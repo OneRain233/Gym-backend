@@ -28,10 +28,10 @@ compile:
     # - mkdir -p mybinaries
     # - go build -o mybinaries ./...
     - make
+    - ls -alh
   artifacts:
     paths:
       - main
-      - ls
 
 deploy:
   stage: deploy
