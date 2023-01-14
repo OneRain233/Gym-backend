@@ -28,7 +28,7 @@ compile:
     # - mkdir -p mybinaries
     # - go build -o mybinaries ./...
     - make
-    - ls -alh
+    - gf build main.go
   artifacts:
     paths:
       - main
