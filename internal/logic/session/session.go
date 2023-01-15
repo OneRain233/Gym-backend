@@ -1,8 +1,13 @@
 package session
 
 import (
+	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+)
+
+const (
+	userKey = "SessionUser"
 )
 
 type sSession struct{}
@@ -14,17 +19,30 @@ func init() {
 func New() *sSession {
 	return &sSession{}
 }
-func (s *sSession) SetUser(ctx context.Context) error {
-	// TODO: SetUser
-	return nil
+
+// SetUser set user content to session
+func (s *sSession) SetUser(ctx context.Context, user *entity.User) error {
+	return service.BizCtx().Get(ctx).Session.Set(userKey, user)
 }
 
-func (s *sSession) GetUser(ctx context.Context) error {
-	// TODO: GetUser
-	return nil
+// GetUser return user info
+func (s *sSession) GetUser(ctx context.Context) *entity.User {
+	c := service.BizCtx().Get(ctx)
+	if c != nil {
+		v, _ := c.Session.Get(userKey)
+		if !v.IsNil() {
+			var user *entity.User
+			_ = v.Structs(&user)
+			return user
+		}
+	}
+	return &entity.User{}
 }
 
 func (s *sSession) RemoveUser(ctx context.Context) error {
-	// TODO
+	c := service.BizCtx().Get(ctx)
+	if c != nil {
+		return c.Session.Remove(userKey)
+	}
 	return nil
 }

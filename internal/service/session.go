@@ -6,13 +6,14 @@
 package service
 
 import (
+	"Gym-backend/internal/model/entity"
 	"context"
 )
 
 type (
 	ISession interface {
-		SetUser(ctx context.Context) error
-		GetUser(ctx context.Context) error
+		SetUser(ctx context.Context, user *entity.User) error
+		GetUser(ctx context.Context) *entity.User
 		RemoveUser(ctx context.Context) error
 	}
 )
