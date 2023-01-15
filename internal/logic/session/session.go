@@ -15,7 +15,7 @@ func New() *sSession {
 	return &sSession{}
 }
 func (s *sSession) SetUser(ctx context.Context) error {
-	// TODO
+	// TODO: SetUser
 	return nil
 }
 
