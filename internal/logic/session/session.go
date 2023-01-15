@@ -20,7 +20,7 @@ func (s *sSession) SetUser(ctx context.Context) error {
 }
 
 func (s *sSession) GetUser(ctx context.Context) error {
-	// TODO
+	// TODO: GetUser
 	return nil
 }
 
