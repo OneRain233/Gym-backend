@@ -3,6 +3,11 @@ package middleware
 import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/response"
+
+	"github.com/gogf/gf/v2/errors/gerror"
+
+	"github.com/gogf/gf/v2/errors/gcode"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -46,4 +51,27 @@ func (s *sMiddleware) Ctx(r *ghttp.Request) {
 func (s *sMiddleware) Auth(r *ghttp.Request) {
 
 	r.Middleware.Next()
+}
+
+func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
+	r.Middleware.Next()
+
+	if r.Response.BufferLength() > 0 {
+		return
+	}
+	var (
+		err             = r.GetError()
+		res             = r.GetHandlerResponse()
+		code gcode.Code = gcode.CodeOK
+	)
+	if err != nil {
+		code = gerror.Code(err)
+		if code == gcode.CodeNil {
+			code = gcode.CodeInternalError
+		}
+	} else {
+		response.Jsonify(r, code.Code(), "success", res)
+	}
+
+	response.Jsonify(r, code.Code(), err.Error())
 }

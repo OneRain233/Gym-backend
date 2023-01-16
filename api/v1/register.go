@@ -12,12 +12,4 @@ type RegisterReq struct {
 	Phone           string `v:"required#Please input phone"`
 }
 
-type RegisterRes struct {
-	// json response
-	g.Meta `mime:"application/json" example:"string"`
-	Status int    `json:"status"`
-	Msg    string `json:"msg"`
-	Data   struct {
-		Username string `json:"username"`
-	}
-}
+type RegisterRes struct{}
