@@ -9,17 +9,16 @@ import (
 	"Gym-backend/internal/model"
 	"context"
 
-	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 type (
 	IBizCtx interface {
-		Init(r ghttp.Request, customCtx *model.Context)
+		Init(r *ghttp.Request, customCtx *model.Context)
 		Get(ctx context.Context) *model.Context
 		GetSession(ctx context.Context) *ghttp.Session
 		GetUser(ctx context.Context) *model.ContextUser
-		SetUser(ctx context.Context, data g.Map)
+		SetUser(ctx context.Context, user *model.ContextUser)
 	}
 )
 

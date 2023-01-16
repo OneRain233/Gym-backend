@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"Gym-backend/internal/service"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -18,9 +19,14 @@ var (
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
-				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				group.Middleware(
+					ghttp.MiddlewareHandlerResponse,
+					service.Middleware().Ctx,
+				)
 				group.Bind(
 					controller.Hello,
+					controller.Login,
+					controller.Register,
 				)
 			})
 			s.Run()
