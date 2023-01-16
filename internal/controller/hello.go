@@ -1,11 +1,10 @@
 package controller
 
 import (
+	"Gym-backend/internal/service"
 	"context"
 
-	"github.com/gogf/gf/v2/frame/g"
-
-	"Gym-backend/api/v1"
+	v1 "Gym-backend/api/v1"
 )
 
 var (
@@ -15,6 +14,10 @@ var (
 type cHello struct{}
 
 func (c *cHello) Hello(ctx context.Context, req *v1.HelloReq) (res *v1.HelloRes, err error) {
-	g.RequestFromCtx(ctx).Response.Writeln("Hello World!")
+	user := service.Session().GetUser(ctx)
+	username := user.Username
+	res = &v1.HelloRes{}
+	res.Msg = "hello world " + username
+
 	return
 }

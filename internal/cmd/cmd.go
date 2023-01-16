@@ -25,10 +25,17 @@ var (
 					service.Middleware().ResponseHandler,
 				)
 				group.Bind(
-					controller.Hello,
+					//controller.Hello,
 					controller.Login,
 					controller.Register,
 				)
+
+				group.Group("/", func(group *ghttp.RouterGroup) {
+					group.Middleware(service.Middleware().ResponseHandler, service.Middleware().AuthHandler)
+					group.Bind(
+						controller.Hello,
+					)
+				})
 			})
 			s.Run()
 			return nil
