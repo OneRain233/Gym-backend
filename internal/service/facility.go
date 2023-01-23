@@ -7,14 +7,18 @@ package service
 
 import (
 	"Gym-backend/internal/model/entity"
+	"context"
 )
 
 type (
 	IFacility interface {
-		GetFacilityList() (res []*entity.Facility, err error)
-		GetFacilityById(id int) (res *entity.Facility, err error)
-		GetFacilityByName(name string) (res *entity.Facility, err error)
-		GetFacilityBySearch(search string) (res []*entity.Facility, err error)
+		GetFacilityList(ctx context.Context) (res []*entity.Facility, err error)
+		GetFacilityById(ctx context.Context, id int) (res *entity.Facility, err error)
+		GetFacilityByName(ctx context.Context, name string) (res *entity.Facility, err error)
+		GetFacilityBySearch(ctx context.Context, search string) (res []*entity.Facility, err error)
+		AddFacility(ctx context.Context, facility *entity.Facility) (err error)
+		ModifyFacility(ctx context.Context, facility *entity.Facility) (err error)
+		ValidateFacility(ctx context.Context, facility *entity.Facility) (err error)
 	}
 )
 
