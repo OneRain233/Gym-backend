@@ -31,6 +31,7 @@ type UserColumns struct {
 	UpdateAt string //
 	Status   string //
 	LoginAt  string //
+	Role     string //
 }
 
 // userColumns holds the columns for table user.
@@ -46,6 +47,7 @@ var userColumns = UserColumns{
 	UpdateAt: "updateAt",
 	Status:   "status",
 	LoginAt:  "loginAt",
+	Role:     "role",
 }
 
 // NewUserDao creates and returns a new DAO object for table data access.

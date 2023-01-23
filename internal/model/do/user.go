@@ -23,4 +23,5 @@ type User struct {
 	UpdateAt *gtime.Time //
 	Status   interface{} //
 	LoginAt  *gtime.Time //
+	Role     interface{} //
 }

@@ -21,4 +21,5 @@ type User struct {
 	UpdateAt *gtime.Time `json:"updateAt" ` //
 	Status   string      `json:"status"   ` //
 	LoginAt  *gtime.Time `json:"loginAt"  ` //
+	Role     int         `json:"role"     ` //
 }

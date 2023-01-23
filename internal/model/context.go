@@ -17,5 +17,5 @@ type ContextUser struct {
 	Email    string
 	Phone    string
 	Avatar   string
-	Role     string
+	Role     uint
 }

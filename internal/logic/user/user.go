@@ -46,6 +46,7 @@ func (u *sUser) Login(ctx context.Context, input model.UserLoginForm) error {
 		Email:    userEntity.Email,
 		Phone:    userEntity.Phone,
 		Avatar:   userEntity.Avatar,
+		Role:     uint(userEntity.Role),
 	})
 	return nil
 }
@@ -57,6 +58,7 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 			return err1
 		}
 		user.Password = EncryptPassword(user.Password)
+		user.Role = 0
 		if err := u.ValidateUsername(ctx, user.Username); err != nil {
 			return err
 		}
