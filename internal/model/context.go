@@ -16,6 +16,6 @@ type ContextUser struct {
 	Username string
 	Email    string
 	Phone    string
-	Avatar   string
-	Role     uint
+	Avatar   string // avatar url
+	Role     uint   // 0: Normal user, 1: Admin
 }

@@ -14,6 +14,7 @@ type (
 		Ctx(r *ghttp.Request)
 		ResponseHandler(r *ghttp.Request)
 		AuthHandler(r *ghttp.Request)
+		AdminAuthHandler(r *ghttp.Request)
 	}
 )
 

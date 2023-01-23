@@ -34,6 +34,7 @@ var (
 					group.Middleware(service.Middleware().ResponseHandler, service.Middleware().AuthHandler)
 					group.Bind(
 						controller.Hello,
+						controller.Facility,
 					)
 				})
 			})

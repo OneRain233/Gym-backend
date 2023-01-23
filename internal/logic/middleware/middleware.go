@@ -4,7 +4,6 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
-	"fmt"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 
@@ -49,6 +48,7 @@ func (s *sMiddleware) Ctx(r *ghttp.Request) {
 	r.Middleware.Next()
 }
 
+// ResponseHandler used to handle all response
 func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 	r.Middleware.Next()
 
@@ -72,11 +72,21 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 	response.Jsonify(r, code.Code(), err.Error())
 }
 
+// AuthHandler used to check if user have logged in
 func (s *sMiddleware) AuthHandler(r *ghttp.Request) {
 	r.Middleware.Next()
 	user := service.Session().GetUser(r.Context())
-	fmt.Println("Current user:", user.Id)
+	//fmt.Println("Current user:", user.Id)
 	if user.Id == 0 {
+		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
+	}
+}
+
+// AdminAuthHandler used to handle admin user auth
+func (s *sMiddleware) AdminAuthHandler(r *ghttp.Request) {
+	r.Middleware.Next()
+	user := service.Session().GetUser(r.Context())
+	if user.Role != 1 {
 		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
 	}
 }
