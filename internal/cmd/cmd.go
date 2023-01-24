@@ -44,6 +44,7 @@ var (
 					//controller.Hello,
 					controller.Login,
 					controller.Register,
+					controller.File, // TODO: Move this to do auth
 				)
 
 				group.Group("/", func(group *ghttp.RouterGroup) {

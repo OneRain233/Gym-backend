@@ -99,6 +99,11 @@ func (u *sUser) GetUserByUsernameAndPassword(ctx context.Context, username strin
 	return
 }
 
+func (u *sUser) GetUserByID(ctx context.Context, id uint) (user *entity.User, err error) {
+	err = dao.User.Ctx(ctx).WherePri(id).Scan(&user)
+	return
+}
+
 // EncryptPassword encrypts the password using md5 algorithm.
 func EncryptPassword(password string) string {
 	return gmd5.MustEncryptString(password)
@@ -138,6 +143,24 @@ func (u *sUser) UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) er
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func (u *sUser) UpdateAvatar(ctx context.Context, userId uint, avatar string) error {
+	user, err := u.GetUserByID(ctx, userId)
+	if err != nil {
+		return err
+	}
+	// check if avatar path is existed
+	path := g.Cfg().MustGet(gctx.New(), "upload.path").String() + avatar
+	if !gfile.Exists(path) {
+		return gerror.New(`Avatar path not found`)
+	}
+	user.Avatar = path
+	_, err = dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
+	if err != nil {
+		return err
 	}
 	return nil
 }

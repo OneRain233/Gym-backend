@@ -16,9 +16,11 @@ type (
 		Login(ctx context.Context, input model.UserLoginForm) error
 		Register(ctx context.Context, input model.UserRegisterForm) error
 		GetUserByUsernameAndPassword(ctx context.Context, username string, password string) (user *entity.User, err error)
+		GetUserByID(ctx context.Context, id uint) (user *entity.User, err error)
 		ValidateUsername(ctx context.Context, username string) error
 		ValidateEmail(ctx context.Context, email string) error
 		UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) error
+		UpdateAvatar(ctx context.Context, userId uint, avatar string) error
 	}
 )
 

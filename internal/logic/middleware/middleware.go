@@ -57,7 +57,7 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 		// replace the message if the response is error
 		code := gerror.Code(r.GetError())
 		if code != gcode.CodeOK {
-			response.Jsonify(r, code.Code(), "An error occurred, please check the log")
+			response.Jsonify(r, code.Code(), "An error occurred")
 		}
 		return
 	}
@@ -74,8 +74,17 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 	} else {
 		response.Jsonify(r, code.Code(), "success", res)
 	}
-
-	response.Jsonify(r, code.Code(), "An error occurred, please check the log")
+	msg := ""
+	// check if the code is 52 (database error)
+	// there exist some sensitive information in the error message
+	// filter it
+	// TODO: check if there are more sensitive information in other error code
+	if code.Code() == 52 {
+		msg = "Database error"
+	} else {
+		msg = err.Error()
+	}
+	response.Jsonify(r, code.Code(), msg)
 }
 
 // AuthHandler used to check if user have logged in
