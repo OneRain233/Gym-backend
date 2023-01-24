@@ -11,9 +11,9 @@ type LoginReq struct {
 type LoginRes struct {
 	// json response
 	g.Meta `mime:"application/json" example:"string"`
-	Status int    `json:"status"`
-	Msg    string `json:"msg"`
 	Data   struct {
 		Username string `json:"username"`
+		Avatar   string `json:"avatar"`
+		Role     int    `json:"role"`
 	}
 }

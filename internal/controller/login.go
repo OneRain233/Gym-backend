@@ -20,8 +20,9 @@ func (c *cLogin) Login(ctx context.Context, req *v1.LoginReq) (res *v1.LoginRes,
 	if err != nil {
 		return
 	}
-	res.Status = 200
-	res.Msg = "Login success"
-	res.Data.Username = req.Username
+	userEntity := service.Session().GetUser(ctx)
+	res.Data.Username = userEntity.Username
+	res.Data.Avatar = userEntity.Avatar
+	res.Data.Role = userEntity.Role
 	return
 }

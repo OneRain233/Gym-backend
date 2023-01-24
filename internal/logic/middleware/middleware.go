@@ -52,7 +52,13 @@ func (s *sMiddleware) Ctx(r *ghttp.Request) {
 func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 	r.Middleware.Next()
 
+	// if response has been written, skip it
 	if r.Response.BufferLength() > 0 {
+		// replace the message if the response is error
+		code := gerror.Code(r.GetError())
+		if code != gcode.CodeOK {
+			response.Jsonify(r, code.Code(), "An error occurred, please check the log")
+		}
 		return
 	}
 	var (
@@ -69,7 +75,7 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 		response.Jsonify(r, code.Code(), "success", res)
 	}
 
-	response.Jsonify(r, code.Code(), err.Error())
+	response.Jsonify(r, code.Code(), "An error occurred, please check the log")
 }
 
 // AuthHandler used to check if user have logged in

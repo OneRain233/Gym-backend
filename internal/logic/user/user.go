@@ -7,6 +7,10 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 
+	"github.com/gogf/gf/v2/os/gfile"
+
+	"github.com/gogf/gf/v2/os/gctx"
+
 	"github.com/gogf/gf/v2/crypto/gmd5"
 
 	"github.com/gogf/gf/v2/util/gconv"
@@ -18,14 +22,26 @@ import (
 	"github.com/gogf/gf/v2/frame/g"
 )
 
-type sUser struct{}
+type sUser struct {
+	avatarPath string
+}
 
 func init() {
-	service.RegisterUser(New())
+	newEntity := New()
+	// check if the upload path exists
+	if !gfile.Exists(newEntity.avatarPath) {
+		err := gfile.Mkdir(newEntity.avatarPath)
+		if err != nil {
+			g.Log().Fatal(gctx.New(), err)
+		}
+	}
+	service.RegisterUser(newEntity)
 }
 
 func New() *sUser {
-	return &sUser{}
+	return &sUser{
+		avatarPath: g.Cfg().MustGet(gctx.New(), "upload.path").String() + "/avatar/",
+	}
 }
 
 func (u *sUser) Login(ctx context.Context, input model.UserLoginForm) error {
@@ -37,6 +53,10 @@ func (u *sUser) Login(ctx context.Context, input model.UserLoginForm) error {
 		return gerror.New(`Wrong username or password`)
 	}
 	err = service.Session().SetUser(ctx, userEntity)
+	if err != nil {
+		return err
+	}
+	err = u.UpdateEmptyAvatarPath(ctx, userEntity)
 	if err != nil {
 		return err
 	}
@@ -65,7 +85,7 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		if err := u.ValidateEmail(ctx, user.Email); err != nil {
 			return err
 		}
-
+		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 		_, err1 := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
 		return err1
 	})
@@ -103,6 +123,21 @@ func (u *sUser) ValidateEmail(ctx context.Context, email string) error {
 	}
 	if cnt > 0 {
 		return gerror.New(`Email already exists`)
+	}
+	return nil
+}
+
+func (u *sUser) UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) error {
+	path := user.Avatar
+	if path == "" {
+		path = g.Cfg().MustGet(gctx.New(), "upload.path").String()
+		defaultAvatar := g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
+
+		user.Avatar = path + defaultAvatar
+		_, err := dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
