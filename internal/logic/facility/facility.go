@@ -31,28 +31,7 @@ func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityE
 		return
 	}
 	// get all facility image
-	var facilityImages []*entity.FacilityImage
-	err = dao.FacilityImage.Ctx(ctx).Scan(&facilityImages)
-	if err != nil {
-		return
-	}
-	// map facility id to facility image
-	facilityImageMap := make(map[int][]*entity.FacilityImage)
-	for _, facilityImage := range facilityImages {
-		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
-	}
-	// map facility id to facility
-	facilityMap := make(map[int]*entity.Facility)
-	for _, facility := range facilities {
-		facilityMap[facility.Id] = facility
-	}
-	// map facility to facility entity
-	for _, facility := range facilities {
-		res = append(res, &model.FacilityEntity{
-			Facility: facility,
-			Images:   facilityImageMap[facility.Id],
-		})
-	}
+	res, err = s.FetchFacilityImages(ctx, facilities)
 	return
 }
 
@@ -87,33 +66,10 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 	if err != nil {
 		return
 	}
-	// get all facility image in the facilities
-	var facilityImages []*entity.FacilityImage
-	var facilityIds []int
-	for _, facility := range facilities {
-		facilityIds = append(facilityIds, facility.Id)
-	}
-	err = dao.FacilityImage.Ctx(ctx).Where("facilityID in (?)", facilityIds).Scan(&facilityImages)
+	// get all facility image
+	res, err = s.FetchFacilityImages(ctx, facilities)
 	if err != nil {
 		return
-	}
-	// map facility id to facility image
-	facilityImageMap := make(map[int][]*entity.FacilityImage)
-	for _, facilityImage := range facilityImages {
-		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
-
-	}
-	// map facility id to facility
-	facilityMap := make(map[int]*entity.Facility)
-	for _, facility := range facilities {
-		facilityMap[facility.Id] = facility
-	}
-	// map facility to facility entity
-	for _, facility := range facilities {
-		res = append(res, &model.FacilityEntity{
-			Facility: facility,
-			Images:   facilityImageMap[facility.Id],
-		})
 	}
 
 	return
@@ -173,5 +129,34 @@ func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facil
 
 func (s *sFacility) GetFacilityImages(ctx context.Context, id int) (res []*entity.FacilityImage, err error) {
 	err = dao.FacilityImage.Ctx(ctx).Where("facilityID", id).Scan(&res)
+	return
+}
+
+func (s *sFacility) FetchFacilityImages(ctx context.Context, facilities []*entity.Facility) (res []*model.FacilityEntity, err error) {
+	res = []*model.FacilityEntity{}
+
+	var facilityIds []int
+	for _, facility := range facilities {
+		facilityIds = append(facilityIds, facility.Id)
+	}
+	var facilityImages []*entity.FacilityImage
+	err = dao.FacilityImage.Ctx(ctx).Where("facilityID in (?)", facilityIds).Scan(&facilityImages)
+	if err != nil {
+		return
+	}
+	// map facility id to facility image
+	facilityImageMap := make(map[int][]*entity.FacilityImage)
+	for _, facilityImage := range facilityImages {
+		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
+	}
+
+	// map facility to facility entity
+	for _, facility := range facilities {
+		res = append(res, &model.FacilityEntity{
+			Facility: facility,
+			Images:   facilityImageMap[facility.Id],
+		})
+	}
+
 	return
 }

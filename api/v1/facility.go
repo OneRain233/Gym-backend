@@ -17,8 +17,8 @@ type FacilityRes struct {
 
 type FacilitySearchReq struct {
 	g.Meta `path:"/facility_search" tags:"Facility" method:"post" summary:"Get Facilities By searching tags"`
-	Name   string `json:"name" v:"required#Please input name"`
-	ID     int    `json:"id" v:"required#Please input id"`
+	Name   string `json:"name"`
+	ID     int    `json:"id" `
 }
 
 type FacilitySearchRes struct {

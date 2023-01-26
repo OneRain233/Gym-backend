@@ -21,6 +21,7 @@ type (
 		ModifyFacility(ctx context.Context, facility *entity.Facility) (err error)
 		ValidateFacility(ctx context.Context, facility *entity.Facility) (err error)
 		GetFacilityImages(ctx context.Context, id int) (res []*entity.FacilityImage, err error)
+		FetchFacilityImages(ctx context.Context, facilities []*entity.Facility) (res []*model.FacilityEntity, err error)
 	}
 )
 
