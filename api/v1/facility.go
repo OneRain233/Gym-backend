@@ -17,8 +17,8 @@ type FacilityRes struct {
 
 type FacilitySearchReq struct {
 	g.Meta `path:"/facility_search" tags:"Facility" method:"post" summary:"Get Facilities By searching tags"`
-	Name   string
-	ID     int
+	Name   string `json:"name" v:"required#Please input name"`
+	ID     int    `json:"id" v:"required#Please input id"`
 }
 
 type FacilitySearchRes struct {
@@ -28,10 +28,10 @@ type FacilitySearchRes struct {
 
 type AddFacilityReq struct {
 	g.Meta      `path:"/add_facility" tags:"Facility" method:"post" summary:"Add Facility"`
-	Name        string
-	Description string
-	Location    string
-	Cost        float64
+	Name        string  `json:"name" v:"required#Please input name"`
+	Description string  `json:"description" v:"required#Please input description"`
+	Location    string  `json:"location" v:"required#Please input location"`
+	Cost        float64 `json:"cost" v:"required#Please input cost"`
 }
 
 type AddFacilityRes struct {
@@ -40,11 +40,11 @@ type AddFacilityRes struct {
 
 type ModifyFacilityReq struct {
 	g.Meta      `path:"/modify_facility" tags:"Facility" method:"post" summary:"Modify Facility"`
-	ID          int
-	Name        string
-	Description string
-	Location    string
-	Cost        float64
+	ID          int     `json:"id" v:"required#Please input id"`
+	Name        string  `json:"name" v:"required#Please input name"`
+	Description string  `json:"description" v:"required#Please input description"`
+	Location    string  `json:"location" v:"required#Please input location"`
+	Cost        float64 `json:"cost" v:"required#Please input cost"`
 }
 
 type ModifyFacilityRes struct {
