@@ -21,6 +21,7 @@ type (
 		ValidateEmail(ctx context.Context, email string) error
 		UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) error
 		UpdateAvatar(ctx context.Context, userId uint, avatar string) error
+		GetCurrentUser(ctx context.Context) (user *entity.User)
 	}
 )
 

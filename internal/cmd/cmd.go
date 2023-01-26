@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/response"
 	"context"
 	"fmt"
 
@@ -22,7 +23,10 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
-
+			oai := s.GetOpenApi()
+			oai.Info.Title = `API Reference`
+			oai.Config.CommonResponse = response.JsonRes{}
+			oai.Config.CommonResponseDataField = `Data`
 			// register static files
 			uploadPath := g.Cfg().MustGet(gctx.New(), "upload.path").String()
 			fmt.Println(uploadPath)
@@ -50,8 +54,8 @@ var (
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Middleware(service.Middleware().ResponseHandler, service.Middleware().AuthHandler)
 					group.Bind(
-						controller.Hello,
 						controller.Facility,
+						controller.Profile,
 					)
 				})
 			})

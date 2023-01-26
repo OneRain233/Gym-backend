@@ -164,3 +164,8 @@ func (u *sUser) UpdateAvatar(ctx context.Context, userId uint, avatar string) er
 	}
 	return nil
 }
+
+func (u *sUser) GetCurrentUser(ctx context.Context) (user *entity.User) {
+	user = service.Session().GetUser(ctx)
+	return
+}

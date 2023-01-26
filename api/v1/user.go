@@ -1,9 +1,11 @@
 package v1
 
-import "github.com/gogf/gf/v2/frame/g"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+)
 
 type LoginReq struct {
-	g.Meta   `path:"/login" tags:"Login" method:"post" summary:"Login"`
+	g.Meta   `path:"/login" tags:"Account" method:"post" summary:"Login"`
 	Username string `v:"required#Please input username"`
 	Password string `v:"required#Please input password"`
 }
@@ -19,7 +21,7 @@ type LoginRes struct {
 }
 
 type RegisterReq struct {
-	g.Meta          `path:"/register" tags:"Register" method:"post" summary:"Register"`
+	g.Meta          `path:"/register" tags:"Account" method:"post" summary:"Register"`
 	Username        string `v:"required#Please input username"`
 	Password        string `v:"required#Please input password"`
 	ConfirmPassword string `v:"required#Please input confirm password"`
@@ -29,3 +31,19 @@ type RegisterReq struct {
 }
 
 type RegisterRes struct{}
+
+type ProfileReq struct {
+	g.Meta `path:"/profile" tags:"Account" method:"post" summary:"Get user's profile'"`
+}
+
+type ProfileRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Data   struct {
+		Username string
+		Gender   string
+		Role     uint
+		Email    string
+		Phone    string
+		Avatar   string
+	}
+}

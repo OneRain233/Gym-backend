@@ -54,11 +54,6 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 
 	// if response has been written, skip it
 	if r.Response.BufferLength() > 0 {
-		// replace the message if the response is error
-		code := gerror.Code(r.GetError())
-		if code != gcode.CodeOK {
-			response.Jsonify(r, code.Code(), "An error occurred")
-		}
 		return
 	}
 	var (
