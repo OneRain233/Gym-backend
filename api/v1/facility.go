@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"Gym-backend/internal/model/entity"
+	"Gym-backend/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -12,7 +12,7 @@ type FacilityReq struct {
 
 type FacilityRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
-	Facility []*entity.Facility
+	Facility []*model.FacilityEntity
 }
 
 type FacilitySearchReq struct {
@@ -23,7 +23,7 @@ type FacilitySearchReq struct {
 
 type FacilitySearchRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
-	Facility []*entity.Facility
+	Facility []*model.FacilityEntity
 }
 
 type AddFacilityReq struct {
@@ -49,4 +49,14 @@ type ModifyFacilityReq struct {
 
 type ModifyFacilityRes struct {
 	g.Meta `mime:"application/json" example:"string"`
+}
+
+type FacilityDetailReq struct {
+	g.Meta `path:"/facility_detail" tags:"Facility" method:"post" summary:"Get Facility Detail"`
+	ID     int `json:"id" v:"required#Please input id"`
+}
+
+type FacilityDetailRes struct {
+	g.Meta   `mime:"application/json" example:"string"`
+	Facility *model.FacilityEntity
 }

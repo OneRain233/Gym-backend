@@ -2,6 +2,7 @@ package facility
 
 import (
 	"Gym-backend/internal/dao"
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
@@ -22,26 +23,99 @@ func New() *sFacility {
 }
 
 // GetFacilityList gets the facility list.
-func (s *sFacility) GetFacilityList(ctx context.Context) (res []*entity.Facility, err error) {
-	err = dao.Facility.Ctx(ctx).Scan(&res)
+func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityEntity, err error) {
+	// get all facility first
+	var facilities []*entity.Facility
+	err = dao.Facility.Ctx(ctx).Scan(&facilities)
+	if err != nil {
+		return
+	}
+	// get all facility image
+	var facilityImages []*entity.FacilityImage
+	err = dao.FacilityImage.Ctx(ctx).Scan(&facilityImages)
+	if err != nil {
+		return
+	}
+	// map facility id to facility image
+	facilityImageMap := make(map[int][]*entity.FacilityImage)
+	for _, facilityImage := range facilityImages {
+		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
+	}
+	// map facility id to facility
+	facilityMap := make(map[int]*entity.Facility)
+	for _, facility := range facilities {
+		facilityMap[facility.Id] = facility
+	}
+	// map facility to facility entity
+	for _, facility := range facilities {
+		res = append(res, &model.FacilityEntity{
+			Facility: facility,
+			Images:   facilityImageMap[facility.Id],
+		})
+	}
 	return
 }
 
 // GetFacilityById gets the facility by id.
-func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *entity.Facility, err error) {
-	err = dao.Facility.Ctx(ctx).Where("id", id).Scan(&res)
+func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.FacilityEntity, err error) {
+	res = &model.FacilityEntity{}
+	err = dao.Facility.Ctx(ctx).Where("id", id).Scan(&res.Facility)
+	if err != nil {
+		return
+	}
+	err = dao.FacilityImage.Ctx(ctx).Where("facilityID", id).Scan(&res.Images)
+	if err != nil {
+		return
+	}
 	return
 }
 
 // GetFacilityByName gets the facility by name.
-func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *entity.Facility, err error) {
+func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error) {
+	res = &model.FacilityEntity{}
 	err = dao.Facility.Ctx(ctx).Where("name", name).Scan(&res)
 	return
 }
 
 // GetFacilityBySearch gets the facility by search in name.
-func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res []*entity.Facility, err error) {
-	err = dao.Facility.Ctx(ctx).Where("name like ?", "%"+search+"%").Scan(&res)
+func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res []*model.FacilityEntity, err error) {
+	//err = dao.Facility.Ctx(ctx).Where("name like ?", "%"+search+"%").Scan(&res)
+	res = []*model.FacilityEntity{}
+	// get all facility first
+	var facilities []*entity.Facility
+	err = dao.Facility.Ctx(ctx).Where("name like ?", "%"+search+"%").Scan(&facilities)
+	if err != nil {
+		return
+	}
+	// get all facility image in the facilities
+	var facilityImages []*entity.FacilityImage
+	var facilityIds []int
+	for _, facility := range facilities {
+		facilityIds = append(facilityIds, facility.Id)
+	}
+	err = dao.FacilityImage.Ctx(ctx).Where("facilityID in (?)", facilityIds).Scan(&facilityImages)
+	if err != nil {
+		return
+	}
+	// map facility id to facility image
+	facilityImageMap := make(map[int][]*entity.FacilityImage)
+	for _, facilityImage := range facilityImages {
+		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
+
+	}
+	// map facility id to facility
+	facilityMap := make(map[int]*entity.Facility)
+	for _, facility := range facilities {
+		facilityMap[facility.Id] = facility
+	}
+	// map facility to facility entity
+	for _, facility := range facilities {
+		res = append(res, &model.FacilityEntity{
+			Facility: facility,
+			Images:   facilityImageMap[facility.Id],
+		})
+	}
+
 	return
 }
 
@@ -94,5 +168,10 @@ func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facil
 		err = gerror.New("The facility already exists")
 		return
 	}
+	return
+}
+
+func (s *sFacility) GetFacilityImages(ctx context.Context, id int) (res []*entity.FacilityImage, err error) {
+	err = dao.FacilityImage.Ctx(ctx).Where("facilityID", id).Scan(&res)
 	return
 }

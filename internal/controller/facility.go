@@ -2,6 +2,7 @@ package controller
 
 import (
 	v1 "Gym-backend/api/v1"
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
@@ -25,8 +26,8 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 	res = &v1.FacilitySearchRes{}
 	name := req.Name
 	id := req.ID
-	var facilities []*entity.Facility
-	var aFacility *entity.Facility
+	var facilities []*model.FacilityEntity
+	var aFacility *model.FacilityEntity
 	if id != 0 {
 		aFacility, err = service.Facility().GetFacilityById(ctx, id)
 		if err != nil {
@@ -69,6 +70,16 @@ func (c *cFacilityAdmin) ModifyFacility(ctx context.Context, req *v1.ModifyFacil
 		Cost:        req.Cost,
 	}
 	err = service.Facility().ModifyFacility(ctx, facility)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cFacility) GetFacilityDetail(ctx context.Context, req *v1.FacilityDetailReq) (res *v1.FacilityDetailRes, err error) {
+	res = &v1.FacilityDetailRes{}
+	facility, err := service.Facility().GetFacilityById(ctx, req.ID)
+	res.Facility = facility
 	if err != nil {
 		return
 	}

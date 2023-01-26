@@ -4,7 +4,7 @@
 gfcli:
   gen:
     dao:
-      - link:     "mysql:root:2332@tcp(172.17.0.2:3306)/gym"
-        tables:   "user,facility"
+      - link:     "mysql:root:2332@tcp(172.250.0.233:3306)/gym"
+        tables:   "user,facility,facility_image"
         jsonCase: "CamelLower"
 
