@@ -8,8 +8,10 @@ import (
 )
 
 var Facility = cFacility{}
+var FacilityAdmin = cFacilityAdmin{}
 
 type cFacility struct{}
+type cFacilityAdmin struct{}
 
 func (c *cFacility) GetAllFacility(ctx context.Context, req *v1.FacilityReq) (res *v1.FacilityRes, err error) {
 	res = &v1.FacilityRes{}
@@ -41,7 +43,7 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 	return
 }
 
-func (c *cFacility) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (res *v1.AddFacilityRes, err error) {
+func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (res *v1.AddFacilityRes, err error) {
 	res = &v1.AddFacilityRes{}
 	facility := &entity.Facility{
 		Name:        req.Name,
@@ -57,7 +59,7 @@ func (c *cFacility) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (re
 	return
 }
 
-func (c *cFacility) ModifyFacility(ctx context.Context, req *v1.ModifyFacilityReq) (res *v1.ModifyFacilityRes, err error) {
+func (c *cFacilityAdmin) ModifyFacility(ctx context.Context, req *v1.ModifyFacilityReq) (res *v1.ModifyFacilityRes, err error) {
 	res = &v1.ModifyFacilityRes{}
 	facility := &entity.Facility{
 		Id:          req.ID,

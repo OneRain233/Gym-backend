@@ -47,3 +47,10 @@ type ProfileRes struct {
 		Avatar   string
 	}
 }
+
+type LogoutReq struct {
+	g.Meta `path:"/logout" tags:"Account" method:"get" summary:"Log out'"`
+}
+
+type LogoutRes struct {
+}

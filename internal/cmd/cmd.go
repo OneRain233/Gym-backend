@@ -38,6 +38,7 @@ var (
 			}
 			s.AddStaticPath("/uploads", uploadPath)
 
+			// Unauthorized user
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(
 					//ghttp.MiddlewareHandlerResponse,
@@ -45,17 +46,30 @@ var (
 					service.Middleware().ResponseHandler,
 				)
 				group.Bind(
-					//controller.Hello,
-					controller.Login,
-					controller.Register,
+					controller.User,
 					controller.File, // TODO: Move this to do auth
+					controller.Facility,
 				)
 
+				// Normal user
 				group.Group("/", func(group *ghttp.RouterGroup) {
-					group.Middleware(service.Middleware().ResponseHandler, service.Middleware().AuthHandler)
+					group.Middleware(
+						service.Middleware().ResponseHandler,
+						service.Middleware().AuthHandler,
+					)
 					group.Bind(
-						controller.Facility,
 						controller.Profile,
+					)
+				})
+
+				// Admin user
+				group.Group("/", func(group *ghttp.RouterGroup) {
+					group.Middleware(
+						service.Middleware().ResponseHandler,
+						service.Middleware().AdminAuthHandler,
+					)
+					group.Bind(
+						controller.FacilityAdmin,
 					)
 				})
 			})
