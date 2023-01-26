@@ -1,0 +1,562 @@
+{
+  "openapi": "3.0.0",
+  "components": {
+    "schemas": {
+      "Gym-backend.api.v1.AddFacilityReq": {
+        "properties": {
+          "Name": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Description": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Location": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Cost": {
+            "format": "float64",
+            "properties": {},
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.AddFacilityRes": {
+        "example": "string",
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FacilityReq": {
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FacilityRes": {
+        "example": "string",
+        "properties": {
+          "Facility": {
+            "format": "[]*entity.Facility",
+            "items": {
+              "$ref": "#/components/schemas/Gym-backend.internal.model.entity.Facility"
+            },
+            "properties": {},
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.internal.model.entity.Facility": {
+        "properties": {
+          "id": {
+            "format": "int",
+            "properties": {},
+            "type": "integer"
+          },
+          "name": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "description": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "location": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "cost": {
+            "format": "float64",
+            "properties": {},
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FacilitySearchReq": {
+        "properties": {
+          "Name": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "ID": {
+            "format": "int",
+            "properties": {},
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FacilitySearchRes": {
+        "example": "string",
+        "properties": {
+          "Facility": {
+            "format": "[]*entity.Facility",
+            "items": {
+              "$ref": "#/components/schemas/Gym-backend.internal.model.entity.Facility"
+            },
+            "properties": {},
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.HelloReq": {
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.HelloRes": {
+        "example": "string",
+        "properties": {
+          "Msg": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.LoginReq": {
+        "properties": {
+          "Username": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Password": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          }
+        },
+        "required": [
+          "Username",
+          "Password"
+        ],
+        "type": "object"
+      },
+      "Gym-backend.api.v1.LoginRes": {
+        "example": "string",
+        "properties": {
+          "Data": {
+            "properties": {
+              "username": {
+                "format": "string",
+                "properties": {},
+                "type": "string"
+              },
+              "avatar": {
+                "format": "string",
+                "properties": {},
+                "type": "string"
+              },
+              "role": {
+                "format": "int",
+                "properties": {},
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.ModifyFacilityReq": {
+        "properties": {
+          "ID": {
+            "format": "int",
+            "properties": {},
+            "type": "integer"
+          },
+          "Name": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Description": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Location": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Cost": {
+            "format": "float64",
+            "properties": {},
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "Gym-backend.api.v1.ModifyFacilityRes": {
+        "example": "string",
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.RegisterReq": {
+        "properties": {
+          "Username": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Password": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "ConfirmPassword": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Email": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Gender": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "Phone": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          }
+        },
+        "required": [
+          "Username",
+          "Password",
+          "ConfirmPassword",
+          "Email",
+          "Gender",
+          "Phone"
+        ],
+        "type": "object"
+      },
+      "Gym-backend.api.v1.RegisterRes": {
+        "properties": {},
+        "type": "object"
+      },
+      "interface": {
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FileUploadReq": {
+        "properties": {
+          "file": {
+            "$ref": "#/components/schemas/github.com.gogf.gf.v2.net.ghttp.UploadFile"
+          },
+          "name": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          },
+          "type": {
+            "format": "string",
+            "properties": {},
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "type"
+        ],
+        "type": "object"
+      },
+      "github.com.gogf.gf.v2.net.ghttp.UploadFile": {
+        "properties": {},
+        "type": "object"
+      },
+      "Gym-backend.api.v1.FileUploadRes": {
+        "example": "string",
+        "properties": {
+          "Data": {
+            "properties": {
+              "url": {
+                "format": "string",
+                "properties": {},
+                "type": "string"
+              },
+              "name": {
+                "format": "string",
+                "properties": {},
+                "type": "string"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "API Reference",
+    "version": ""
+  },
+  "paths": {
+    "/add_facility": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.AddFacilityReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.AddFacilityRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Add Facility",
+        "tags": [
+          "Facility"
+        ]
+      },
+      "summary": "Add Facility"
+    },
+    "/facility": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.FacilityRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Get All Facilities",
+        "tags": [
+          "Facility"
+        ]
+      },
+      "summary": "Get All Facilities"
+    },
+    "/facility_search": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.FacilitySearchReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.FacilitySearchRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Get Facilities By searching tags",
+        "tags": [
+          "Facility"
+        ]
+      },
+      "summary": "Get Facilities By searching tags"
+    },
+    "/hello": {
+      "get": {
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.HelloRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "You first hello api",
+        "tags": [
+          "Hello"
+        ]
+      },
+      "summary": "You first hello api"
+    },
+    "/login": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.LoginReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.LoginRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Login",
+        "tags": [
+          "Login"
+        ]
+      },
+      "summary": "Login"
+    },
+    "/modify_facility": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.ModifyFacilityReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.ModifyFacilityRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Modify Facility",
+        "tags": [
+          "Facility"
+        ]
+      },
+      "summary": "Modify Facility"
+    },
+    "/register": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.RegisterReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "format": "int",
+                      "properties": {},
+                      "type": "integer"
+                    },
+                    "message": {
+                      "format": "string",
+                      "properties": {},
+                      "type": "string"
+                    },
+                    "data": {
+                      "properties": {},
+                      "type": "object"
+                    },
+                    "redirect": {
+                      "format": "string",
+                      "properties": {},
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Register",
+        "tags": [
+          "Register"
+        ]
+      },
+      "summary": "Register"
+    },
+    "/upload": {
+      "post": {
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Gym-backend.api.v1.FileUploadReq"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gym-backend.api.v1.FileUploadRes"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "summary": "Upload file",
+        "tags": [
+          "File"
+        ]
+      },
+      "summary": "Upload file"
+    }
+  }
+}
