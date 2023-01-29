@@ -169,3 +169,29 @@ func (u *sUser) GetCurrentUser(ctx context.Context) (user *entity.User) {
 	user = service.Session().GetUser(ctx)
 	return
 }
+
+func (u *sUser) UpdatePassword(ctx context.Context, user *entity.User, newPassword string, oldPassword string) error {
+	// check if session user is the same as the user to be updated
+	sessionUser := service.Session().GetUser(ctx)
+	if sessionUser.Id == 0 || sessionUser.Id != user.Id {
+		return gerror.New("Error session user, please login again")
+	}
+
+	// check if the old password is correct
+	if EncryptPassword(oldPassword) != user.Password {
+		return gerror.New("Error old password")
+	}
+
+	user.Password = EncryptPassword(newPassword)
+	_, err := dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
+	if err != nil {
+		return err
+	}
+	// update session
+	err = service.Session().SetUser(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

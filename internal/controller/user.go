@@ -5,6 +5,8 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"context"
+
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 var User = cUser{}
@@ -48,5 +50,24 @@ func (c *cUser) Logout(ctx context.Context, req *v1.LogoutReq) (res *v1.LogoutRe
 		return
 	}
 
+	return
+}
+
+func (c *cUser) ChangePassword(ctx context.Context, req *v1.ChangePasswdReq) (res *v1.ChangePasswdRes, err error) {
+	res = &v1.ChangePasswdRes{}
+	oldPassword := req.OldPassword
+	newPassword := req.NewPassword
+	confirmPassword := req.ConfirmPassword
+	if newPassword != confirmPassword {
+		err = gerror.New("The two passwords do not match")
+		return
+	}
+
+	user := service.Session().GetUser(ctx)
+
+	err = service.User().UpdatePassword(ctx, user, newPassword, oldPassword)
+	if err != nil {
+		return
+	}
 	return
 }
