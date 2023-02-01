@@ -48,4 +48,5 @@ deploy:
     - make
     - gf docker -tn gym-demo -tp gym_kneethaimay
     - docker run -itd --name gym-demo gym_kneethaimay/gym-demo
+    - echo "Done"
   environment: production
