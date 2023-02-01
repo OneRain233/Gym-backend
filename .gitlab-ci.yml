@@ -20,6 +20,8 @@ format:
     # - go fmt $(go list ./... | grep -v /vendor/)
     # - go vet $(go list ./... | grep -v /vendor/)
     # - go test -race $(go list ./... | grep -v /vendor/)
+    - go env -w GO111MODULE=on
+    - go env -w GOPROXY=https://goproxy.cn,direct
     - go test -v
 
 compile:
@@ -27,6 +29,8 @@ compile:
   script:
     # - mkdir -p mybinaries
     # - go build -o mybinaries ./...
+    - go env -w GO111MODULE=on
+    - go env -w GOPROXY=https://goproxy.cn,direct
     - make
     - gf build main.go
   artifacts:
@@ -37,6 +41,8 @@ deploy:
   stage: deploy
   script:
     - echo "Deployment Todo"
+    - go env -w GO111MODULE=on
+    - go env -w GOPROXY=https://goproxy.cn,direct
     - make
     - gf docker -tn gym-demo -tp gym_kneethaimay
     - docker run -itd --name gym-demo gym_kneethaimay/gym-demo
