@@ -1,0 +1,21 @@
+server:
+  address:     ":8000"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+
+logger:
+  level : "all"
+  stdout: true
+
+database:
+  logger:
+    path:    "logs/sql"
+    level:   "all"
+
+  default:
+    link:   "mysql:root:2332@tcp(gym-db:3306)/gym"
+    debug:  true
+
+upload:
+  defaultAvatar: "default.png"
+  path: "uploads/"
