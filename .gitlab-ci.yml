@@ -51,6 +51,7 @@ deploy:
     - go env -w GOPROXY=https://goproxy.cn,direct
     - make
     - gf docker -tn gym-demo -tp gym_kneethaimay
+    - cp manifest/config/config.prod.yaml manifest/config/config.yaml
     - docker run -itd --name gym-demo -p "16800:8000" gym_kneethaimay/gym-demo
     - echo "Done"
   environment: production
