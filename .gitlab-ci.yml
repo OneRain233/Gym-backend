@@ -42,6 +42,10 @@ compile:
 deploy:
   stage: deploy
   script:
+    - echo "Delete previous container"
+    - docker stop gym-demo
+    - docker rm gym-demo
+    - docker rmi gym_kneethaimay/gym-demo
     - echo "Deployment Todo"
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
