@@ -7,7 +7,7 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Go.gitlab-ci.yml
 
-image: golang:latest
+
 
 stages:
   - test
@@ -15,6 +15,7 @@ stages:
   - deploy
 
 format:
+  image: golang:latest
   stage: test
   script:
     # - go fmt $(go list ./... | grep -v /vendor/)
@@ -25,6 +26,7 @@ format:
     - go test -v
 
 compile:
+  image: golang:latest
   stage: build
   script:
     # - mkdir -p mybinaries
@@ -44,5 +46,6 @@ deploy:
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
     - make
-    - gf run main.go
+    - gf docker -tn gym-demo -tp gym_kneethaimay
+    - docker run -itd --name gym-demo gym_kneethaimay/gym-demo
   environment: production
