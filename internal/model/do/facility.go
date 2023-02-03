@@ -11,9 +11,9 @@ import (
 // Facility is the golang structure of table facility for DAO operations like Where/Data.
 type Facility struct {
 	g.Meta      `orm:"table:facility, do:true"`
-	Id          interface{} //
-	Name        interface{} //
-	Description interface{} //
-	Location    interface{} //
-	Cost        interface{} //
+	ID          interface{} // Facility ID
+	NAME        interface{} // Facility Name
+	DESCRIPTION interface{} // Facility Description
+	LOCATION    interface{} // Facility Location
+	IMAGES      interface{} // Image urls
 }
