@@ -12,12 +12,12 @@ import (
 // EvaluationResponse is the golang structure of table evaluation_response for DAO operations like Where/Data.
 type EvaluationResponse struct {
 	g.Meta           `orm:"table:evaluation_response, do:true"`
-	ID               interface{} // ID
-	PARENTRESPONSEID interface{} // reponse_id
-	USERID           interface{} // response_user_id
-	EVALUATIONID     interface{} // evaluation_id
-	CONTENT          interface{} // response_content
-	UPDATETIME       *gtime.Time // response_time
-	IMAGES           interface{} // Image urls
-	VIDEOS           interface{} // Videos urls
+	Id               interface{} // ID
+	ParentResponseId interface{} // reponse_id
+	UserId           interface{} // response_user_id
+	EvaluationId     interface{} // evaluation_id
+	Content          interface{} // response_content
+	UpdateTime       *gtime.Time // response_time
+	Images           interface{} // Image urls
+	Videos           interface{} // Videos urls
 }

@@ -50,7 +50,7 @@ func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq
 		Name:        req.Name,
 		Description: req.Description,
 		Location:    req.Location,
-		Cost:        req.Cost,
+		// TODO: images
 	}
 
 	err = service.Facility().AddFacility(ctx, facility)
@@ -67,7 +67,7 @@ func (c *cFacilityAdmin) ModifyFacility(ctx context.Context, req *v1.ModifyFacil
 		Name:        req.Name,
 		Description: req.Description,
 		Location:    req.Location,
-		Cost:        req.Cost,
+		// TODO: images
 	}
 	err = service.Facility().ModifyFacility(ctx, facility)
 	if err != nil {

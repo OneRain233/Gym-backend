@@ -10,14 +10,14 @@ import (
 
 // TopicComment is the golang structure for table topic_comment.
 type TopicComment struct {
-	ID              int         `json:"iD"              ` // ID
-	USERID          int         `json:"uSERID"          ` // USER_ID
-	TOPICID         int         `json:"tOPICID"         ` // TOPIC_ID
-	PARENTCOMMENTID int         `json:"pARENTCOMMENTID" ` // Parent comment ID
-	TITLE           string      `json:"tITLE"           ` // Comment_title
-	CONTENT         string      `json:"cONTENT"         ` // Comment_conrtent
-	APPROVE         string      `json:"aPPROVE"         ` // comment_approve
-	DISAPPROVE      string      `json:"dISAPPROVE"      ` // comment_disapprove
-	UPDATETIME      *gtime.Time `json:"uPDATETIME"      ` // creat_time
-	IMAGES          string      `json:"iMAGES"          ` // Image urls
+	Id              int         `json:"id"              ` // ID
+	UserId          int         `json:"userId"          ` // USER_ID
+	TopicId         int         `json:"topicId"         ` // TOPIC_ID
+	ParentCommentId int         `json:"parentCommentId" ` // Parent comment ID
+	Title           string      `json:"title"           ` // Comment_title
+	Content         string      `json:"content"         ` // Comment_conrtent
+	Approve         string      `json:"approve"         ` // comment_approve
+	Disapprove      string      `json:"disapprove"      ` // comment_disapprove
+	UpdateTime      *gtime.Time `json:"updateTime"      ` // creat_time
+	Images          string      `json:"images"          ` // Image urls
 }

@@ -10,12 +10,12 @@ import (
 
 // EvaluationResponse is the golang structure for table evaluation_response.
 type EvaluationResponse struct {
-	ID               int         `json:"iD"               ` // ID
-	PARENTRESPONSEID int         `json:"pARENTRESPONSEID" ` // reponse_id
-	USERID           int         `json:"uSERID"           ` // response_user_id
-	EVALUATIONID     int         `json:"eVALUATIONID"     ` // evaluation_id
-	CONTENT          string      `json:"cONTENT"          ` // response_content
-	UPDATETIME       *gtime.Time `json:"uPDATETIME"       ` // response_time
-	IMAGES           string      `json:"iMAGES"           ` // Image urls
-	VIDEOS           string      `json:"vIDEOS"           ` // Videos urls
+	Id               int         `json:"id"               ` // ID
+	ParentResponseId int         `json:"parentResponseId" ` // reponse_id
+	UserId           int         `json:"userId"           ` // response_user_id
+	EvaluationId     int         `json:"evaluationId"     ` // evaluation_id
+	Content          string      `json:"content"          ` // response_content
+	UpdateTime       *gtime.Time `json:"updateTime"       ` // response_time
+	Images           string      `json:"images"           ` // Image urls
+	Videos           string      `json:"videos"           ` // Videos urls
 }

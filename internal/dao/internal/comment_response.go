@@ -20,21 +20,21 @@ type CommentResponseDao struct {
 
 // CommentResponseColumns defines and stores column names for table comment_response.
 type CommentResponseColumns struct {
-	ID               string // ID
-	PARENTRESPONSEID string // PARENT_RESPONSE_ID
+	Id               string // ID
+	ParentResponseId string // PARENT_RESPONSE_ID
 	Title            string // title
 	Content          string // content
-	USERID           string // USER_ID
+	UserId           string // USER_ID
 	CreatTime        string // creat_time
 }
 
 // commentResponseColumns holds the columns for table comment_response.
 var commentResponseColumns = CommentResponseColumns{
-	ID:               "ID",
-	PARENTRESPONSEID: "PARENT_RESPONSE_ID",
+	Id:               "id",
+	ParentResponseId: "parent_response_id",
 	Title:            "title",
 	Content:          "content",
-	USERID:           "USER_ID",
+	UserId:           "user_id",
 	CreatTime:        "creat_time",
 }
 

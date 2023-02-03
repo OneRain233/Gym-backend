@@ -6,6 +6,6 @@ package entity
 
 // FacilityScore is the golang structure for table facility_score.
 type FacilityScore struct {
-	FACILITYID int     `json:"fACILITYID" ` // Facility ID
-	SCORE      float64 `json:"sCORE"      ` // Current Score
+	FacilityId int     `json:"facilityId" ` // Facility ID
+	Score      float64 `json:"score"      ` // Current Score
 }

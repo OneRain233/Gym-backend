@@ -10,13 +10,13 @@ import (
 
 // Order is the golang structure for table order.
 type Order struct {
-	ID          int         `json:"iD"          ` // ID
-	USERID      int         `json:"uSERID"      ` // User id
-	PLACEID     int         `json:"pLACEID"     ` // Place ID
-	TIME        *gtime.Time `json:"tIME"        ` // Order Time
-	STARTTIME   *gtime.Time `json:"sTARTTIME"   ` // Start time of the order
-	ENDTIME     *gtime.Time `json:"eNDTIME"     ` // End time of the order
-	PAYMENTTYPE int         `json:"pAYMENTTYPE" ` // Payment type
-	AMOUNT      float64     `json:"aMOUNT"      ` // Amount of the order
-	ORDERCODE   string      `json:"oRDERCODE"   ` // Order code
+	Id          int         `json:"id"          ` // ID
+	UserId      int         `json:"userId"      ` // User id
+	PlaceId     int         `json:"placeId"     ` // Place ID
+	Time        *gtime.Time `json:"time"        ` // Order Time
+	StartTime   *gtime.Time `json:"startTime"   ` // Start time of the order
+	EndTime     *gtime.Time `json:"endTime"     ` // End time of the order
+	PaymentType int         `json:"paymentType" ` // Payment type
+	Amount      float64     `json:"amount"      ` // Amount of the order
+	OrderCode   string      `json:"orderCode"   ` // Order code
 }

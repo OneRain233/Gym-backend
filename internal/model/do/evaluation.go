@@ -11,12 +11,12 @@ import (
 // Evaluation is the golang structure of table evaluation for DAO operations like Where/Data.
 type Evaluation struct {
 	g.Meta      `orm:"table:evaluation, do:true"`
-	ID          interface{} // ID
-	USERID      interface{} // User id
-	FACILITYID  interface{} // Facility Id
-	SCORE       interface{} // Score
-	DESCRIPTION interface{} // Description
-	ANONYMOUS   interface{} // IS Anonymous
-	IMAGES      interface{} // Image urls
-	VIDEOS      interface{} // Videos urls
+	Id          interface{} // ID
+	UserId      interface{} // User id
+	FacilityId  interface{} // Facility Id
+	Score       interface{} // Score
+	Description interface{} // Description
+	Anonymous   interface{} // IS Anonymous
+	Images      interface{} // Image urls
+	Videos      interface{} // Videos urls
 }

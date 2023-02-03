@@ -20,28 +20,28 @@ type OrderDao struct {
 
 // OrderColumns defines and stores column names for table order.
 type OrderColumns struct {
-	ID          string // ID
-	USERID      string // User id
-	PLACEID     string // Place ID
-	TIME        string // Order Time
-	STARTTIME   string // Start time of the order
-	ENDTIME     string // End time of the order
-	PAYMENTTYPE string // Payment type
-	AMOUNT      string // Amount of the order
-	ORDERCODE   string // Order code
+	Id          string // ID
+	UserId      string // User id
+	PlaceId     string // Place ID
+	Time        string // Order Time
+	StartTime   string // Start time of the order
+	EndTime     string // End time of the order
+	PaymentType string // Payment type
+	Amount      string // Amount of the order
+	OrderCode   string // Order code
 }
 
 // orderColumns holds the columns for table order.
 var orderColumns = OrderColumns{
-	ID:          "ID",
-	USERID:      "USER_ID",
-	PLACEID:     "PLACE_ID",
-	TIME:        "TIME",
-	STARTTIME:   "START_TIME",
-	ENDTIME:     "END_TIME",
-	PAYMENTTYPE: "PAYMENT_TYPE",
-	AMOUNT:      "AMOUNT",
-	ORDERCODE:   "ORDER_CODE",
+	Id:          "id",
+	UserId:      "user_id",
+	PlaceId:     "place_id",
+	Time:        "time",
+	StartTime:   "start_time",
+	EndTime:     "end_time",
+	PaymentType: "payment_type",
+	Amount:      "amount",
+	OrderCode:   "order_code",
 }
 
 // NewOrderDao creates and returns a new DAO object for table data access.

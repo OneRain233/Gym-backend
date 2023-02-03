@@ -12,13 +12,13 @@ import (
 // Topics is the golang structure of table topics for DAO operations like Where/Data.
 type Topics struct {
 	g.Meta          `orm:"table:topics, do:true"`
-	ID              interface{} // ID
-	USERID          interface{} // USER_ID
-	CONTENT         interface{} // content
-	TITLE           interface{} // title
-	UPDATETIME      *gtime.Time // time
-	APPROVECOUNT    interface{} // Approve count
-	DISAPPROVECOUNT interface{} // Disapprove count
-	IMAGES          interface{} // Image urls
-	VIDEOS          interface{} // Video urls
+	Id              interface{} // ID
+	UserId          interface{} // USER_ID
+	Content         interface{} // content
+	Title           interface{} // title
+	UpdateTime      *gtime.Time // time
+	ApproveCount    interface{} // Approve count
+	DisapproveCount interface{} // Disapprove count
+	Images          interface{} // Image urls
+	Videos          interface{} // Video urls
 }

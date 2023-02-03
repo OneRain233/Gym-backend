@@ -12,15 +12,15 @@ import (
 // Course is the golang structure of table course for DAO operations like Where/Data.
 type Course struct {
 	g.Meta       `orm:"table:course, do:true"`
-	ID           interface{} // ID
-	STATUS       interface{} // status
-	STARTTIME    *gtime.Time // start_time
-	ENDTIME      *gtime.Time // end_time
-	TITLE        interface{} // title
-	DESCRIPTION  interface{} // course discription
-	TEACHER      interface{} // teacher
-	TYPE         interface{} // type
-	PLACE        interface{} // place
-	MAXMEMBERNUM interface{} // max member num
-	NOWNUM       interface{} // now member num
+	Id           interface{} // ID
+	Status       interface{} // status
+	StartTime    *gtime.Time // start_time
+	EndTime      *gtime.Time // end_time
+	Title        interface{} // title
+	Description  interface{} // course discription
+	Teacher      interface{} // teacher
+	Type         interface{} // type
+	Place        interface{} // place
+	MaxMemberNum interface{} // max member num
+	CurrentNum   interface{} // now member num
 }

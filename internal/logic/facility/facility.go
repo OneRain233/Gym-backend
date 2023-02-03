@@ -111,10 +111,6 @@ func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facil
 		err = gerror.New("Location is empty")
 		return
 	}
-	if facility.Cost == 0 {
-		err = gerror.New("Cost is empty")
-		return
-	}
 
 	cnt, err := dao.Facility.Ctx(ctx).Where("name", facility.Name).Count()
 	if err != nil {

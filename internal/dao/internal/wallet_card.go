@@ -20,22 +20,22 @@ type WalletCardDao struct {
 
 // WalletCardColumns defines and stores column names for table wallet_card.
 type WalletCardColumns struct {
-	ID          string // ID
-	BANKID      string // Bank ID of the card
-	WALLETID    string // Wallet ID of the card
-	CARDACCOUNT string // Card number
-	PHONE       string // Phone of the card
-	AMOUNT      string // Amount in the card
+	Id          string // ID
+	BankId      string // Bank ID of the card
+	WalletId    string // Wallet ID of the card
+	CardAccount string // Card number
+	Phone       string // Phone of the card
+	Amount      string // Amount in the card
 }
 
 // walletCardColumns holds the columns for table wallet_card.
 var walletCardColumns = WalletCardColumns{
-	ID:          "ID",
-	BANKID:      "BANK_ID",
-	WALLETID:    "WALLET_ID",
-	CARDACCOUNT: "CARD_ACCOUNT",
-	PHONE:       "PHONE",
-	AMOUNT:      "AMOUNT",
+	Id:          "id",
+	BankId:      "bank_id",
+	WalletId:    "wallet_id",
+	CardAccount: "card_account",
+	Phone:       "phone",
+	Amount:      "amount",
 }
 
 // NewWalletCardDao creates and returns a new DAO object for table data access.

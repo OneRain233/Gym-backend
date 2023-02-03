@@ -6,8 +6,8 @@ package entity
 
 // Wallet is the golang structure for table wallet.
 type Wallet struct {
-	ID     int     `json:"iD"     ` // ID
-	USERID int     `json:"uSERID" ` // User ID
-	AMOUNT float64 `json:"aMOUNT" ` // Money amount
-	STATUS int     `json:"sTATUS" ` // Wallet status
+	Id     int     `json:"id"     ` // ID
+	UserId int     `json:"userId" ` // User ID
+	Amount float64 `json:"amount" ` // Money amount
+	Status int     `json:"status" ` // Wallet status
 }

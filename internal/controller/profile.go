@@ -18,7 +18,7 @@ func (c *cProfile) GetProfile(ctx context.Context, req *v1.ProfileReq) (res *v1.
 	res.Data.Role = uint(user.Role)
 	res.Data.Email = user.Email
 	res.Data.Phone = user.Phone
-	res.Data.Gender = user.Gender
+	res.Data.Gender = uint(user.Gender)
 	return
 
 }

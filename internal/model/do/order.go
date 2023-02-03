@@ -12,13 +12,13 @@ import (
 // Order is the golang structure of table order for DAO operations like Where/Data.
 type Order struct {
 	g.Meta      `orm:"table:order, do:true"`
-	ID          interface{} // ID
-	USERID      interface{} // User id
-	PLACEID     interface{} // Place ID
-	TIME        *gtime.Time // Order Time
-	STARTTIME   *gtime.Time // Start time of the order
-	ENDTIME     *gtime.Time // End time of the order
-	PAYMENTTYPE interface{} // Payment type
-	AMOUNT      interface{} // Amount of the order
-	ORDERCODE   interface{} // Order code
+	Id          interface{} // ID
+	UserId      interface{} // User id
+	PlaceId     interface{} // Place ID
+	Time        *gtime.Time // Order Time
+	StartTime   *gtime.Time // Start time of the order
+	EndTime     *gtime.Time // End time of the order
+	PaymentType interface{} // Payment type
+	Amount      interface{} // Amount of the order
+	OrderCode   interface{} // Order code
 }

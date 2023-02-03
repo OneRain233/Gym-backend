@@ -11,8 +11,8 @@ import (
 // Wallet is the golang structure of table wallet for DAO operations like Where/Data.
 type Wallet struct {
 	g.Meta `orm:"table:wallet, do:true"`
-	ID     interface{} // ID
-	USERID interface{} // User ID
-	AMOUNT interface{} // Money amount
-	STATUS interface{} // Wallet status
+	Id     interface{} // ID
+	UserId interface{} // User ID
+	Amount interface{} // Money amount
+	Status interface{} // Wallet status
 }

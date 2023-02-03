@@ -20,18 +20,18 @@ type WalletDao struct {
 
 // WalletColumns defines and stores column names for table wallet.
 type WalletColumns struct {
-	ID     string // ID
-	USERID string // User ID
-	AMOUNT string // Money amount
-	STATUS string // Wallet status
+	Id     string // ID
+	UserId string // User ID
+	Amount string // Money amount
+	Status string // Wallet status
 }
 
 // walletColumns holds the columns for table wallet.
 var walletColumns = WalletColumns{
-	ID:     "ID",
-	USERID: "USER_ID",
-	AMOUNT: "AMOUNT",
-	STATUS: "STATUS",
+	Id:     "id",
+	UserId: "user_id",
+	Amount: "amount",
+	Status: "status",
 }
 
 // NewWalletDao creates and returns a new DAO object for table data access.

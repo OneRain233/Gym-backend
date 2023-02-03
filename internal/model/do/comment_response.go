@@ -12,10 +12,10 @@ import (
 // CommentResponse is the golang structure of table comment_response for DAO operations like Where/Data.
 type CommentResponse struct {
 	g.Meta           `orm:"table:comment_response, do:true"`
-	ID               interface{} // ID
-	PARENTRESPONSEID interface{} // PARENT_RESPONSE_ID
+	Id               interface{} // ID
+	ParentResponseId interface{} // PARENT_RESPONSE_ID
 	Title            interface{} // title
 	Content          interface{} // content
-	USERID           interface{} // USER_ID
+	UserId           interface{} // USER_ID
 	CreatTime        *gtime.Time // creat_time
 }

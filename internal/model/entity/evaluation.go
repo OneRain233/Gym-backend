@@ -6,12 +6,12 @@ package entity
 
 // Evaluation is the golang structure for table evaluation.
 type Evaluation struct {
-	ID          int    `json:"iD"          ` // ID
-	USERID      int    `json:"uSERID"      ` // User id
-	FACILITYID  int    `json:"fACILITYID"  ` // Facility Id
-	SCORE       string `json:"sCORE"       ` // Score
-	DESCRIPTION string `json:"dESCRIPTION" ` // Description
-	ANONYMOUS   string `json:"aNONYMOUS"   ` // IS Anonymous
-	IMAGES      string `json:"iMAGES"      ` // Image urls
-	VIDEOS      string `json:"vIDEOS"      ` // Videos urls
+	Id          int    `json:"id"          ` // ID
+	UserId      int    `json:"userId"      ` // User id
+	FacilityId  int    `json:"facilityId"  ` // Facility Id
+	Score       string `json:"score"       ` // Score
+	Description string `json:"description" ` // Description
+	Anonymous   string `json:"anonymous"   ` // IS Anonymous
+	Images      string `json:"images"      ` // Image urls
+	Videos      string `json:"videos"      ` // Videos urls
 }

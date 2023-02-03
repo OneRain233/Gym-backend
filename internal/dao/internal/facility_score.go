@@ -20,14 +20,14 @@ type FacilityScoreDao struct {
 
 // FacilityScoreColumns defines and stores column names for table facility_score.
 type FacilityScoreColumns struct {
-	FACILITYID string // Facility ID
-	SCORE      string // Current Score
+	FacilityId string // Facility ID
+	Score      string // Current Score
 }
 
 // facilityScoreColumns holds the columns for table facility_score.
 var facilityScoreColumns = FacilityScoreColumns{
-	FACILITYID: "FACILITY_ID",
-	SCORE:      "SCORE",
+	FacilityId: "facility_id",
+	Score:      "score",
 }
 
 // NewFacilityScoreDao creates and returns a new DAO object for table data access.

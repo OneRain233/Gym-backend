@@ -11,9 +11,9 @@ import (
 // Payment is the golang structure of table payment for DAO operations like Where/Data.
 type Payment struct {
 	g.Meta      `orm:"table:payment, do:true"`
-	ID          interface{} // ID
-	WALLETID    interface{} // Wallet ID
-	ORDERID     interface{} // Order ID
-	PAYMENTCODE interface{} // Payment code
-	TIME        interface{} // Payment Time
+	Id          interface{} // ID
+	WalletId    interface{} // Wallet ID
+	OrderId     interface{} // Order ID
+	PaymentCode interface{} // Payment code
+	Time        interface{} // Payment Time
 }

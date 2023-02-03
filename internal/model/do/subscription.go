@@ -12,8 +12,8 @@ import (
 // Subscription is the golang structure of table subscription for DAO operations like Where/Data.
 type Subscription struct {
 	g.Meta    `orm:"table:subscription, do:true"`
-	ID        interface{} // ID
-	USERID    interface{} //
-	STARTTIME *gtime.Time //
+	Id        interface{} // ID
+	UserId    interface{} //
+	StartTime *gtime.Time //
 	ENDTIME   *gtime.Time //
 }

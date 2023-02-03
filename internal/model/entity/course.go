@@ -10,15 +10,15 @@ import (
 
 // Course is the golang structure for table course.
 type Course struct {
-	ID           int         `json:"iD"           ` // ID
-	STATUS       int         `json:"sTATUS"       ` // status
-	STARTTIME    *gtime.Time `json:"sTARTTIME"    ` // start_time
-	ENDTIME      *gtime.Time `json:"eNDTIME"      ` // end_time
-	TITLE        string      `json:"tITLE"        ` // title
-	DESCRIPTION  string      `json:"dESCRIPTION"  ` // course discription
-	TEACHER      string      `json:"tEACHER"      ` // teacher
-	TYPE         int         `json:"tYPE"         ` // type
-	PLACE        string      `json:"pLACE"        ` // place
-	MAXMEMBERNUM int         `json:"mAXMEMBERNUM" ` // max member num
-	NOWNUM       int         `json:"nOWNUM"       ` // now member num
+	Id           int         `json:"id"           ` // ID
+	Status       int         `json:"status"       ` // status
+	StartTime    *gtime.Time `json:"startTime"    ` // start_time
+	EndTime      *gtime.Time `json:"endTime"      ` // end_time
+	Title        string      `json:"title"        ` // title
+	Description  string      `json:"description"  ` // course discription
+	Teacher      string      `json:"teacher"      ` // teacher
+	Type         int         `json:"type"         ` // type
+	Place        string      `json:"place"        ` // place
+	MaxMemberNum int         `json:"maxMemberNum" ` // max member num
+	CurrentNum   int         `json:"currentNum"   ` // now member num
 }

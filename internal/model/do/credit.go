@@ -11,7 +11,7 @@ import (
 // Credit is the golang structure of table credit for DAO operations like Where/Data.
 type Credit struct {
 	g.Meta `orm:"table:credit, do:true"`
-	ID     interface{} // ID
-	USERID interface{} // User ID
-	CREDIT interface{} // Credit of User
+	Id     interface{} // ID
+	UserId interface{} // User ID
+	Credit interface{} // Credit of User
 }

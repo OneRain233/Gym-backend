@@ -20,26 +20,26 @@ type EvaluationResponseDao struct {
 
 // EvaluationResponseColumns defines and stores column names for table evaluation_response.
 type EvaluationResponseColumns struct {
-	ID               string // ID
-	PARENTRESPONSEID string // reponse_id
-	USERID           string // response_user_id
-	EVALUATIONID     string // evaluation_id
-	CONTENT          string // response_content
-	UPDATETIME       string // response_time
-	IMAGES           string // Image urls
-	VIDEOS           string // Videos urls
+	Id               string // ID
+	ParentResponseId string // reponse_id
+	UserId           string // response_user_id
+	EvaluationId     string // evaluation_id
+	Content          string // response_content
+	UpdateTime       string // response_time
+	Images           string // Image urls
+	Videos           string // Videos urls
 }
 
 // evaluationResponseColumns holds the columns for table evaluation_response.
 var evaluationResponseColumns = EvaluationResponseColumns{
-	ID:               "ID",
-	PARENTRESPONSEID: "PARENT_RESPONSE_ID",
-	USERID:           "USER_ID",
-	EVALUATIONID:     "EVALUATION_ID",
-	CONTENT:          "CONTENT",
-	UPDATETIME:       "UPDATE_TIME",
-	IMAGES:           "IMAGES",
-	VIDEOS:           "VIDEOS",
+	Id:               "id",
+	ParentResponseId: "parent_response_id",
+	UserId:           "user_id",
+	EvaluationId:     "evaluation_id",
+	Content:          "content",
+	UpdateTime:       "update_time",
+	Images:           "images",
+	Videos:           "videos",
 }
 
 // NewEvaluationResponseDao creates and returns a new DAO object for table data access.

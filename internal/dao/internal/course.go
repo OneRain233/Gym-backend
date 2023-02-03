@@ -20,32 +20,32 @@ type CourseDao struct {
 
 // CourseColumns defines and stores column names for table course.
 type CourseColumns struct {
-	ID           string // ID
-	STATUS       string // status
-	STARTTIME    string // start_time
-	ENDTIME      string // end_time
-	TITLE        string // title
-	DESCRIPTION  string // course discription
-	TEACHER      string // teacher
-	TYPE         string // type
-	PLACE        string // place
-	MAXMEMBERNUM string // max member num
-	NOWNUM       string // now member num
+	Id           string // ID
+	Status       string // status
+	StartTime    string // start_time
+	EndTime      string // end_time
+	Title        string // title
+	Description  string // course discription
+	Teacher      string // teacher
+	Type         string // type
+	Place        string // place
+	MaxMemberNum string // max member num
+	CurrentNum   string // now member num
 }
 
 // courseColumns holds the columns for table course.
 var courseColumns = CourseColumns{
-	ID:           "ID",
-	STATUS:       "STATUS",
-	STARTTIME:    "START_TIME",
-	ENDTIME:      "END_TIME",
-	TITLE:        "TITLE",
-	DESCRIPTION:  "DESCRIPTION",
-	TEACHER:      "TEACHER",
-	TYPE:         "TYPE",
-	PLACE:        "PLACE",
-	MAXMEMBERNUM: "MAX_MEMBER_NUM",
-	NOWNUM:       "NOW_NUM",
+	Id:           "id",
+	Status:       "status",
+	StartTime:    "start_time",
+	EndTime:      "end_time",
+	Title:        "title",
+	Description:  "description",
+	Teacher:      "teacher",
+	Type:         "type",
+	Place:        "place",
+	MaxMemberNum: "max_member_num",
+	CurrentNum:   "current_num",
 }
 
 // NewCourseDao creates and returns a new DAO object for table data access.

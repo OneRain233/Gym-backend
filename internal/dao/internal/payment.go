@@ -20,20 +20,20 @@ type PaymentDao struct {
 
 // PaymentColumns defines and stores column names for table payment.
 type PaymentColumns struct {
-	ID          string // ID
-	WALLETID    string // Wallet ID
-	ORDERID     string // Order ID
-	PAYMENTCODE string // Payment code
-	TIME        string // Payment Time
+	Id          string // ID
+	WalletId    string // Wallet ID
+	OrderId     string // Order ID
+	PaymentCode string // Payment code
+	Time        string // Payment Time
 }
 
 // paymentColumns holds the columns for table payment.
 var paymentColumns = PaymentColumns{
-	ID:          "ID",
-	WALLETID:    "WALLET_ID",
-	ORDERID:     "ORDER_ID",
-	PAYMENTCODE: "PAYMENT_CODE",
-	TIME:        "TIME",
+	Id:          "id",
+	WalletId:    "wallet_id",
+	OrderId:     "order_id",
+	PaymentCode: "payment_code",
+	Time:        "time",
 }
 
 // NewPaymentDao creates and returns a new DAO object for table data access.

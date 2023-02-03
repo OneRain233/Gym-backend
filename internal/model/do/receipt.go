@@ -11,7 +11,7 @@ import (
 // Receipt is the golang structure of table receipt for DAO operations like Where/Data.
 type Receipt struct {
 	g.Meta      `orm:"table:receipt, do:true"`
-	ID          interface{} // ID
-	ORDERID     interface{} // Order Id
-	RECEIPTPATH interface{} // PDF Receipt path
+	Id          interface{} // ID
+	OrderId     interface{} // Order Id
+	ReceiptPath interface{} // PDF Receipt path
 }

@@ -6,10 +6,10 @@ package entity
 
 // WalletCard is the golang structure for table wallet_card.
 type WalletCard struct {
-	ID          int    `json:"iD"          ` // ID
-	BANKID      int    `json:"bANKID"      ` // Bank ID of the card
-	WALLETID    int    `json:"wALLETID"    ` // Wallet ID of the card
-	CARDACCOUNT string `json:"cARDACCOUNT" ` // Card number
-	PHONE       string `json:"pHONE"       ` // Phone of the card
-	AMOUNT      string `json:"aMOUNT"      ` // Amount in the card
+	Id          int    `json:"id"          ` // ID
+	BankId      int    `json:"bankId"      ` // Bank ID of the card
+	WalletId    int    `json:"walletId"    ` // Wallet ID of the card
+	CardAccount string `json:"cardAccount" ` // Card number
+	Phone       string `json:"phone"       ` // Phone of the card
+	Amount      string `json:"amount"      ` // Amount in the card
 }

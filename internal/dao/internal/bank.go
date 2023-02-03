@@ -20,14 +20,14 @@ type BankDao struct {
 
 // BankColumns defines and stores column names for table bank.
 type BankColumns struct {
-	ID   string // ID
-	NAME string // Bank name
+	Id   string // ID
+	Name string // Bank name
 }
 
 // bankColumns holds the columns for table bank.
 var bankColumns = BankColumns{
-	ID:   "ID",
-	NAME: "NAME",
+	Id:   "id",
+	Name: "name",
 }
 
 // NewBankDao creates and returns a new DAO object for table data access.

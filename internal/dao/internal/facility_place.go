@@ -20,20 +20,20 @@ type FacilityPlaceDao struct {
 
 // FacilityPlaceColumns defines and stores column names for table facility_place.
 type FacilityPlaceColumns struct {
-	ID          string // ID
-	FACILITYID  string // Facility ID
-	NAME        string // Place Name
-	DESCRIPTION string // Place Description
-	COST        string // Place order code
+	Id          string // ID
+	FacilityId  string // Facility ID
+	Name        string // Place Name
+	Description string // Place Description
+	Cost        string // Place order code
 }
 
 // facilityPlaceColumns holds the columns for table facility_place.
 var facilityPlaceColumns = FacilityPlaceColumns{
-	ID:          "ID",
-	FACILITYID:  "FACILITY_ID",
-	NAME:        "NAME",
-	DESCRIPTION: "DESCRIPTION",
-	COST:        "COST",
+	Id:          "id",
+	FacilityId:  "facility_id",
+	Name:        "name",
+	Description: "description",
+	Cost:        "cost",
 }
 
 // NewFacilityPlaceDao creates and returns a new DAO object for table data access.

@@ -20,16 +20,16 @@ type CreditDao struct {
 
 // CreditColumns defines and stores column names for table credit.
 type CreditColumns struct {
-	ID     string // ID
-	USERID string // User ID
-	CREDIT string // Credit of User
+	Id     string // ID
+	UserId string // User ID
+	Credit string // Credit of User
 }
 
 // creditColumns holds the columns for table credit.
 var creditColumns = CreditColumns{
-	ID:     "ID",
-	USERID: "USER_ID",
-	CREDIT: "CREDIT",
+	Id:     "id",
+	UserId: "user_id",
+	Credit: "credit",
 }
 
 // NewCreditDao creates and returns a new DAO object for table data access.

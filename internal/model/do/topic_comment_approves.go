@@ -11,9 +11,9 @@ import (
 // TopicCommentApproves is the golang structure of table topic_comment_approves for DAO operations like Where/Data.
 type TopicCommentApproves struct {
 	g.Meta     `orm:"table:topic_comment_approves, do:true"`
-	ID         interface{} // ID
-	TYPE       interface{} // TYPE
-	UPDATETIME interface{} // Update time
-	USERID     interface{} // USER_ID
-	COMMENTID  interface{} // topic_comment_ID
+	Id         interface{} // ID
+	Type       interface{} // TYPE
+	UpdateTime interface{} // Update time
+	UserId     interface{} // USER_ID
+	CommentId  interface{} // topic_comment_ID
 }

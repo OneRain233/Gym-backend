@@ -11,6 +11,6 @@ import (
 // FacilityScore is the golang structure of table facility_score for DAO operations like Where/Data.
 type FacilityScore struct {
 	g.Meta     `orm:"table:facility_score, do:true"`
-	FACILITYID interface{} // Facility ID
-	SCORE      interface{} // Current Score
+	FacilityId interface{} // Facility ID
+	Score      interface{} // Current Score
 }

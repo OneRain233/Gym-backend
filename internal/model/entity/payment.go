@@ -6,9 +6,9 @@ package entity
 
 // Payment is the golang structure for table payment.
 type Payment struct {
-	ID          int    `json:"iD"          ` // ID
-	WALLETID    string `json:"wALLETID"    ` // Wallet ID
-	ORDERID     string `json:"oRDERID"     ` // Order ID
-	PAYMENTCODE string `json:"pAYMENTCODE" ` // Payment code
-	TIME        string `json:"tIME"        ` // Payment Time
+	Id          int    `json:"id"          ` // ID
+	WalletId    string `json:"walletId"    ` // Wallet ID
+	OrderId     string `json:"orderId"     ` // Order ID
+	PaymentCode string `json:"paymentCode" ` // Payment code
+	Time        string `json:"time"        ` // Payment Time
 }

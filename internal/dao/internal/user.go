@@ -20,30 +20,30 @@ type UserDao struct {
 
 // UserColumns defines and stores column names for table user.
 type UserColumns struct {
-	ID         string // USER ID
-	USERNAME   string // USERNAME
-	PASSWORD   string // PASSWORD
-	AVATAR     string // AVATAR URL
-	EMAIL      string // EMAIL ADDRESS
-	PHONE      string // PHONE NUMBER
-	GENDER     string // GENDER
-	CREATETIME string // CREATE AT
-	ROLE       string // ROLE
-	LOGINTIME  string // LAST LOGIN TIME
+	Id         string // USER ID
+	Username   string // USERNAME
+	Password   string // PASSWORD
+	Avatar     string // AVATAR URL
+	Email      string // EMAIL ADDRESS
+	Phone      string // PHONE NUMBER
+	Gender     string // GENDER
+	UpdateTime string // CREATE AT
+	Role       string // ROLE
+	LoginTime  string // LAST LOGIN TIME
 }
 
 // userColumns holds the columns for table user.
 var userColumns = UserColumns{
-	ID:         "ID",
-	USERNAME:   "USERNAME",
-	PASSWORD:   "PASSWORD",
-	AVATAR:     "AVATAR",
-	EMAIL:      "EMAIL",
-	PHONE:      "PHONE",
-	GENDER:     "GENDER",
-	CREATETIME: "CREATE_TIME",
-	ROLE:       "ROLE",
-	LOGINTIME:  "LOGIN_TIME",
+	Id:         "id",
+	Username:   "username",
+	Password:   "password",
+	Avatar:     "avatar",
+	Email:      "email",
+	Phone:      "phone",
+	Gender:     "gender",
+	UpdateTime: "update_time",
+	Role:       "role",
+	LoginTime:  "login_time",
 }
 
 // NewUserDao creates and returns a new DAO object for table data access.

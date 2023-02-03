@@ -28,10 +28,10 @@ type FacilitySearchRes struct {
 
 type AddFacilityReq struct {
 	g.Meta      `path:"/add_facility" tags:"Facility" method:"post" summary:"Add Facility"`
-	Name        string  `json:"name" v:"required#Please input name"`
-	Description string  `json:"description" v:"required#Please input description"`
-	Location    string  `json:"location" v:"required#Please input location"`
-	Cost        float64 `json:"cost" v:"required#Please input cost"`
+	Name        string `json:"name" v:"required#Please input name"`
+	Description string `json:"description" v:"required#Please input description"`
+	Location    string `json:"location" v:"required#Please input location"`
+	// TODO: images
 }
 
 type AddFacilityRes struct {

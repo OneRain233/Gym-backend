@@ -20,20 +20,20 @@ type TopicCommentApprovesDao struct {
 
 // TopicCommentApprovesColumns defines and stores column names for table topic_comment_approves.
 type TopicCommentApprovesColumns struct {
-	ID         string // ID
-	TYPE       string // TYPE
-	UPDATETIME string // Update time
-	USERID     string // USER_ID
-	COMMENTID  string // topic_comment_ID
+	Id         string // ID
+	Type       string // TYPE
+	UpdateTime string // Update time
+	UserId     string // USER_ID
+	CommentId  string // topic_comment_ID
 }
 
 // topicCommentApprovesColumns holds the columns for table topic_comment_approves.
 var topicCommentApprovesColumns = TopicCommentApprovesColumns{
-	ID:         "ID",
-	TYPE:       "TYPE",
-	UPDATETIME: "UPDATE_TIME",
-	USERID:     "USER_ID",
-	COMMENTID:  "COMMENT_ID",
+	Id:         "id",
+	Type:       "type",
+	UpdateTime: "update_time",
+	UserId:     "user_id",
+	CommentId:  "comment_id",
 }
 
 // NewTopicCommentApprovesDao creates and returns a new DAO object for table data access.

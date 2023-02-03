@@ -11,10 +11,10 @@ import (
 // WalletCard is the golang structure of table wallet_card for DAO operations like Where/Data.
 type WalletCard struct {
 	g.Meta      `orm:"table:wallet_card, do:true"`
-	ID          interface{} // ID
-	BANKID      interface{} // Bank ID of the card
-	WALLETID    interface{} // Wallet ID of the card
-	CARDACCOUNT interface{} // Card number
-	PHONE       interface{} // Phone of the card
-	AMOUNT      interface{} // Amount in the card
+	Id          interface{} // ID
+	BankId      interface{} // Bank ID of the card
+	WalletId    interface{} // Wallet ID of the card
+	CardAccount interface{} // Card number
+	Phone       interface{} // Phone of the card
+	Amount      interface{} // Amount in the card
 }

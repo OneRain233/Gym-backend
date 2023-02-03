@@ -20,28 +20,28 @@ type TopicsDao struct {
 
 // TopicsColumns defines and stores column names for table topics.
 type TopicsColumns struct {
-	ID              string // ID
-	USERID          string // USER_ID
-	CONTENT         string // content
-	TITLE           string // title
-	UPDATETIME      string // time
-	APPROVECOUNT    string // Approve count
-	DISAPPROVECOUNT string // Disapprove count
-	IMAGES          string // Image urls
-	VIDEOS          string // Video urls
+	Id              string // ID
+	UserId          string // USER_ID
+	Content         string // content
+	Title           string // title
+	UpdateTime      string // time
+	ApproveCount    string // Approve count
+	DisapproveCount string // Disapprove count
+	Images          string // Image urls
+	Videos          string // Video urls
 }
 
 // topicsColumns holds the columns for table topics.
 var topicsColumns = TopicsColumns{
-	ID:              "ID",
-	USERID:          "USER_ID",
-	CONTENT:         "CONTENT",
-	TITLE:           "TITLE",
-	UPDATETIME:      "UPDATE_TIME",
-	APPROVECOUNT:    "APPROVE_COUNT",
-	DISAPPROVECOUNT: "DISAPPROVE_COUNT",
-	IMAGES:          "IMAGES",
-	VIDEOS:          "VIDEOS",
+	Id:              "id",
+	UserId:          "user_id",
+	Content:         "content",
+	Title:           "title",
+	UpdateTime:      "update_time",
+	ApproveCount:    "approve_count",
+	DisapproveCount: "disapprove_count",
+	Images:          "images",
+	Videos:          "videos",
 }
 
 // NewTopicsDao creates and returns a new DAO object for table data access.

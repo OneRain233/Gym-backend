@@ -11,6 +11,6 @@ import (
 // Bank is the golang structure of table bank for DAO operations like Where/Data.
 type Bank struct {
 	g.Meta `orm:"table:bank, do:true"`
-	ID     interface{} // ID
-	NAME   interface{} // Bank name
+	Id     interface{} // ID
+	Name   interface{} // Bank name
 }

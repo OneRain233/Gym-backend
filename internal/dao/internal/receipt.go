@@ -20,16 +20,16 @@ type ReceiptDao struct {
 
 // ReceiptColumns defines and stores column names for table receipt.
 type ReceiptColumns struct {
-	ID          string // ID
-	ORDERID     string // Order Id
-	RECEIPTPATH string // PDF Receipt path
+	Id          string // ID
+	OrderId     string // Order Id
+	ReceiptPath string // PDF Receipt path
 }
 
 // receiptColumns holds the columns for table receipt.
 var receiptColumns = ReceiptColumns{
-	ID:          "ID",
-	ORDERID:     "ORDER_ID",
-	RECEIPTPATH: "RECEIPT_PATH",
+	Id:          "id",
+	OrderId:     "order_id",
+	ReceiptPath: "receipt_path",
 }
 
 // NewReceiptDao creates and returns a new DAO object for table data access.

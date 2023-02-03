@@ -10,9 +10,9 @@ import (
 
 // TopicApproves is the golang structure for table topic_approves.
 type TopicApproves struct {
-	ID         int         `json:"iD"         ` // ID
-	USERID     int         `json:"uSERID"     ` // USER_ID
-	TOPICID    int         `json:"tOPICID"    ` // TOPIC_ID
-	TYPE       int         `json:"tYPE"       ` // TYPE
-	UPDATETIME *gtime.Time `json:"uPDATETIME" ` // create_time
+	Id         int         `json:"id"         ` // ID
+	UserId     int         `json:"userId"     ` // USER_ID
+	TopicId    int         `json:"topicId"    ` // TOPIC_ID
+	Type       int         `json:"type"       ` // TYPE
+	UpdateTime *gtime.Time `json:"updateTime" ` // create_time
 }

@@ -6,9 +6,9 @@ package entity
 
 // TopicCommentApproves is the golang structure for table topic_comment_approves.
 type TopicCommentApproves struct {
-	ID         int `json:"iD"         ` // ID
-	TYPE       int `json:"tYPE"       ` // TYPE
-	UPDATETIME int `json:"uPDATETIME" ` // Update time
-	USERID     int `json:"uSERID"     ` // USER_ID
-	COMMENTID  int `json:"cOMMENTID"  ` // topic_comment_ID
+	Id         int `json:"id"         ` // ID
+	Type       int `json:"type"       ` // TYPE
+	UpdateTime int `json:"updateTime" ` // Update time
+	UserId     int `json:"userId"     ` // USER_ID
+	CommentId  int `json:"commentId"  ` // topic_comment_ID
 }

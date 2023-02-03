@@ -10,13 +10,13 @@ import (
 
 // Topics is the golang structure for table topics.
 type Topics struct {
-	ID              int         `json:"iD"              ` // ID
-	USERID          int         `json:"uSERID"          ` // USER_ID
-	CONTENT         string      `json:"cONTENT"         ` // content
-	TITLE           string      `json:"tITLE"           ` // title
-	UPDATETIME      *gtime.Time `json:"uPDATETIME"      ` // time
-	APPROVECOUNT    int         `json:"aPPROVECOUNT"    ` // Approve count
-	DISAPPROVECOUNT int         `json:"dISAPPROVECOUNT" ` // Disapprove count
-	IMAGES          string      `json:"iMAGES"          ` // Image urls
-	VIDEOS          string      `json:"vIDEOS"          ` // Video urls
+	Id              int         `json:"id"              ` // ID
+	UserId          int         `json:"userId"          ` // USER_ID
+	Content         string      `json:"content"         ` // content
+	Title           string      `json:"title"           ` // title
+	UpdateTime      *gtime.Time `json:"updateTime"      ` // time
+	ApproveCount    int         `json:"approveCount"    ` // Approve count
+	DisapproveCount int         `json:"disapproveCount" ` // Disapprove count
+	Images          string      `json:"images"          ` // Image urls
+	Videos          string      `json:"videos"          ` // Video urls
 }

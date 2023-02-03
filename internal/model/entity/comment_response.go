@@ -10,10 +10,10 @@ import (
 
 // CommentResponse is the golang structure for table comment_response.
 type CommentResponse struct {
-	ID               int         `json:"iD"               ` // ID
-	PARENTRESPONSEID int         `json:"pARENTRESPONSEID" ` // PARENT_RESPONSE_ID
+	Id               int         `json:"id"               ` // ID
+	ParentResponseId int         `json:"parentResponseId" ` // PARENT_RESPONSE_ID
 	Title            string      `json:"title"            ` // title
 	Content          string      `json:"content"          ` // content
-	USERID           int         `json:"uSERID"           ` // USER_ID
+	UserId           int         `json:"userId"           ` // USER_ID
 	CreatTime        *gtime.Time `json:"creatTime"        ` // creat_time
 }

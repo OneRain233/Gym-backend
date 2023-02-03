@@ -6,6 +6,6 @@ package entity
 
 // Bank is the golang structure for table bank.
 type Bank struct {
-	ID   int    `json:"iD"   ` // ID
-	NAME string `json:"nAME" ` // Bank name
+	Id   int    `json:"id"   ` // ID
+	Name string `json:"name" ` // Bank name
 }

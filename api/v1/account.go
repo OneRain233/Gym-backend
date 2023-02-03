@@ -40,7 +40,7 @@ type ProfileRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Data   struct {
 		Username string
-		Gender   string
+		Gender   uint
 		Role     uint
 		Email    string
 		Phone    string

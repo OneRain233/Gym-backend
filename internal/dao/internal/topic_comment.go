@@ -20,30 +20,30 @@ type TopicCommentDao struct {
 
 // TopicCommentColumns defines and stores column names for table topic_comment.
 type TopicCommentColumns struct {
-	ID              string // ID
-	USERID          string // USER_ID
-	TOPICID         string // TOPIC_ID
-	PARENTCOMMENTID string // Parent comment ID
-	TITLE           string // Comment_title
-	CONTENT         string // Comment_conrtent
-	APPROVE         string // comment_approve
-	DISAPPROVE      string // comment_disapprove
-	UPDATETIME      string // creat_time
-	IMAGES          string // Image urls
+	Id              string // ID
+	UserId          string // USER_ID
+	TopicId         string // TOPIC_ID
+	ParentCommentId string // Parent comment ID
+	Title           string // Comment_title
+	Content         string // Comment_conrtent
+	Approve         string // comment_approve
+	Disapprove      string // comment_disapprove
+	UpdateTime      string // creat_time
+	Images          string // Image urls
 }
 
 // topicCommentColumns holds the columns for table topic_comment.
 var topicCommentColumns = TopicCommentColumns{
-	ID:              "ID",
-	USERID:          "USER_ID",
-	TOPICID:         "TOPIC_ID",
-	PARENTCOMMENTID: "PARENT_COMMENT_ID",
-	TITLE:           "TITLE",
-	CONTENT:         "CONTENT",
-	APPROVE:         "APPROVE",
-	DISAPPROVE:      "DISAPPROVE",
-	UPDATETIME:      "UPDATE_TIME",
-	IMAGES:          "IMAGES",
+	Id:              "id",
+	UserId:          "user_id",
+	TopicId:         "topic_id",
+	ParentCommentId: "parent_comment_id",
+	Title:           "title",
+	Content:         "content",
+	Approve:         "approve",
+	Disapprove:      "disapprove",
+	UpdateTime:      "update_time",
+	Images:          "images",
 }
 
 // NewTopicCommentDao creates and returns a new DAO object for table data access.

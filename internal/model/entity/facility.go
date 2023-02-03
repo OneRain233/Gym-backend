@@ -6,9 +6,9 @@ package entity
 
 // Facility is the golang structure for table facility.
 type Facility struct {
-	ID          int    `json:"iD"          ` // Facility ID
-	NAME        string `json:"nAME"        ` // Facility Name
-	DESCRIPTION string `json:"dESCRIPTION" ` // Facility Description
-	LOCATION    string `json:"lOCATION"    ` // Facility Location
-	IMAGES      string `json:"iMAGES"      ` // Image urls
+	Id          int    `json:"id"          ` // Facility ID
+	Name        string `json:"name"        ` // Facility Name
+	Description string `json:"description" ` // Facility Description
+	Location    string `json:"location"    ` // Facility Location
+	Images      string `json:"images"      ` // Image urls
 }

@@ -12,14 +12,14 @@ import (
 // TopicComment is the golang structure of table topic_comment for DAO operations like Where/Data.
 type TopicComment struct {
 	g.Meta          `orm:"table:topic_comment, do:true"`
-	ID              interface{} // ID
-	USERID          interface{} // USER_ID
-	TOPICID         interface{} // TOPIC_ID
-	PARENTCOMMENTID interface{} // Parent comment ID
-	TITLE           interface{} // Comment_title
-	CONTENT         interface{} // Comment_conrtent
-	APPROVE         interface{} // comment_approve
-	DISAPPROVE      interface{} // comment_disapprove
-	UPDATETIME      *gtime.Time // creat_time
-	IMAGES          interface{} // Image urls
+	Id              interface{} // ID
+	UserId          interface{} // USER_ID
+	TopicId         interface{} // TOPIC_ID
+	ParentCommentId interface{} // Parent comment ID
+	Title           interface{} // Comment_title
+	Content         interface{} // Comment_conrtent
+	Approve         interface{} // comment_approve
+	Disapprove      interface{} // comment_disapprove
+	UpdateTime      *gtime.Time // creat_time
+	Images          interface{} // Image urls
 }

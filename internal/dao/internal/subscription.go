@@ -20,17 +20,17 @@ type SubscriptionDao struct {
 
 // SubscriptionColumns defines and stores column names for table subscription.
 type SubscriptionColumns struct {
-	ID        string // ID
-	USERID    string //
-	STARTTIME string //
+	Id        string // ID
+	UserId    string //
+	StartTime string //
 	ENDTIME   string //
 }
 
 // subscriptionColumns holds the columns for table subscription.
 var subscriptionColumns = SubscriptionColumns{
-	ID:        "ID",
-	USERID:    "USER_ID",
-	STARTTIME: "START_TIME",
+	Id:        "id",
+	UserId:    "user_id",
+	StartTime: "start_time",
 	ENDTIME:   "END_TIME",
 }
 

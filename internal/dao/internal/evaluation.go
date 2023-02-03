@@ -20,26 +20,26 @@ type EvaluationDao struct {
 
 // EvaluationColumns defines and stores column names for table evaluation.
 type EvaluationColumns struct {
-	ID          string // ID
-	USERID      string // User id
-	FACILITYID  string // Facility Id
-	SCORE       string // Score
-	DESCRIPTION string // Description
-	ANONYMOUS   string // IS Anonymous
-	IMAGES      string // Image urls
-	VIDEOS      string // Videos urls
+	Id          string // ID
+	UserId      string // User id
+	FacilityId  string // Facility Id
+	Score       string // Score
+	Description string // Description
+	Anonymous   string // IS Anonymous
+	Images      string // Image urls
+	Videos      string // Videos urls
 }
 
 // evaluationColumns holds the columns for table evaluation.
 var evaluationColumns = EvaluationColumns{
-	ID:          "ID",
-	USERID:      "USER_ID",
-	FACILITYID:  "FACILITY_ID",
-	SCORE:       "SCORE",
-	DESCRIPTION: "DESCRIPTION",
-	ANONYMOUS:   "ANONYMOUS",
-	IMAGES:      "IMAGES",
-	VIDEOS:      "VIDEOS",
+	Id:          "id",
+	UserId:      "user_id",
+	FacilityId:  "facility_id",
+	Score:       "score",
+	Description: "description",
+	Anonymous:   "anonymous",
+	Images:      "images",
+	Videos:      "videos",
 }
 
 // NewEvaluationDao creates and returns a new DAO object for table data access.

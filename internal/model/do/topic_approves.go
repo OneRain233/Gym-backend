@@ -12,9 +12,9 @@ import (
 // TopicApproves is the golang structure of table topic_approves for DAO operations like Where/Data.
 type TopicApproves struct {
 	g.Meta     `orm:"table:topic_approves, do:true"`
-	ID         interface{} // ID
-	USERID     interface{} // USER_ID
-	TOPICID    interface{} // TOPIC_ID
-	TYPE       interface{} // TYPE
-	UPDATETIME *gtime.Time // create_time
+	Id         interface{} // ID
+	UserId     interface{} // USER_ID
+	TopicId    interface{} // TOPIC_ID
+	Type       interface{} // TYPE
+	UpdateTime *gtime.Time // create_time
 }
