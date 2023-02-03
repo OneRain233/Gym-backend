@@ -3,7 +3,6 @@ package controller
 import (
 	v1 "Gym-backend/api/v1"
 	"Gym-backend/internal/model"
-	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
 )
@@ -46,14 +45,14 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 
 func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (res *v1.AddFacilityRes, err error) {
 	res = &v1.AddFacilityRes{}
-	facility := &entity.Facility{
+	form := model.AddFacilityForm{
 		Name:        req.Name,
 		Description: req.Description,
 		Location:    req.Location,
-		// TODO: images
+		Images:      req.Image,
 	}
 
-	err = service.Facility().AddFacility(ctx, facility)
+	err = service.Facility().AddFacility(ctx, &form)
 	if err != nil {
 		return
 	}
@@ -62,14 +61,14 @@ func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq
 
 func (c *cFacilityAdmin) ModifyFacility(ctx context.Context, req *v1.ModifyFacilityReq) (res *v1.ModifyFacilityRes, err error) {
 	res = &v1.ModifyFacilityRes{}
-	facility := &entity.Facility{
+	form := model.ModifyFacilityForm{
 		Id:          req.ID,
 		Name:        req.Name,
 		Description: req.Description,
 		Location:    req.Location,
-		// TODO: images
+		Images:      req.Image,
 	}
-	err = service.Facility().ModifyFacility(ctx, facility)
+	err = service.Facility().ModifyFacility(ctx, &form)
 	if err != nil {
 		return
 	}
@@ -80,6 +79,37 @@ func (c *cFacility) GetFacilityDetail(ctx context.Context, req *v1.FacilityDetai
 	res = &v1.FacilityDetailRes{}
 	facility, err := service.Facility().GetFacilityById(ctx, req.ID)
 	res.Facility = facility
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cFacility) AddFacilityPlace(ctx context.Context, req *v1.AddFacilityPlaceReq) (res *v1.AddFacilityPlaceRes, err error) {
+	res = &v1.AddFacilityPlaceRes{}
+	form := model.AddFacilityPlaceForm{
+		FacilityId:  req.FacilityID,
+		Name:        req.Name,
+		Cost:        req.Cost,
+		Description: req.Description,
+	}
+	err = service.Facility().AddFacilityPlace(ctx, &form)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cFacility) ModifyFacilityPlace(ctx context.Context, req *v1.ModifyFacilityPlaceReq) (res *v1.ModifyFacilityPlaceRes, err error) {
+	res = &v1.ModifyFacilityPlaceRes{}
+	form := model.ModifyFacilityPlaceForm{
+		Id:          req.ID,
+		FacilityId:  req.FacilityID,
+		Name:        req.Name,
+		Cost:        req.Cost,
+		Description: req.Description,
+	}
+	err = service.Facility().ModifyFacilityPlace(ctx, &form)
 	if err != nil {
 		return
 	}

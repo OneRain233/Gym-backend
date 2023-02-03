@@ -7,7 +7,6 @@ package service
 
 import (
 	"Gym-backend/internal/model"
-	"Gym-backend/internal/model/entity"
 	"context"
 )
 
@@ -17,11 +16,11 @@ type (
 		GetFacilityById(ctx context.Context, id int) (res *model.FacilityEntity, err error)
 		GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error)
 		GetFacilityBySearch(ctx context.Context, search string) (res []*model.FacilityEntity, err error)
-		AddFacility(ctx context.Context, facility *entity.Facility) (err error)
-		ModifyFacility(ctx context.Context, facility *entity.Facility) (err error)
-		ValidateFacility(ctx context.Context, facility *entity.Facility) (err error)
-		GetFacilityImages(ctx context.Context, id int) (res []*entity.FacilityImage, err error)
-		FetchFacilityImages(ctx context.Context, facilities []*entity.Facility) (res []*model.FacilityEntity, err error)
+		AddFacility(ctx context.Context, input *model.AddFacilityForm) (err error)
+		ModifyFacility(ctx context.Context, input *model.ModifyFacilityForm) (err error)
+		ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error)
+		AddFacilityPlace(ctx context.Context, input *model.AddFacilityPlaceForm) (err error)
+		ModifyFacilityPlace(ctx context.Context, input *model.ModifyFacilityPlaceForm) (err error)
 	}
 )
 

@@ -32,19 +32,46 @@ type AddFacilityReq struct {
 	Description string `json:"description" v:"required#Please input description"`
 	Location    string `json:"location" v:"required#Please input location"`
 	// TODO: images
+	Image []string `json:"image" v:"required#Please input image"`
 }
 
 type AddFacilityRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
 
-type ModifyFacilityReq struct {
-	g.Meta      `path:"/modify_facility" tags:"Facility" method:"post" summary:"Modify Facility"`
+type AddFacilityPlaceReq struct {
+	g.Meta      `path:"/add_facility_place" tags:"Facility" method:"post" summary:"Add Facility Place"`
+	Name        string  `json:"name" v:"required#Please input name"`
+	FacilityID  int     `json:"facility_id" v:"required#Please input facility_id"`
+	Cost        float64 `json:"cost" v:"required#Please input cost"`
+	Description string  `json:"description" v:"required#Please input description"`
+}
+
+type AddFacilityPlaceRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}
+
+type ModifyFacilityPlaceReq struct {
+	g.Meta      `path:"/modify_facility_place" tags:"Facility" method:"post" summary:"Modify Facility Place"`
 	ID          int     `json:"id" v:"required#Please input id"`
 	Name        string  `json:"name" v:"required#Please input name"`
-	Description string  `json:"description" v:"required#Please input description"`
-	Location    string  `json:"location" v:"required#Please input location"`
+	FacilityID  int     `json:"facility_id" v:"required#Please input facility_id"`
 	Cost        float64 `json:"cost" v:"required#Please input cost"`
+	Description string  `json:"description" v:"required#Please input description"`
+}
+
+type ModifyFacilityPlaceRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}
+
+type ModifyFacilityReq struct {
+	g.Meta      `path:"/modify_facility" tags:"Facility" method:"post" summary:"Modify Facility"`
+	ID          int      `json:"id" v:"required#Please input id"`
+	Name        string   `json:"name" v:"required#Please input name"`
+	Description string   `json:"description" v:"required#Please input description"`
+	Location    string   `json:"location" v:"required#Please input location"`
+	Image       []string `json:"image" v:"required#Please input image"`
+	//Cost        float64 `json:"cost" v:"required#Please input cost"`
 }
 
 type ModifyFacilityRes struct {

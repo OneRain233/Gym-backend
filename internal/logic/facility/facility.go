@@ -30,8 +30,19 @@ func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityE
 	if err != nil {
 		return
 	}
-	// get all facility image
-	res, err = s.FetchFacilityImages(ctx, facilities)
+
+	// map the places to facility
+	for _, facility := range facilities {
+		var place []*entity.FacilityPlace
+		err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
+		if err != nil {
+			return
+		}
+		res = append(res, &model.FacilityEntity{
+			Facility: facility,
+			Places:   place,
+		})
+	}
 	return
 }
 
@@ -42,17 +53,23 @@ func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.Fac
 	if err != nil {
 		return
 	}
-	err = dao.FacilityImage.Ctx(ctx).Where("facilityID", id).Scan(&res.Images)
+	var place []*entity.FacilityPlace
+	err = dao.FacilityPlace.Ctx(ctx).Where("id", id).Scan(&place)
 	if err != nil {
 		return
 	}
+	res.Places = place
 	return
 }
 
 // GetFacilityByName gets the facility by name.
 func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error) {
 	res = &model.FacilityEntity{}
-	err = dao.Facility.Ctx(ctx).Where("name", name).Scan(&res)
+	err = dao.Facility.Ctx(ctx).Where("name", name).Scan(&res.Facility)
+	if err != nil {
+		return
+	}
+
 	return
 }
 
@@ -66,39 +83,83 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 	if err != nil {
 		return
 	}
-	// get all facility image
-	res, err = s.FetchFacilityImages(ctx, facilities)
-	if err != nil {
-		return
+	// map the places to facility
+	for _, facility := range facilities {
+		var place []*entity.FacilityPlace
+		err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
+		if err != nil {
+			return
+		}
+		res = append(res, &model.FacilityEntity{
+			Facility: facility,
+			Places:   place,
+		})
 	}
-
 	return
 }
 
 // AddFacility adds the facility.
-func (s *sFacility) AddFacility(ctx context.Context, facility *entity.Facility) (err error) {
+func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityForm) (err error) {
 	// check if all the fields are filled
-	err = s.ValidateFacility(ctx, facility)
+	err = s.ValidateAddFacility(ctx, input)
 	if err != nil {
 		return
 	}
+	// convert images to string like "image1,image2,image3"
+	var images string
+	for _, image := range input.Images {
+		images += image + ","
+	}
+
+	var facility = &entity.Facility{
+		Name:        input.Name,
+		Description: input.Description,
+		Location:    input.Location,
+		Images:      images,
+	}
+
 	_, err = g.DB().Model("facility").Data(facility).Insert()
 	return
 }
 
 // ModifyFacility modifies the facility.
-func (s *sFacility) ModifyFacility(ctx context.Context, facility *entity.Facility) (err error) {
+func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacilityForm) (err error) {
 	// check if all the fields are filled
-	err = s.ValidateFacility(ctx, facility)
+	if input.Id == 0 {
+		err = gerror.New("Id is empty")
+		return
+	}
+	// merge previous data
+	var facility *entity.Facility
+	err = dao.Facility.Ctx(ctx).Where("id", input.Id).Scan(&facility)
 	if err != nil {
 		return
 	}
-	_, err = g.DB().Model("facility").Data(facility).Where("id", facility.Id).Update()
+	if input.Name != "" {
+		facility.Name = input.Name
+	}
+	if input.Description != "" {
+		facility.Description = input.Description
+	}
+	if input.Location != "" {
+		facility.Location = input.Location
+	}
+	if input.Images != nil {
+		var images string
+		for _, image := range input.Images {
+			images += image + ","
+		}
+		facility.Images = images
+	}
+	_, err = g.DB().Model("facility").Data(facility).Where("id", input.Id).Update()
+	if err != nil {
+		return
+	}
 	return
 }
 
-// ValidateFacility validates the facility.
-func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facility) (err error) {
+// ValidateAddFacility validates the facility.
+func (s *sFacility) ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error) {
 	if facility.Name == "" {
 		err = gerror.New("Name is empty")
 		return
@@ -109,6 +170,11 @@ func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facil
 	}
 	if facility.Location == "" {
 		err = gerror.New("Location is empty")
+		return
+	}
+
+	if facility.Images == nil {
+		err = gerror.New("Images is empty")
 		return
 	}
 
@@ -123,36 +189,90 @@ func (s *sFacility) ValidateFacility(ctx context.Context, facility *entity.Facil
 	return
 }
 
-func (s *sFacility) GetFacilityImages(ctx context.Context, id int) (res []*entity.FacilityImage, err error) {
-	err = dao.FacilityImage.Ctx(ctx).Where("facilityID", id).Scan(&res)
-	return
-}
-
-func (s *sFacility) FetchFacilityImages(ctx context.Context, facilities []*entity.Facility) (res []*model.FacilityEntity, err error) {
-	res = []*model.FacilityEntity{}
-
-	var facilityIds []int
-	for _, facility := range facilities {
-		facilityIds = append(facilityIds, facility.Id)
+func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacilityPlaceForm) (err error) {
+	if input.FacilityId == 0 {
+		err = gerror.New("FacilityId is empty")
+		return
 	}
-	var facilityImages []*entity.FacilityImage
-	err = dao.FacilityImage.Ctx(ctx).Where("facilityID in (?)", facilityIds).Scan(&facilityImages)
+	if input.Name == "" {
+		err = gerror.New("Name is empty")
+		return
+	}
+	if input.Cost == 0 {
+		err = gerror.New("Cost is empty")
+		return
+	}
+
+	// check if the facility is exist
+	var facility *entity.Facility
+	err = dao.Facility.Ctx(ctx).Where("id", input.FacilityId).Scan(&facility)
 	if err != nil {
 		return
 	}
-	// map facility id to facility image
-	facilityImageMap := make(map[int][]*entity.FacilityImage)
-	for _, facilityImage := range facilityImages {
-		facilityImageMap[facilityImage.FacilityID] = append(facilityImageMap[facilityImage.FacilityID], facilityImage)
+	if facility == nil {
+		err = gerror.New("The facility is not exist")
+		return
 	}
 
-	// map facility to facility entity
-	for _, facility := range facilities {
-		res = append(res, &model.FacilityEntity{
-			Facility: facility,
-			Images:   facilityImageMap[facility.Id],
-		})
+	var place = &entity.FacilityPlace{
+		FacilityId: input.FacilityId,
+		Name:       input.Name,
+		Cost:       input.Cost,
 	}
 
+	_, err = g.DB().Model("facility_place").Data(place).Insert()
+	return
+}
+
+func (s *sFacility) ModifyFacilityPlace(ctx context.Context, input *model.ModifyFacilityPlaceForm) (err error) {
+	if input.Id == 0 {
+		err = gerror.New("Id is empty")
+		return
+	}
+	if input.Name == "" {
+		err = gerror.New("Name is empty")
+		return
+	}
+	if input.Cost == 0 {
+		err = gerror.New("Cost is empty")
+		return
+	}
+
+	// check if the facility is exist
+	var place *entity.FacilityPlace
+	err = dao.FacilityPlace.Ctx(ctx).Where("id", input.Id).Scan(&place)
+	if err != nil {
+		return
+	}
+	if place == nil {
+		err = gerror.New("The place is not exist")
+		return
+	}
+
+	if input.Name != "" {
+		place.Name = input.Name
+	}
+	if input.Cost != 0 {
+		place.Cost = input.Cost
+	}
+	if input.Description != "" {
+		place.Description = input.Description
+	}
+	if input.FacilityId != 0 {
+		// check if the facility is exist
+		var facility *entity.Facility
+		err = dao.Facility.Ctx(ctx).Where("id", input.FacilityId).Scan(&facility)
+		if err != nil {
+			return
+		}
+		if facility == nil {
+			err = gerror.New("The facility is not exist")
+			return
+		}
+
+		place.FacilityId = input.FacilityId
+	}
+
+	_, err = g.DB().Model("facility_place").Data(place).Where("id", input.Id).Update()
 	return
 }

@@ -5,10 +5,14 @@
 package logic
 
 import (
+	_ "Gym-backend/internal/logic/bank"
 	_ "Gym-backend/internal/logic/bizctx"
+	_ "Gym-backend/internal/logic/credit"
 	_ "Gym-backend/internal/logic/facility"
 	_ "Gym-backend/internal/logic/file"
 	_ "Gym-backend/internal/logic/middleware"
+	_ "Gym-backend/internal/logic/order"
 	_ "Gym-backend/internal/logic/session"
 	_ "Gym-backend/internal/logic/user"
+	_ "Gym-backend/internal/logic/wallet"
 )

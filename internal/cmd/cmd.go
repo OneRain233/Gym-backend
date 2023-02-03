@@ -4,7 +4,6 @@ import (
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
 	"context"
-	"fmt"
 
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gfile"
@@ -29,7 +28,6 @@ var (
 			oai.Config.CommonResponseDataField = `Data`
 			// register static files
 			uploadPath := g.Cfg().MustGet(gctx.New(), "upload.path").String()
-			fmt.Println(uploadPath)
 			if !gfile.Exists(uploadPath) {
 				err := gfile.Mkdir(uploadPath)
 				if err != nil {
