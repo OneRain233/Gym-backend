@@ -38,7 +38,6 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) e
 	orderEntity.Amount = input.Amount
 	// TODO: order code
 	orderEntity.OrderCode = string(rune(rand.Int()))
-	orderEntity.PaymentType = input.PaymentType
 
 	_, err = dao.Order.Ctx(ctx).Save(orderEntity)
 	if err != nil {

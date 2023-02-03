@@ -38,3 +38,18 @@ func (s *sWallet) SetStatus(ctx context.Context, status int) error {
 	_, err = dao.Wallet.Ctx(ctx).Where("userId", userId).Update(&wallet)
 	return err
 }
+
+func (s *sWallet) GetCardsInWallet(ctx context.Context) (cards []*entity.WalletCard, err error) {
+	userId := service.Session().GetUser(ctx).Id
+	var wallet *entity.Wallet
+	err = dao.Wallet.Ctx(ctx).Where("userId", userId).Scan(&wallet)
+	if err != nil {
+		return
+	}
+	walletId := wallet.Id
+	err = dao.WalletCard.Ctx(ctx).Where("wallet_id", walletId).Scan(&cards)
+	if err != nil {
+		return
+	}
+	return
+}

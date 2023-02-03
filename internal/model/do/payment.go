@@ -6,6 +6,7 @@ package do
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // Payment is the golang structure of table payment for DAO operations like Where/Data.
@@ -15,5 +16,7 @@ type Payment struct {
 	WalletId    interface{} // Wallet ID
 	OrderId     interface{} // Order ID
 	PaymentCode interface{} // Payment code
-	Time        interface{} // Payment Time
+	Time        *gtime.Time // Payment Time
+	Amount      interface{} // Payment Amount
+	PaymentType interface{} // Payment type
 }

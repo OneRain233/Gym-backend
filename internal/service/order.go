@@ -17,6 +17,7 @@ type (
 		ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error)
 		GetOrdersByUserId(ctx context.Context, userId int) (res []*entity.Order, err error)
 		GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error)
+		GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error)
 	}
 )
 

@@ -25,7 +25,7 @@ type WalletCardColumns struct {
 	WalletId    string // Wallet ID of the card
 	CardAccount string // Card number
 	Phone       string // Phone of the card
-	Amount      string // Amount in the card
+	Amount      string // Money amount
 }
 
 // walletCardColumns holds the columns for table wallet_card.

@@ -25,6 +25,8 @@ type PaymentColumns struct {
 	OrderId     string // Order ID
 	PaymentCode string // Payment code
 	Time        string // Payment Time
+	Amount      string // Payment Amount
+	PaymentType string // Payment type
 }
 
 // paymentColumns holds the columns for table payment.
@@ -34,6 +36,8 @@ var paymentColumns = PaymentColumns{
 	OrderId:     "order_id",
 	PaymentCode: "payment_code",
 	Time:        "time",
+	Amount:      "amount",
+	PaymentType: "payment_type",
 }
 
 // NewPaymentDao creates and returns a new DAO object for table data access.

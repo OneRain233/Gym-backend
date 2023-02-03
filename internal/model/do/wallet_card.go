@@ -16,5 +16,5 @@ type WalletCard struct {
 	WalletId    interface{} // Wallet ID of the card
 	CardAccount interface{} // Card number
 	Phone       interface{} // Phone of the card
-	Amount      interface{} // Amount in the card
+	Amount      interface{} // Money amount
 }

@@ -1,0 +1,158 @@
+package card
+
+import (
+	"Gym-backend/internal/consts"
+	"Gym-backend/internal/dao"
+	"Gym-backend/internal/model"
+	"Gym-backend/internal/model/entity"
+	"Gym-backend/internal/service"
+	"context"
+
+	"github.com/gogf/gf/v2/database/gdb"
+
+	"github.com/gogf/gf/v2/errors/gerror"
+)
+
+type sCard struct{}
+
+func New() *sCard {
+	return &sCard{}
+}
+
+func init() {
+	service.RegisterCard(New())
+}
+
+func (s *sCard) GetCard(ctx context.Context) (card *entity.WalletCard, err error) {
+	userId := service.Session().GetUser(ctx)
+	err = dao.WalletCard.Ctx(ctx).Where("user_id", userId).Scan(&card)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *sCard) BindCard(ctx context.Context, input *model.BindCardForm) error {
+	userId := service.Session().GetUser(ctx)
+	var wallet *entity.Wallet
+	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	// check if bank id exists
+	var bank *entity.Bank
+	err = dao.Bank.Ctx(ctx).Where("id", input.BankId).Scan(&bank)
+	if err != nil {
+		return err
+	}
+	if bank == nil {
+		return gerror.New("bank id not exists")
+	}
+	card := entity.WalletCard{
+		BankId:      input.BankId,
+		WalletId:    wallet.Id,
+		CardAccount: input.CardAccount,
+		Phone:       input.Phone,
+		Amount:      0.0,
+	}
+	_, err = dao.WalletCard.Ctx(ctx).Insert(&card)
+	return err
+}
+
+func (s *sCard) GetCardsByUserId(ctx context.Context, userId int) (cards []*entity.WalletCard, err error) {
+	err = dao.WalletCard.Ctx(ctx).Where("user_id", userId).Scan(&cards)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *sCard) GetCardsCountByUserId(ctx context.Context, userId int) (count int, err error) {
+	count, err = dao.WalletCard.Ctx(ctx).Where("user_id", userId).Count()
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
+	return dao.WalletCard.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		userId := service.Session().GetUser(ctx)
+		var wallet *entity.Wallet
+		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+		var card *entity.WalletCard
+		err = dao.WalletCard.Ctx(ctx).Where("id", input.CardId).Scan(&card)
+		if err != nil {
+			return err
+		}
+
+		// validate order id
+		if input.OrderId == 0 {
+			return gerror.New("order id not exists")
+		}
+		var order *entity.Order
+		err = dao.Order.Ctx(ctx).Where("id", input.OrderId).Scan(&order)
+		if err != nil {
+			return err
+		}
+		if order == nil {
+			return gerror.New("order not exists")
+		}
+
+		// validate card
+		if card == nil {
+			return gerror.New("card not exists")
+		}
+		if card.WalletId != wallet.Id {
+			return gerror.New("card not belongs to you")
+		}
+
+		if order.Amount != input.Amount {
+			return gerror.New("amount not match")
+		}
+
+		// validate amount
+		if card.Amount < input.Amount {
+			return gerror.New("amount not enough")
+		}
+		card.Amount -= input.Amount
+		_, err = dao.WalletCard.Ctx(ctx).Data(card).Save()
+		if err != nil {
+			return err
+		}
+
+		// create payment record
+		paymentForm := model.CreatePaymentForm{
+			WalletId:    wallet.Id,
+			OrderId:     input.OrderId,
+			Amount:      input.Amount,
+			PaymentType: consts.PaymentTypeCard,
+		}
+		err = service.Payment().CreatePayment(ctx, &paymentForm)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
+}
+
+func (s *sCard) Recharge(ctx context.Context, input *model.CardRechargeForm) error {
+	userId := service.Session().GetUser(ctx)
+	var wallet *entity.Wallet
+	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	var card *entity.WalletCard
+	err = dao.WalletCard.Ctx(ctx).Where("id", input.CardId).Scan(&card)
+	if err != nil {
+		return err
+	}
+	if card == nil {
+		return gerror.New("card not exists")
+	}
+	if card.WalletId != wallet.Id {
+		return gerror.New("card not belongs to you")
+	}
+	card.Amount += input.Amount
+	_, err = dao.WalletCard.Ctx(ctx).Where("id", input.CardId).Update(&card)
+	if err != nil {
+		return err
+	}
+	return nil
+}
