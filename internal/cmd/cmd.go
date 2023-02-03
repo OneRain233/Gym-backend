@@ -42,6 +42,7 @@ var (
 					//ghttp.MiddlewareHandlerResponse,
 					service.Middleware().Ctx,
 					service.Middleware().ResponseHandler,
+					service.Middleware().CorsHandler,
 				)
 				group.Bind(
 					controller.User,

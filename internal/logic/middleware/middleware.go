@@ -100,3 +100,9 @@ func (s *sMiddleware) AdminAuthHandler(r *ghttp.Request) {
 		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
 	}
 }
+
+// CorsHandler used to handle cors
+func (s *sMiddleware) CorsHandler(r *ghttp.Request) {
+	r.Response.CORSDefault()
+	r.Middleware.Next()
+}
