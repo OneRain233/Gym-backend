@@ -6,6 +6,7 @@
 package service
 
 import (
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"context"
 )
@@ -14,6 +15,8 @@ type (
 	IBank interface {
 		GetBanks(ctx context.Context) (banks []*entity.Bank, err error)
 		GetBankById(ctx context.Context, bankId int) (bank *entity.Bank, err error)
+		AddBank(ctx context.Context, form *model.AddBankForm) error
+		UpdateBank(ctx context.Context, form *model.UpdateBankForm) error
 	}
 )
 

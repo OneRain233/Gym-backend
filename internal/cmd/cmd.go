@@ -48,6 +48,8 @@ var (
 					controller.User,
 					controller.File, // TODO: Move this to do auth
 					controller.Facility,
+					controller.Bank,
+					controller.BankAdmin, //TODO: Move this to do auth
 				)
 
 				// Normal user
