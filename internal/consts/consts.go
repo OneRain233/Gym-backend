@@ -11,4 +11,7 @@ const (
 	RoleManager    = 2
 
 	UserKey = "SessionUser"
+
+	PaymentSuccess = 1
+	PaymentFail    = 0
 )

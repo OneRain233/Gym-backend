@@ -58,6 +58,8 @@ var (
 					)
 					group.Bind(
 						controller.Profile,
+						controller.Order,
+						controller.Payment,
 					)
 				})
 

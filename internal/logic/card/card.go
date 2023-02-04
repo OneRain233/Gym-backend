@@ -1,7 +1,6 @@
 package card
 
 import (
-	"Gym-backend/internal/consts"
 	"Gym-backend/internal/dao"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
@@ -118,17 +117,6 @@ func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
 			return err
 		}
 
-		// create payment record
-		paymentForm := model.CreatePaymentForm{
-			WalletId:    wallet.Id,
-			OrderId:     input.OrderId,
-			Amount:      input.Amount,
-			PaymentType: consts.PaymentTypeCard,
-		}
-		err = service.Payment().CreatePayment(ctx, &paymentForm)
-		if err != nil {
-			return err
-		}
 		return nil
 	})
 

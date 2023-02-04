@@ -75,7 +75,8 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 	// filter it
 	// TODO: check if there are more sensitive information in other error code
 	if code.Code() == 52 {
-		msg = "Database error"
+		//msg = "Database error"
+		msg = err.Error()
 	} else {
 		msg = err.Error()
 	}

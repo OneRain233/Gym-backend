@@ -13,6 +13,8 @@ import (
 type (
 	IWallet interface {
 		GetWallet(ctx context.Context) (wallet *entity.Wallet, err error)
+		CreateWallet(ctx context.Context) error
+		CreateWalletForUser(ctx context.Context, userId int) error
 		SetStatus(ctx context.Context, status int) error
 		GetCardsInWallet(ctx context.Context) (cards []*entity.WalletCard, err error)
 	}

@@ -5,6 +5,8 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type sWallet struct {
@@ -20,11 +22,33 @@ func init() {
 
 func (s *sWallet) GetWallet(ctx context.Context) (wallet *entity.Wallet, err error) {
 	userId := service.Session().GetUser(ctx).Id
-	err = dao.Wallet.Ctx(ctx).Where("userId", userId).Scan(&wallet)
+	err = dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
 	if err != nil {
 		return
 	}
 	return
+}
+
+func (s *sWallet) CreateWallet(ctx context.Context) error {
+	userId := service.Session().GetUser(ctx).Id
+	wallet := entity.Wallet{
+		UserId: userId,
+		Status: 0,
+	}
+	_, err := dao.Wallet.Ctx(ctx).Insert(&wallet)
+	return err
+}
+
+func (s *sWallet) CreateWalletForUser(ctx context.Context, userId int) error {
+	if userId == 0 {
+		return gerror.New("user id is 0")
+	}
+	wallet := entity.Wallet{
+		UserId: userId,
+		Status: 0,
+	}
+	_, err := dao.Wallet.Ctx(ctx).Insert(&wallet)
+	return err
 }
 
 func (s *sWallet) SetStatus(ctx context.Context, status int) error {

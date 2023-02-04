@@ -13,6 +13,7 @@ import (
 type (
 	ICredit interface {
 		GetCredit(ctx context.Context) (credit *entity.Credit, err error)
+		UpdateAmount(ctx context.Context, amount int) error
 	}
 )
 

@@ -5,5 +5,12 @@ type CreateOrderForm struct {
 	PlaceId   int
 	StartTime string
 	EndTime   string
+}
+
+type ResponseOrderForm struct {
 	Amount    float64
+	PlaceId   int
+	StartTime string
+	EndTime   string
+	OrderCode string
 }

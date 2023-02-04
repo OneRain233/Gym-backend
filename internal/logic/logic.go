@@ -14,6 +14,7 @@ import (
 	_ "Gym-backend/internal/logic/middleware"
 	_ "Gym-backend/internal/logic/order"
 	_ "Gym-backend/internal/logic/payment"
+	_ "Gym-backend/internal/logic/place"
 	_ "Gym-backend/internal/logic/session"
 	_ "Gym-backend/internal/logic/user"
 	_ "Gym-backend/internal/logic/wallet"

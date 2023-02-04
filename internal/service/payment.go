@@ -12,7 +12,8 @@ import (
 
 type (
 	IPayment interface {
-		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) error
+		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
+		GeneratePaymentCode() string
 	}
 )
 

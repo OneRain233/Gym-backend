@@ -23,6 +23,9 @@ func (c *cUser) Register(ctx context.Context, req *v1.RegisterReq) (res *v1.Regi
 		Phone:    req.Phone,
 		Gender:   req.Gender,
 	})
+	if err != nil {
+		return
+	}
 	return
 
 }

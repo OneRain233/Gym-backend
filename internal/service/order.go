@@ -13,7 +13,8 @@ import (
 
 type (
 	IOrder interface {
-		CreateOrder(ctx context.Context, input model.CreateOrderForm) error
+		CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error)
+		GenerateOrderCode() string
 		ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error)
 		GetOrdersByUserId(ctx context.Context, userId int) (res []*entity.Order, err error)
 		GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error)

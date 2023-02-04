@@ -87,6 +87,17 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		}
 		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 		_, err1 := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
+		if err1 != nil {
+			return err1
+		}
+		err := dao.User.Ctx(ctx).Where(dao.User.Columns().Username, user.Username).Scan(&user)
+		if err != nil {
+			return err
+		}
+		err = service.Wallet().CreateWalletForUser(ctx, user.Id)
+		if err != nil {
+			return err
+		}
 		return err1
 	})
 }

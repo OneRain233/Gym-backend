@@ -6,9 +6,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
-	"math/rand"
-
-	"github.com/gogf/gf/v2/errors/gerror"
+	"strconv"
 
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -24,26 +22,41 @@ func New() *sOrder {
 	return &sOrder{}
 }
 
-func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) error {
+func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error) {
+	response = &model.ResponseOrderForm{}
 	// check if the time is taken
-	res, err := o.ValidateTime(ctx, input)
-	if err != nil || !res {
-		return gerror.New("The time is taken")
+	_, err = o.ValidateTime(ctx, input)
+	// TODO: check amount
+	facilityPlace, err := service.Place().GetPlaceById(ctx, input.PlaceId)
+	if err != nil {
+		return
 	}
-	var orderEntity *entity.Order
+	orderEntity := &entity.Order{}
 	orderEntity.UserId = input.UserId
 	orderEntity.PlaceId = input.PlaceId
 	orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
 	orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
-	orderEntity.Amount = input.Amount
+	orderEntity.Amount = facilityPlace.Cost
 	// TODO: order code
-	orderEntity.OrderCode = string(rune(rand.Int()))
+	orderEntity.OrderCode = o.GenerateOrderCode()
+	orderEntity.Time = gtime.Now()
 
 	_, err = dao.Order.Ctx(ctx).Save(orderEntity)
+	response.OrderCode = orderEntity.OrderCode
+	response.Amount = orderEntity.Amount
+	response.StartTime = orderEntity.StartTime.String()
+	response.EndTime = orderEntity.EndTime.String()
+	response.PlaceId = orderEntity.PlaceId
+
 	if err != nil {
-		return err
+		return
 	}
-	return nil
+	return
+}
+
+func (o *sOrder) GenerateOrderCode() string {
+	// YearMonthDay + 8 digits
+	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
 }
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
