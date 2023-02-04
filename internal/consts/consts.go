@@ -9,4 +9,6 @@ const (
 	RoleAdmin      = 1
 	RoleNormalUser = 0
 	RoleManager    = 2
+
+	UserKey = "SessionUser"
 )

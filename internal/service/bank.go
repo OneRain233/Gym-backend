@@ -13,6 +13,7 @@ import (
 type (
 	IBank interface {
 		GetBanks(ctx context.Context) (banks []*entity.Bank, err error)
+		GetBankById(ctx context.Context, bankId int) (bank *entity.Bank, err error)
 	}
 )
 
