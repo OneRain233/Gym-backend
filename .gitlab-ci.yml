@@ -7,6 +7,13 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Go.gitlab-ci.yml
 
+services:
+  - docker:20.10.12-dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+
 stages:
   - test
   - build
@@ -18,15 +25,13 @@ format:
     # - go fmt $(go list ./... | grep -v /vendor/)
     # - go vet $(go list ./... | grep -v /vendor/)
     # - go test -race $(go list ./... | grep -v /vendor/)
-    - go env -w GO111MODULE=on
-    - go env -w GOPROXY=https://goproxy.cn,direct
     - go test -v
 compile:
   image: golang:latest
   stage: build
   script:
-    - go env -w GO111MODULE=on
-    - go env -w GOPROXY=https://goproxy.cn,direct
+    # - mkdir -p mybinaries
+    # - go build -o mybinaries ./...
     - make
     - gf build main.go
   artifacts:
