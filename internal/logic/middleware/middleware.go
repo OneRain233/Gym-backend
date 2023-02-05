@@ -85,21 +85,21 @@ func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
 
 // AuthHandler used to check if user have logged in
 func (s *sMiddleware) AuthHandler(r *ghttp.Request) {
-	r.Middleware.Next()
 	user := service.Session().GetUser(r.Context())
 	//fmt.Println("Current user:", user.Id)
 	if user.Id == 0 {
 		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
 	}
+	r.Middleware.Next()
 }
 
 // AdminAuthHandler used to handle admin user auth
 func (s *sMiddleware) AdminAuthHandler(r *ghttp.Request) {
-	r.Middleware.Next()
 	user := service.Session().GetUser(r.Context())
 	if user.Role != 1 {
 		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
 	}
+	r.Middleware.Next()
 }
 
 // CorsHandler used to handle cors

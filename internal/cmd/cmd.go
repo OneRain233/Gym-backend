@@ -69,6 +69,7 @@ var (
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Middleware(
 						service.Middleware().ResponseHandler,
+						service.Middleware().AuthHandler,
 						service.Middleware().AdminAuthHandler,
 					)
 					group.Bind(
