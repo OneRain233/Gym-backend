@@ -7,7 +7,7 @@ DOCKER_NAME = "template-single"
 .PHONY: cli
 cli:
 	@set -e; \
-	cp gf_bin/gf ./gf \
+	cp gf_bin/gf . && \
 	chmod +x gf && \
 	./gf install -y && \
 	rm ./gf
