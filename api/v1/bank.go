@@ -7,7 +7,7 @@ import (
 )
 
 type AddBankReq struct {
-	g.Meta `path:"/add_bank" method:"post" mime:"application/json" tags:"Bank" summary:"Add bank"`
+	g.Meta `path:"/bank/add" method:"post" mime:"application/json" tags:"Bank" summary:"Add bank"`
 	Name   string `json:"name" v:"required#Please input bank name"`
 }
 
@@ -16,7 +16,7 @@ type AddBankRes struct {
 }
 
 type UpdateBankReq struct {
-	g.Meta `path:"/update_bank" method:"post" mime:"application/json" tags:"Bank" summary:"Update bank"`
+	g.Meta `path:"/bank/update" method:"post" mime:"application/json" tags:"Bank" summary:"Update bank"`
 	Id     int    `json:"id" v:"required#Please input bank id"`
 	Name   string `json:"name" v:"required#Please input bank name"`
 }
@@ -26,7 +26,7 @@ type UpdateBankRes struct {
 }
 
 type GetBanksReq struct {
-	g.Meta `path:"/banks" method:"get" tags:"Bank" summary:"Get banks"`
+	g.Meta `path:"/bank/banks" method:"get" tags:"Bank" summary:"Get banks"`
 }
 
 type GetBanksRes struct {

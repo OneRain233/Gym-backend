@@ -5,7 +5,7 @@ import (
 )
 
 type LoginReq struct {
-	g.Meta   `path:"/login" tags:"Account" method:"post" summary:"Login"`
+	g.Meta   `path:"/user/login" tags:"Account" method:"post" summary:"Login"`
 	Username string `v:"required#Please input username"`
 	Password string `v:"required#Please input password"`
 }
@@ -21,7 +21,7 @@ type LoginRes struct {
 }
 
 type RegisterReq struct {
-	g.Meta          `path:"/register" tags:"Account" method:"post" summary:"Register"`
+	g.Meta          `path:"/user/register" tags:"Account" method:"post" summary:"Register"`
 	Username        string `v:"required#Please input username"`
 	Password        string `v:"required#Please input password"`
 	ConfirmPassword string `v:"required#Please input confirm password"`
@@ -33,7 +33,7 @@ type RegisterReq struct {
 type RegisterRes struct{}
 
 type ProfileReq struct {
-	g.Meta `path:"/profile" tags:"Account" method:"post" summary:"Get user's profile'"`
+	g.Meta `path:"/user/profile" tags:"Account" method:"post" summary:"Get user's profile'"`
 }
 
 type ProfileRes struct {
@@ -49,7 +49,7 @@ type ProfileRes struct {
 }
 
 type LogoutReq struct {
-	g.Meta `path:"/logout" tags:"Account" method:"get" summary:"Log out'"`
+	g.Meta `path:"/user/logout" tags:"Account" method:"get" summary:"Log out'"`
 }
 
 type LogoutRes struct {
