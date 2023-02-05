@@ -6,7 +6,7 @@ FROM loads/alpine:3.8
 
 ENV WORKDIR                 /app
 ADD resource                $WORKDIR/
-ADD ./temp/linux_amd64/main $WORKDIR/main
+ADD ./main $WORKDIR/main
 ADD ./manifest/config/config.yaml $WORKDIR/config.yaml
 RUN chmod +x $WORKDIR/main
 
