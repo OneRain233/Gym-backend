@@ -44,9 +44,7 @@ deploy:
   stage: deploy
   script:
     - echo "Delete previous container"
-    - docker stop gym-demo
-    - docker rm gym-demo
-    - docker rmi gym_kneethaimay/gym-demo
+    - if [ $(docker ps -qa --filter name=gym-demo) ];then docker rm -f gym-demo;fi
     - echo "Deployment Todo"
     - make cli
     - go env -w GO111MODULE=on
