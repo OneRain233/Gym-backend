@@ -4,11 +4,15 @@
 
 package entity
 
+import (
+	"github.com/gogf/gf/v2/os/gtime"
+)
+
 // TopicCommentApproves is the golang structure for table topic_comment_approves.
 type TopicCommentApproves struct {
-	Id         int `json:"id"         ` // ID
-	Type       int `json:"type"       ` // TYPE
-	UpdateTime int `json:"updateTime" ` // Update time
-	UserId     int `json:"userId"     ` // USER_ID
-	CommentId  int `json:"commentId"  ` // topic_comment_ID
+	Id         int         `json:"id"         ` // ID
+	Type       int         `json:"type"       ` // TYPE
+	UpdateTime *gtime.Time `json:"updateTime" ` // Update time
+	UserId     int         `json:"userId"     ` // USER_ID
+	CommentId  int         `json:"commentId"  ` // topic_comment_ID
 }
