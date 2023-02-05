@@ -53,7 +53,7 @@ var (
 				)
 
 				// Normal user
-				group.Group("/", func(group *ghttp.RouterGroup) {
+				group.Group("/api/v1", func(group *ghttp.RouterGroup) {
 					group.Middleware(
 						service.Middleware().ResponseHandler,
 						service.Middleware().AuthHandler,
@@ -66,7 +66,7 @@ var (
 				})
 
 				// Admin user
-				group.Group("/", func(group *ghttp.RouterGroup) {
+				group.Group("/api/v1", func(group *ghttp.RouterGroup) {
 					group.Middleware(
 						service.Middleware().ResponseHandler,
 						service.Middleware().AuthHandler,
