@@ -7,17 +7,13 @@
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Go.gitlab-ci.yml
 
-services:
-  - docker:20.10.12-dind
 
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
 
 stages:
   - test
   - build
   - deploy
+
 format:
   image: golang:latest
   stage: test
@@ -28,27 +24,35 @@ format:
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
     - go test -v
+
 compile:
   image: golang:latest
   stage: build
   script:
+    # - mkdir -p mybinaries
+    # - go build -o mybinaries ./...
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
     - make
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main main.go
+    - gf build main.go
   artifacts:
     paths:
       - main
+
 deploy:
-  image: docker:stable
   stage: deploy
   script:
     - echo "Delete previous container"
-    - if [ $(docker ps -qa --filter name=gym-demo) ];then docker rm -f gym-demo;fi
+    - docker stop gym-demo
+    - docker rm gym-demo
+    - docker rmi gym_kneethaimay/gym-demo
     - echo "Deployment Todo"
-    - cp gf_bin/gf . && chmod +x gf && ./gf install -y
-    - cp manifest/docker/Dockerfile .
-    - docker build -t gym_kneethaimay/gym-demo .
+    - go env -w GO111MODULE=on
+    - go env -w GOPROXY=https://goproxy.cn,direct
+    - make
+    - cp manifest/config/config.prod.yaml manifest/config/config.yaml
+    - gf docker -tn gym-demo -tp gym_kneethaimay
     - docker run -itd --name gym-demo -p "16800:8000" gym_kneethaimay/gym-demo
     - echo "Done"
   environment: production
+
