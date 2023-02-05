@@ -7,6 +7,8 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 
+	"github.com/gogf/gf/v2/os/gtime"
+
 	"github.com/gogf/gf/v2/os/gfile"
 
 	"github.com/gogf/gf/v2/os/gctx"
@@ -68,7 +70,9 @@ func (u *sUser) Login(ctx context.Context, input model.UserLoginForm) error {
 		Avatar:   userEntity.Avatar,
 		Role:     uint(userEntity.Role),
 	})
-	return nil
+	userEntity.LoginTime = gtime.Now()
+	_, err = dao.User.Ctx(ctx).Data(userEntity).OmitEmpty().Save()
+	return err
 }
 
 func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) error {
@@ -78,14 +82,16 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 			return err1
 		}
 		user.Password = EncryptPassword(user.Password)
-		user.Role = 0
+
 		if err := u.ValidateUsername(ctx, user.Username); err != nil {
 			return err
 		}
 		if err := u.ValidateEmail(ctx, user.Email); err != nil {
 			return err
 		}
+		user.Role = 0
 		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
+		user.UpdateTime = gtime.Now()
 		_, err1 := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
 		if err1 != nil {
 			return err1
