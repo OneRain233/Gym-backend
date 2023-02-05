@@ -7,7 +7,7 @@ import (
 )
 
 type FacilityReq struct {
-	g.Meta `path:"/facility" tags:"Facility" method:"get" summary:"Get All Facilities"`
+	g.Meta `path:"/facility/facility" tags:"Facility" method:"get" summary:"Get All Facilities"`
 }
 
 type FacilityRes struct {
@@ -16,7 +16,7 @@ type FacilityRes struct {
 }
 
 type FacilitySearchReq struct {
-	g.Meta `path:"/facility_search" tags:"Facility" method:"post" summary:"Get Facilities By searching tags"`
+	g.Meta `path:"/facility/search" tags:"Facility" method:"post" summary:"Get Facilities By searching tags"`
 	Name   string `json:"name"`
 	ID     int    `json:"id" `
 }
@@ -27,7 +27,7 @@ type FacilitySearchRes struct {
 }
 
 type AddFacilityReq struct {
-	g.Meta      `path:"/add_facility" tags:"Facility" method:"post" summary:"Add Facility"`
+	g.Meta      `path:"/facility/add" tags:"Facility" method:"post" summary:"Add Facility"`
 	Name        string `json:"name" v:"required#Please input name"`
 	Description string `json:"description" v:"required#Please input description"`
 	Location    string `json:"location" v:"required#Please input location"`
@@ -40,7 +40,7 @@ type AddFacilityRes struct {
 }
 
 type AddFacilityPlaceReq struct {
-	g.Meta      `path:"/add_facility_place" tags:"Facility" method:"post" summary:"Add Facility Place"`
+	g.Meta      `path:"/facility/place/add" tags:"Facility" method:"post" summary:"Add Facility Place"`
 	Name        string  `json:"name" v:"required#Please input name"`
 	FacilityID  int     `json:"facility_id" v:"required#Please input facility_id"`
 	Cost        float64 `json:"cost" v:"required#Please input cost"`
@@ -52,7 +52,7 @@ type AddFacilityPlaceRes struct {
 }
 
 type ModifyFacilityPlaceReq struct {
-	g.Meta      `path:"/modify_facility_place" tags:"Facility" method:"post" summary:"Modify Facility Place"`
+	g.Meta      `path:"/facility/place/update" tags:"Facility" method:"post" summary:"Modify Facility Place"`
 	ID          int     `json:"id" v:"required#Please input id"`
 	Name        string  `json:"name" v:"required#Please input name"`
 	FacilityID  int     `json:"facility_id" v:"required#Please input facility_id"`
@@ -65,7 +65,7 @@ type ModifyFacilityPlaceRes struct {
 }
 
 type ModifyFacilityReq struct {
-	g.Meta      `path:"/modify_facility" tags:"Facility" method:"post" summary:"Modify Facility"`
+	g.Meta      `path:"/facility/update" tags:"Facility" method:"post" summary:"Modify Facility"`
 	ID          int      `json:"id" v:"required#Please input id"`
 	Name        string   `json:"name" v:"required#Please input name"`
 	Description string   `json:"description" v:"required#Please input description"`
@@ -79,7 +79,7 @@ type ModifyFacilityRes struct {
 }
 
 type FacilityDetailReq struct {
-	g.Meta `path:"/facility_detail" tags:"Facility" method:"post" summary:"Get Facility Detail"`
+	g.Meta `path:"/facility/detail" tags:"Facility" method:"post" summary:"Get Facility Detail"`
 	ID     int `json:"id" v:"required#Please input id"`
 }
 

@@ -37,7 +37,7 @@ var (
 			s.AddStaticPath("/uploads", uploadPath)
 
 			// Unauthorized user
-			s.Group("/", func(group *ghttp.RouterGroup) {
+			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
 				group.Middleware(
 					//ghttp.MiddlewareHandlerResponse,
 					service.Middleware().Ctx,

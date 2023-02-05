@@ -3,7 +3,7 @@ package v1
 import "github.com/gogf/gf/v2/frame/g"
 
 type CreateOrderReq struct {
-	g.Meta    `path:"/create" method:"post" tags:"Order" summary:"Create order"`
+	g.Meta    `path:"/order/create" method:"post" tags:"Order" summary:"Create order"`
 	PlaceId   int    `json:"placeId" v:"required#Please input place id"`
 	StartTime string `json:"startTime" v:"required#Please input start time"`
 	EndTime   string `json:"endTime" v:"required#Please input end time"`

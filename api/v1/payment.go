@@ -3,7 +3,7 @@ package v1
 import "github.com/gogf/gf/v2/frame/g"
 
 type CreatePaymentReq struct {
-	g.Meta      `path:"/payment" method:"post" mime:"application/json" tags:"Payment" summary:"Create payment"`
+	g.Meta      `path:"/order/payment" method:"post" mime:"application/json" tags:"Payment" summary:"Create payment"`
 	OrderCode   string `json:"orderCode" v:"required#Please input order code"`
 	PaymentType int    `json:"paymentType" v:"required#Please input payment type"`
 	CardId      int    `json:"cardId"`
