@@ -9,6 +9,8 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"context"
+
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 type (
@@ -19,6 +21,8 @@ type (
 		GetOrdersByUserId(ctx context.Context, userId int) (res []*entity.Order, err error)
 		GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error)
 		GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error)
+		GetAllOrders(ctx context.Context) (res []*entity.Order, err error)
+		GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time, endTime *gtime.Time) (res []*entity.Order, err error)
 	}
 )
 

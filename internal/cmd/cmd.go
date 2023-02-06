@@ -76,6 +76,7 @@ var (
 					group.Bind(
 						controller.FacilityAdmin,
 						controller.PaymentAdmin,
+						controller.OrderAdmin,
 					)
 				})
 			})

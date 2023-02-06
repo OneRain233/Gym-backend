@@ -27,7 +27,14 @@ func New() *sOrder {
 func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error) {
 	response = &model.ResponseOrderForm{}
 	// check if the time is taken
-	_, err = o.ValidateTime(ctx, input)
+	validated, err := o.ValidateTime(ctx, input)
+	if err != nil {
+		return
+	}
+	if !validated {
+		err = gerror.New("time is taken or invalid")
+		return
+	}
 	// TODO: check amount
 	facilityPlace, err := service.Place().GetPlaceById(ctx, input.PlaceId)
 	if err != nil {
@@ -63,6 +70,11 @@ func (o *sOrder) GenerateOrderCode() string {
 }
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
+	// start time should be before end time
+	if gtime.NewFromStr(input.StartTime).Timestamp() >= gtime.NewFromStr(input.EndTime).Timestamp() {
+		return false, nil
+	}
+
 	// find all orders in the same place
 	var orders []*entity.Order
 	// TODO: optimize the query
@@ -100,7 +112,7 @@ func (o *sOrder) GetOrdersByUserId(ctx context.Context, userId int) (res []*enti
 
 func (o *sOrder) GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error) {
 	// first 50 orders
-	err = dao.Order.Ctx(ctx).Where("place_id", placeId).Limit(50).Scan(&res)
+	err = dao.Order.Ctx(ctx).Where("place_id", placeId).Scan(&res)
 	if err != nil {
 		return
 	}
@@ -109,6 +121,23 @@ func (o *sOrder) GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*en
 
 func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error) {
 	err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Scan(&res)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (o *sOrder) GetAllOrders(ctx context.Context) (res []*entity.Order, err error) {
+	err = dao.Order.Ctx(ctx).Scan(&res)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (o *sOrder) GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time, endTime *gtime.Time) (res []*entity.Order, err error) {
+	// get all orders >= start time and <= end time
+	err = dao.Order.Ctx(ctx).Where("start_time >= ?", startTime).Where("end_time <= ?", endTime).Scan(&res)
 	if err != nil {
 		return
 	}
