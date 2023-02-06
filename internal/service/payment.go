@@ -16,7 +16,10 @@ type (
 		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
 		GeneratePaymentCode() string
 		GetPaymentByPaymentCode(ctx context.Context, paymentCode string) (payment *entity.Payment, err error)
+		GetPaymentById(ctx context.Context, paymentId int) (payment *entity.Payment, err error)
 		GetPaymentByOrderId(ctx context.Context, orderId int) (payment *entity.Payment, err error)
+		GetPaymentByUserId(ctx context.Context, userId int) (payment []*entity.Payment, err error)
+		GetAllPayment(ctx context.Context) (payments []*entity.Payment, err error)
 	}
 )
 

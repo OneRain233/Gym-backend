@@ -128,9 +128,50 @@ func (s *sPayment) GetPaymentByPaymentCode(ctx context.Context, paymentCode stri
 	return
 }
 
+func (s *sPayment) GetPaymentById(ctx context.Context, paymentId int) (payment *entity.Payment, err error) {
+	payment = &entity.Payment{}
+	err = dao.Payment.Ctx(ctx).Where("id", paymentId).Scan(payment)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (s *sPayment) GetPaymentByOrderId(ctx context.Context, orderId int) (payment *entity.Payment, err error) {
 	payment = &entity.Payment{}
 	err = dao.Payment.Ctx(ctx).Where("order_id", orderId).OmitEmpty().Scan(payment)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *sPayment) GetPaymentByUserId(ctx context.Context, userId int) (payment []*entity.Payment, err error) {
+	// check if user exists
+	userEntity, err := service.User().GetUserByID(ctx, uint(userId))
+	if err != nil || userEntity == nil {
+		err = gerror.New("user not found")
+		return
+	}
+	payment = []*entity.Payment{}
+	wallet := &entity.Wallet{}
+	err = dao.Wallet.Ctx(ctx).Where("user_id", userEntity.Id).Scan(&wallet)
+	if wallet == nil || err != nil {
+		err = gerror.New("wallet not found")
+		return
+	}
+	err = dao.Payment.Ctx(ctx).Where("wallet_id", wallet.Id).Scan(&payment)
+	if payment == nil {
+		err = gerror.New("payment not found")
+		return
+	}
+
+	return
+}
+
+func (s *sPayment) GetAllPayment(ctx context.Context) (payments []*entity.Payment, err error) {
+	payments = []*entity.Payment{}
+	err = dao.Payment.Ctx(ctx).Scan(&payments)
 	if err != nil {
 		return
 	}

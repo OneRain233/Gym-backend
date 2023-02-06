@@ -117,7 +117,7 @@ func (u *sUser) GetUserByUsernameAndPassword(ctx context.Context, username strin
 }
 
 func (u *sUser) GetUserByID(ctx context.Context, id uint) (user *entity.User, err error) {
-	err = dao.User.Ctx(ctx).WherePri(id).Scan(&user)
+	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, id).Scan(&user)
 	return
 }
 

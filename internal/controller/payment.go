@@ -5,6 +5,7 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"context"
+	"fmt"
 )
 
 var Payment = cPayment{}
@@ -30,4 +31,24 @@ func (c *cPayment) CreatePayment(ctx context.Context, req *v1.CreatePaymentReq) 
 	res.Amount = resp.Amount
 	res.Status = resp.Status
 	return
+}
+
+func (c *cPaymentAdmin) GetPayment(ctx context.Context, req *v1.GetPaymentByUserIdReq) (res *v1.GetPaymentByUserIdRes, err error) {
+	res = &v1.GetPaymentByUserIdRes{}
+	fmt.Println(req.UserId)
+	if req.UserId == 0 {
+		fmt.Println("get all payment")
+		res.Payments, err = service.Payment().GetAllPayment(ctx)
+		if err != nil {
+			return
+		}
+		return
+	} else {
+		fmt.Println("get payment by user id")
+		res.Payments, err = service.Payment().GetPaymentByUserId(ctx, req.UserId)
+		if err != nil {
+			return
+		}
+		return
+	}
 }
