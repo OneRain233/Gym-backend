@@ -38,6 +38,7 @@ compile:
   artifacts:
     paths:
       - main
+    expire_in: 2 days
 
 deploy:
   stage: deploy

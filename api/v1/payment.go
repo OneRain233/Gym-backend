@@ -41,3 +41,12 @@ type GetPaymentByUserIdRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
 	Payments []*entity.Payment `json:"payments"`
 }
+
+type GetOwnPaymentReq struct {
+	g.Meta `path:"/order/payment/own" method:"post" mime:"application/json" tags:"Payment" summary:"Get own payment"`
+}
+
+type GetOwnPaymentRes struct {
+	g.Meta   `mime:"application/json" example:"string"`
+	Payments []*entity.Payment `json:"payments"`
+}

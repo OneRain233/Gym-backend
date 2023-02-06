@@ -6,6 +6,8 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 	"fmt"
+
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 var Payment = cPayment{}
@@ -33,7 +35,7 @@ func (c *cPayment) CreatePayment(ctx context.Context, req *v1.CreatePaymentReq) 
 	return
 }
 
-func (c *cPaymentAdmin) GetPayment(ctx context.Context, req *v1.GetPaymentByUserIdReq) (res *v1.GetPaymentByUserIdRes, err error) {
+func (c *cPaymentAdmin) GetPaymentByUserId(ctx context.Context, req *v1.GetPaymentByUserIdReq) (res *v1.GetPaymentByUserIdRes, err error) {
 	res = &v1.GetPaymentByUserIdRes{}
 	fmt.Println(req.UserId)
 	if req.UserId == 0 {
@@ -51,4 +53,18 @@ func (c *cPaymentAdmin) GetPayment(ctx context.Context, req *v1.GetPaymentByUser
 		}
 		return
 	}
+}
+
+func (c *cPayment) GetOwnPayment(ctx context.Context, req *v1.GetOwnPaymentReq) (res *v1.GetOwnPaymentRes, err error) {
+	res = &v1.GetOwnPaymentRes{}
+	user := service.Session().GetUser(ctx)
+	if user == nil {
+		err = gerror.New("user not found")
+		return
+	}
+	res.Payments, err = service.Payment().GetPaymentByUserId(ctx, user.Id)
+	if err != nil {
+		return
+	}
+	return
 }
