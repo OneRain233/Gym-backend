@@ -7,7 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
-	"math/rand"
+	"strconv"
 
 	"github.com/gogf/gf/v2/os/gtime"
 
@@ -43,16 +43,35 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 		err = gerror.New("wallet not found")
 		return
 	}
-	paymentRecord := entity.Payment{
-		WalletId:    wallet.Id,
-		OrderId:     order.Id,
-		PaymentCode: s.GeneratePaymentCode(),
-		Time:        gtime.Now(),
-		Amount:      order.Amount,
-		PaymentType: form.PaymentType,
-	}
-	_, err = dao.Payment.Ctx(ctx).Insert(paymentRecord)
+
+	// check if there is record in db
+	var paymentRecord *entity.Payment
+	paymentRecord, err = s.GetPaymentByOrderId(ctx, order.Id)
 	if err != nil {
+		paymentRecord = &entity.Payment{
+			WalletId:    wallet.Id,
+			OrderId:     order.Id,
+			PaymentCode: s.GeneratePaymentCode(),
+			Time:        gtime.Now(),
+			Amount:      order.Amount,
+			PaymentType: form.PaymentType,
+			Status:      consts.PaymentPending,
+		}
+		res, err1 := dao.Payment.Ctx(ctx).Insert(paymentRecord)
+		paymentId, err2 := res.LastInsertId()
+		paymentRecord.Id = int(paymentId)
+		if err1 != nil || err2 != nil {
+			err = gerror.New("payment create failed")
+		}
+	}
+
+	// if this payment is already paid
+	if paymentRecord.Status == consts.PaymentSuccess {
+		response.PaymentCode = paymentRecord.PaymentCode
+		response.Amount = paymentRecord.Amount
+		response.PaymentType = paymentRecord.PaymentType
+		response.OrderCode = order.OrderCode
+		response.Status = consts.PaymentSuccess
 		return
 	}
 
@@ -71,11 +90,19 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 		}
 		err = service.Card().Pay(ctx, &cardPaymentForm)
 		if err != nil {
+			// update payment status
+			paymentRecord.Status = consts.PaymentFail
+			_, _ = dao.Payment.Ctx(ctx).Where("id", paymentRecord.Id).Update(paymentRecord)
 			return
 		}
-
 	}
 
+	// update payment status
+	paymentRecord.Status = consts.PaymentSuccess
+	_, err = dao.Payment.Ctx(ctx).Where("id", paymentRecord.Id).Update(paymentRecord)
+	if err != nil {
+		return
+	}
 	response.PaymentCode = paymentRecord.PaymentCode
 	response.Amount = paymentRecord.Amount
 	response.PaymentType = paymentRecord.PaymentType
@@ -88,5 +115,24 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 
 func (s *sPayment) GeneratePaymentCode() string {
 	// YearMonthDay + 8 digits
-	return gtime.Now().Format("Ymd") + string(rand.Int())
+	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+}
+
+// GetPaymentByPaymentCode get payment by payment code
+func (s *sPayment) GetPaymentByPaymentCode(ctx context.Context, paymentCode string) (payment *entity.Payment, err error) {
+	payment = &entity.Payment{}
+	err = dao.Payment.Ctx(ctx).Where("payment_code", paymentCode).Scan(payment)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (s *sPayment) GetPaymentByOrderId(ctx context.Context, orderId int) (payment *entity.Payment, err error) {
+	payment = &entity.Payment{}
+	err = dao.Payment.Ctx(ctx).Where("order_id", orderId).OmitEmpty().Scan(payment)
+	if err != nil {
+		return
+	}
+	return
 }

@@ -32,9 +32,12 @@ func (s *sCard) GetCard(ctx context.Context) (card *entity.WalletCard, err error
 }
 
 func (s *sCard) BindCard(ctx context.Context, input *model.BindCardForm) error {
-	userId := service.Session().GetUser(ctx)
+	userId := service.Session().GetUser(ctx).Id
 	var wallet *entity.Wallet
 	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	if err != nil {
+		return err
+	}
 	// check if bank id exists
 	var bank *entity.Bank
 	err = dao.Bank.Ctx(ctx).Where("id", input.BankId).Scan(&bank)
@@ -44,14 +47,14 @@ func (s *sCard) BindCard(ctx context.Context, input *model.BindCardForm) error {
 	if bank == nil {
 		return gerror.New("bank id not exists")
 	}
-	card := entity.WalletCard{
+	card := &entity.WalletCard{
 		BankId:      input.BankId,
 		WalletId:    wallet.Id,
 		CardAccount: input.CardAccount,
 		Phone:       input.Phone,
 		Amount:      0.0,
 	}
-	_, err = dao.WalletCard.Ctx(ctx).Insert(&card)
+	_, err = dao.WalletCard.Ctx(ctx).Insert(card)
 	return err
 }
 
@@ -73,7 +76,7 @@ func (s *sCard) GetCardsCountByUserId(ctx context.Context, userId int) (count in
 
 func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
 	return dao.WalletCard.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
-		userId := service.Session().GetUser(ctx)
+		userId := service.Session().GetUser(ctx).Id
 		var wallet *entity.Wallet
 		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
 		var card *entity.WalletCard

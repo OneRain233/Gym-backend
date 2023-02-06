@@ -14,4 +14,7 @@ const (
 
 	PaymentSuccess = 1
 	PaymentFail    = 0
+	PaymentPending = 2
+
+	PaymentNotFound = "payment not found"
 )

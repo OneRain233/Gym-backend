@@ -1,10 +1,10 @@
 package model
 
 type BindCardForm struct {
-	BankId      int    `json:"bankId"`
-	CardAccount string `json:"cardAccount"`
-	Phone       string `json:"phone"`
-	Amount      string `json:"amount"` // simulated amount
+	BankId      int     `json:"bankId"`
+	CardAccount string  `json:"cardAccount"`
+	Phone       string  `json:"phone"`
+	Amount      float64 `json:"amount"` // simulated amount
 }
 
 type CardPayForm struct {

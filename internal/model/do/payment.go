@@ -19,4 +19,5 @@ type Payment struct {
 	Time        *gtime.Time // Payment Time
 	Amount      interface{} // Payment Amount
 	PaymentType interface{} // Payment type
+	Status      interface{} // Payment status
 }

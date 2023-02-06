@@ -17,4 +17,5 @@ type Payment struct {
 	Time        *gtime.Time `json:"time"        ` // Payment Time
 	Amount      float64     `json:"amount"      ` // Payment Amount
 	PaymentType int         `json:"paymentType" ` // Payment type
+	Status      int         `json:"status"      ` // Payment status
 }

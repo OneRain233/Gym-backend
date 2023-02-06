@@ -8,6 +8,8 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/gogf/gf/v2/errors/gerror"
+
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
@@ -29,6 +31,7 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 	// TODO: check amount
 	facilityPlace, err := service.Place().GetPlaceById(ctx, input.PlaceId)
 	if err != nil {
+		err = gerror.New("place not found")
 		return
 	}
 	orderEntity := &entity.Order{}

@@ -215,9 +215,10 @@ func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacili
 	}
 
 	var place = &entity.FacilityPlace{
-		FacilityId: input.FacilityId,
-		Name:       input.Name,
-		Cost:       input.Cost,
+		FacilityId:  input.FacilityId,
+		Name:        input.Name,
+		Cost:        input.Cost,
+		Description: input.Description,
 	}
 
 	_, err = g.DB().Model("facility_place").Data(place).Insert()

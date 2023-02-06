@@ -7,6 +7,7 @@ package service
 
 import (
 	"Gym-backend/internal/model"
+	"Gym-backend/internal/model/entity"
 	"context"
 )
 
@@ -14,6 +15,8 @@ type (
 	IPayment interface {
 		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
 		GeneratePaymentCode() string
+		GetPaymentByPaymentCode(ctx context.Context, paymentCode string) (payment *entity.Payment, err error)
+		GetPaymentByOrderId(ctx context.Context, orderId int) (payment *entity.Payment, err error)
 	}
 )
 
