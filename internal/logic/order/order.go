@@ -103,6 +103,15 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 }
 
 func (o *sOrder) GetOrdersByUserId(ctx context.Context, userId int) (res []*entity.Order, err error) {
+	// check if user exists
+	userEntity, err := service.User().GetUserByID(ctx, uint(userId))
+	if err != nil {
+		return
+	}
+	if userEntity == nil {
+		err = gerror.New("user not found")
+		return
+	}
 	err = dao.Order.Ctx(ctx).Where("user_id", userId).Scan(&res)
 	if err != nil {
 		return

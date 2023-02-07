@@ -12,6 +12,7 @@ import (
 
 type (
 	IFacility interface {
+		ProcessImage(images string) []string
 		GetFacilityList(ctx context.Context) (res []*model.FacilityEntity, err error)
 		GetFacilityById(ctx context.Context, id int) (res *model.FacilityEntity, err error)
 		GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error)

@@ -6,6 +6,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 
@@ -20,6 +21,10 @@ func init() {
 
 func New() *sFacility {
 	return &sFacility{}
+}
+
+func (s *sFacility) ProcessImage(images string) []string {
+	return strings.Split(images, ",")
 }
 
 // GetFacilityList gets the facility list.
