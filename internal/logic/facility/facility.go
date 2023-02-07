@@ -39,7 +39,7 @@ func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityE
 	// map the places to facility
 	for _, facility := range facilities {
 		var place []*entity.FacilityPlace
-		err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
+		err = dao.FacilityPlace.Ctx(ctx).Where("facility_id", facility.Id).Scan(&place)
 		if err != nil {
 			return
 		}
