@@ -140,6 +140,10 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 	if err != nil {
 		return
 	}
+	if facility == nil {
+		err = gerror.New("facility not found")
+		return
+	}
 	if input.Name != "" {
 		facility.Name = input.Name
 	}

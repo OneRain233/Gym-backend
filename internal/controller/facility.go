@@ -85,7 +85,7 @@ func (c *cFacility) GetFacilityDetail(ctx context.Context, req *v1.FacilityDetai
 	return
 }
 
-func (c *cFacility) AddFacilityPlace(ctx context.Context, req *v1.AddFacilityPlaceReq) (res *v1.AddFacilityPlaceRes, err error) {
+func (c *cFacilityAdmin) AddFacilityPlace(ctx context.Context, req *v1.AddFacilityPlaceReq) (res *v1.AddFacilityPlaceRes, err error) {
 	res = &v1.AddFacilityPlaceRes{}
 	form := model.AddFacilityPlaceForm{
 		FacilityId:  req.FacilityID,
@@ -100,7 +100,7 @@ func (c *cFacility) AddFacilityPlace(ctx context.Context, req *v1.AddFacilityPla
 	return
 }
 
-func (c *cFacility) ModifyFacilityPlace(ctx context.Context, req *v1.ModifyFacilityPlaceReq) (res *v1.ModifyFacilityPlaceRes, err error) {
+func (c *cFacilityAdmin) ModifyFacilityPlace(ctx context.Context, req *v1.ModifyFacilityPlaceReq) (res *v1.ModifyFacilityPlaceRes, err error) {
 	res = &v1.ModifyFacilityPlaceRes{}
 	form := model.ModifyFacilityPlaceForm{
 		Id:          req.ID,
