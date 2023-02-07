@@ -61,6 +61,9 @@ func (s *sBank) UpdateBank(ctx context.Context, form *model.UpdateBankForm) erro
 	if err != nil {
 		return err
 	}
+	if bank == nil {
+		return gerror.New("bank not found")
+	}
 	bank.Name = form.Name
 	_, err = dao.Bank.Ctx(ctx).Where("id", form.Id).Update(bank)
 	return err
