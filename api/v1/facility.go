@@ -12,7 +12,7 @@ type FacilityReq struct {
 
 type FacilityRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
-	Facility []*model.FacilityEntity
+	Facility []*model.FacilityEntity `json:"facility"`
 }
 
 type FacilitySearchReq struct {
@@ -23,7 +23,7 @@ type FacilitySearchReq struct {
 
 type FacilitySearchRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
-	Facility []*model.FacilityEntity
+	Facility []*model.FacilityEntity `json:"facility"`
 }
 
 type AddFacilityReq struct {
@@ -85,5 +85,5 @@ type FacilityDetailReq struct {
 
 type FacilityDetailRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
-	Facility *model.FacilityEntity
+	Facility *model.FacilityEntity `json:"facility"`
 }
