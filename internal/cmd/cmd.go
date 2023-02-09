@@ -63,6 +63,7 @@ var (
 						controller.Order,
 						controller.Payment,
 						controller.Card,
+						controller.Announcement,
 					)
 				})
 
@@ -77,6 +78,7 @@ var (
 						controller.FacilityAdmin,
 						controller.PaymentAdmin,
 						controller.OrderAdmin,
+						controller.AnnouncementAdmin,
 					)
 				})
 			})

@@ -5,6 +5,7 @@
 package logic
 
 import (
+	_ "Gym-backend/internal/logic/announcement"
 	_ "Gym-backend/internal/logic/bank"
 	_ "Gym-backend/internal/logic/bizctx"
 	_ "Gym-backend/internal/logic/card"
