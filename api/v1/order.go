@@ -71,3 +71,13 @@ type GetOrderByOrderCodeRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Order  *entity.Order `json:"order"`
 }
+
+type GetReceiptReq struct {
+	g.Meta    `path:"/order/receipt" method:"post" tags:"Order" summary:"Get receipt by order code"`
+	OrderCode string `json:"orderCode" v:"required#Please input order code"`
+}
+
+type GetReceiptRes struct {
+	// file response
+	g.Meta `mime:"application/octet-stream" example:"string"`
+}

@@ -6,6 +6,8 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 
+	"github.com/gogf/gf/v2/frame/g"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -97,5 +99,16 @@ func (c *cOrderAdmin) GetOrderByTime(ctx context.Context, req *v1.GetOrderByTime
 		err = gerror.New("order not found")
 	}
 
+	return
+}
+
+func (c *cOrder) GetReceipt(ctx context.Context, req *v1.GetReceiptReq) (res *v1.GetReceiptRes, err error) {
+	res = &v1.GetReceiptRes{}
+	path, err := service.Order().GenerateOrderReceipt(ctx, req.OrderCode)
+	if err != nil {
+		return
+	}
+	// return the file as a response
+	g.RequestFromCtx(ctx).Response.ServeFile(path)
 	return
 }

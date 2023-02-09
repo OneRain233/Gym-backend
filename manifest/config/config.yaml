@@ -19,3 +19,8 @@ database:
 upload:
   defaultAvatar: "default.png"
   path: "uploads/"
+
+receipt:
+  path: "receipts/"
+  pdfPath: "receipts/pdf/"
+  qrPath:  "receipts/qr/"

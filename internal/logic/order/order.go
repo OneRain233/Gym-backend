@@ -5,6 +5,7 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/receipt"
 	"context"
 	"strconv"
 
@@ -151,4 +152,57 @@ func (o *sOrder) GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time,
 		return
 	}
 	return
+}
+
+func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (path string, err error) {
+	// TODO: regenerate?
+
+	// check if there is a receipt in db
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return "", err
+	}
+	receiptEntity, err := service.Receipt().GetReceiptByOrderCode(ctx, order.Id)
+	if err != nil {
+		return "", err
+	}
+	if receiptEntity != nil {
+		return receiptEntity.ReceiptPath, nil
+	}
+	// generate order code qr code
+	userId := service.Session().GetUser(ctx).Id
+	qeFilename := strconv.Itoa(int(userId)) + orderCode + ".png"
+	content := string(userId) + orderCode + gtime.Now().String()
+	qrFilePath, err := receipt.GenerateQRCode(qeFilename, content)
+	if err != nil {
+		return "", err
+	}
+	// generate order pdf
+	pdfFilename := strconv.Itoa(int(userId)) + orderCode + ".pdf"
+
+	place, err := service.Place().GetPlaceById(ctx, order.PlaceId)
+	if err != nil {
+		return "", err
+	}
+	pdfContent := "Order Code: " + orderCode + "\n" +
+		"Start Time: " + order.StartTime.String() + "\n" +
+		"End Time: " + order.EndTime.String() + "\n" +
+		"Place: " + place.Name + "\n" +
+		"Amount: " + strconv.Itoa(int(order.Amount)) + "\n"
+	path, err = receipt.GenerateReceiptPDF(pdfFilename, pdfContent, qrFilePath)
+	if err != nil {
+		return "", err
+	}
+	// recode in db
+	form := model.CreateReceiptForm{
+		OrderCode:   orderCode,
+		ReceiptPath: path,
+		OrderId:     order.Id,
+	}
+	err = service.Receipt().AddReceipt(ctx, form)
+	if err != nil {
+		return
+	}
+	return
+
 }

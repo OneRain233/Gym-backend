@@ -7,6 +7,6 @@ package entity
 // Receipt is the golang structure for table receipt.
 type Receipt struct {
 	Id          int    `json:"id"          ` // ID
-	OrderId     string `json:"orderId"     ` // Order Id
+	OrderId     int    `json:"orderId"     ` // Order Id
 	ReceiptPath string `json:"receiptPath" ` // PDF Receipt path
 }

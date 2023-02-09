@@ -14,3 +14,9 @@ type ResponseOrderForm struct {
 	EndTime   string
 	OrderCode string
 }
+
+type CreateReceiptForm struct {
+	OrderCode   string
+	OrderId     int
+	ReceiptPath string
+}
