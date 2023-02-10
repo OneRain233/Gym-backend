@@ -20,6 +20,7 @@ type (
 		GetPaymentByOrderId(ctx context.Context, orderId int) (payment *entity.Payment, err error)
 		GetPaymentByUserId(ctx context.Context, userId int) (payment []*entity.Payment, err error)
 		GetAllPayment(ctx context.Context) (payments []*entity.Payment, err error)
+		GetPaymentByOrderCode(ctx context.Context, orderCode string) (payment *entity.Payment, err error)
 	}
 )
 

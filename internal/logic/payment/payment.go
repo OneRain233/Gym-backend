@@ -177,3 +177,25 @@ func (s *sPayment) GetAllPayment(ctx context.Context) (payments []*entity.Paymen
 	}
 	return
 }
+
+func (s *sPayment) GetPaymentByOrderCode(ctx context.Context, orderCode string) (payment *entity.Payment, err error) {
+	var order *entity.Order
+	order, err = service.Order().GetOrderByOrderCode(ctx, orderCode)
+	if order == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	if err != nil {
+		return
+	}
+	orderId := order.Id
+	err = dao.Payment.Ctx(ctx).Where("order_id", orderId).Scan(&payment)
+	if payment == nil {
+		err = gerror.New("payment not found")
+		return
+	}
+	if err != nil {
+		return
+	}
+	return
+}

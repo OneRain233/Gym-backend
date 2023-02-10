@@ -1,6 +1,7 @@
 package order
 
 import (
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/dao"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
@@ -131,6 +132,9 @@ func (o *sOrder) GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*en
 
 func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error) {
 	err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Scan(&res)
+	if res == nil {
+		return nil, nil
+	}
 	if err != nil {
 		return
 	}
@@ -155,8 +159,25 @@ func (o *sOrder) GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time,
 }
 
 func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (path string, err error) {
-	// TODO: regenerate?
+	// Test Cases:
+	// 1. If there is no such order 		pass
+	// 2. If the order is not paid			pass
+	// 3. If there is already a receipt		pass
+	// 4. If the order is paid and there is no receipt	pass
+	// 5. If the order is paid and there is a receipt	pass
 
+	// TODO: regenerate?
+	// check if the order is paid
+	payment, err := service.Payment().GetPaymentByOrderCode(ctx, orderCode)
+	if err != nil {
+		return "", err
+	}
+	if payment == nil {
+		return "", gerror.New("payment not found")
+	}
+	if payment.Status != consts.PaymentSuccess {
+		return "", gerror.New("payment not successful")
+	}
 	// check if there is a receipt in db
 	order, err := o.GetOrderByOrderCode(ctx, orderCode)
 	if err != nil {
