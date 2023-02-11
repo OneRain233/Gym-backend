@@ -83,6 +83,9 @@ func GenerateReceiptPDF(filename string, content *model.ReceiptInfo, qrPath stri
 	}
 	pdf.Cell(nil, content.Amount)
 
+	// add qr code
+	pdf.Image(qrPath, 400, 550, nil)
+
 	pdf.WritePdf(filePath)
 	return filePath, nil
 }

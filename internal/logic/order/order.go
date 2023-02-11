@@ -181,11 +181,15 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	if payment.Status != consts.PaymentSuccess {
 		return "", gerror.New("payment not successful")
 	}
-	// check if there is a receipt in db
+
 	order, err := o.GetOrderByOrderCode(ctx, orderCode)
 	if err != nil {
 		return "", err
 	}
+
+	// TODO: Comment this part for testing
+	// ================================
+	//check if there is a receipt in db
 	receiptEntity, err := service.Receipt().GetReceiptByOrderCode(ctx, order.Id)
 	if err != nil {
 		return "", err
@@ -193,6 +197,7 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	if receiptEntity != nil {
 		return receiptEntity.ReceiptPath, nil
 	}
+	// ================================
 	// generate order code qr code
 	userId := service.Session().GetUser(ctx).Id
 	qeFilename := strconv.Itoa(int(userId)) + orderCode + ".png"
