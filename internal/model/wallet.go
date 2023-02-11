@@ -1,5 +1,7 @@
 package model
 
+import "Gym-backend/internal/model/entity"
+
 type BindCardForm struct {
 	BankId      int     `json:"bankId"`
 	CardAccount string  `json:"cardAccount"`
@@ -17,4 +19,9 @@ type CardRechargeForm struct {
 	CardId  int     `json:"cardId"`
 	Amount  float64 `json:"amount"`
 	OrderId int     `json:"orderId"`
+}
+
+type WalletInfo struct {
+	Wallet *entity.Wallet       `json:"wallet"`
+	Cards  []*entity.WalletCard `json:"cards"`
 }

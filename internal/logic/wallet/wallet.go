@@ -2,6 +2,7 @@ package wallet
 
 import (
 	"Gym-backend/internal/dao"
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
@@ -27,6 +28,27 @@ func (s *sWallet) GetWallet(ctx context.Context) (wallet *entity.Wallet, err err
 		return
 	}
 	return
+}
+
+func (s *sWallet) GetFullWalletInfo(ctx context.Context) (walletInfo *model.WalletInfo, err error) {
+	user := service.Session().GetUser(ctx)
+	userId := user.Id
+	var walletEntity *entity.Wallet
+	err = dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&walletEntity)
+	if err != nil {
+		return
+	}
+	var cards []*entity.WalletCard
+	err = dao.WalletCard.Ctx(ctx).Where("wallet_id", walletEntity.Id).Scan(&cards)
+	if err != nil {
+		return
+	}
+	walletInfo = &model.WalletInfo{
+		Wallet: walletEntity,
+		Cards:  cards,
+	}
+	return
+
 }
 
 func (s *sWallet) CreateWallet(ctx context.Context) error {

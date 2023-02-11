@@ -10,6 +10,9 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/gogf/gf/v2/crypto/gmd5"
+	"github.com/gogf/gf/v2/encoding/gjson"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -193,8 +196,16 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	// generate order code qr code
 	userId := service.Session().GetUser(ctx).Id
 	qeFilename := strconv.Itoa(int(userId)) + orderCode + ".png"
-	content := string(userId) + orderCode + gtime.Now().String()
-	qrFilePath, err := receipt.GenerateQRCode(qeFilename, content)
+
+	// json qrContent
+	qrContent := map[string]interface{}{
+		"orderCode":     order.OrderCode,
+		"user":          userId,
+		"generatedTime": gtime.Now().String(),
+	}
+	sign := o.GenerateQrSignature(qrContent)
+	qrContent["sign"] = sign
+	qrFilePath, err := receipt.GenerateQRCode(qeFilename, gjson.MustEncodeString(qrContent))
 	if err != nil {
 		return "", err
 	}
@@ -226,4 +237,22 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	}
 	return
 
+}
+
+func (o *sOrder) GenerateQrSignature(qrContent map[string]interface{}) string {
+	res := gmd5.MustEncryptString(gjson.MustEncodeString(qrContent))
+	return res
+}
+
+func (o *sOrder) CheckSignature(qrContent map[string]interface{}, sign string) bool {
+	originalQrContent := map[string]interface{}{
+		"orderCode":     qrContent["orderCode"],
+		"user":          qrContent["user"],
+		"generatedTime": qrContent["generatedTime"],
+	}
+	originalSign := o.GenerateQrSignature(originalQrContent)
+	if originalSign != sign {
+		return false
+	}
+	return true
 }

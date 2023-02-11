@@ -6,6 +6,7 @@
 package service
 
 import (
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"context"
 )
@@ -13,6 +14,7 @@ import (
 type (
 	IWallet interface {
 		GetWallet(ctx context.Context) (wallet *entity.Wallet, err error)
+		GetFullWalletInfo(ctx context.Context) (walletInfo *model.WalletInfo, err error)
 		CreateWallet(ctx context.Context) error
 		CreateWalletForUser(ctx context.Context, userId int) error
 		SetStatus(ctx context.Context, status int) error

@@ -64,6 +64,7 @@ var (
 						controller.Payment,
 						controller.Card,
 						controller.Announcement,
+						controller.Wallet,
 					)
 				})
 
