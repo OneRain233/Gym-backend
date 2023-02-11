@@ -1,7 +1,7 @@
 package receipt
 
 import (
-	"strings"
+	"Gym-backend/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gctx"
@@ -35,7 +35,7 @@ func GenerateQRCode(filename string, content string) (path string, err error) {
 	return filepath, nil
 }
 
-func GenerateReceiptPDF(filename string, content string, qrPath string) (path string, err error) {
+func GenerateReceiptPDF(filename string, content *model.ReceiptInfo, qrPath string) (path string, err error) {
 	pdfPath := g.Cfg().MustGet(gctx.New(), "receipt.pdfPath").String()
 	filePath := pdfPath + filename
 	pdf := gopdf.GoPdf{}
@@ -51,23 +51,38 @@ func GenerateReceiptPDF(filename string, content string, qrPath string) (path st
 		return "", err
 	}
 
-	// add header
-	pdf.AddHeader(func() {
-		pdf.SetY(5)
-		pdf.Cell(nil, "Gym Receipt")
-	})
-	// add footer
-	pdf.AddFooter(func() {
-		pdf.SetY(-15)
-		pdf.Cell(nil, "Gym Receipt")
-	})
-	contentLines := strings.Split(content, "\n")
-	for _, line := range contentLines {
-		pdf.Cell(nil, line)
-		pdf.Br(30)
+	// import exsiting pdf
+	tpl1 := pdf.ImportPage("resource/pdf/receipt-original.pdf", 1, "/MediaBox")
+	pdf.UseImportedTemplate(tpl1, 0, 0, 595, 842)
+
+	// add info
+	pdf.SetTextColor(156, 197, 140)
+	// facility name
+	pdf.SetX(350)
+	pdf.SetY(305)
+	pdf.Cell(nil, content.Facility)
+	// activity name
+	pdf.SetX(350)
+	pdf.SetY(340)
+	pdf.Cell(nil, content.Activity)
+	// start time
+	pdf.SetX(350)
+	pdf.SetY(375)
+	pdf.Cell(nil, content.StartTime)
+	// end time
+	pdf.SetX(350)
+	pdf.SetY(410)
+	pdf.Cell(nil, content.LastingTime)
+	// amount
+	pdf.SetX(250)
+	pdf.SetY(470)
+	// set font size
+	err = pdf.SetFont("NotoSans", "", 24)
+	if err != nil {
+		return "", err
 	}
-	// add a image at right bottom
-	pdf.Image(qrPath, 300, 300, nil)
+	pdf.Cell(nil, content.Amount)
+
 	pdf.WritePdf(filePath)
 	return filePath, nil
 }

@@ -216,11 +216,24 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	if err != nil {
 		return "", err
 	}
-	pdfContent := "Order Code: " + orderCode + "\n" +
-		"Start Time: " + order.StartTime.String() + "\n" +
-		"End Time: " + order.EndTime.String() + "\n" +
-		"Place: " + place.Name + "\n" +
-		"Amount: " + strconv.Itoa(int(order.Amount)) + "\n"
+	facility, err := service.Facility().GetFacilityById(ctx, place.FacilityId)
+	if err != nil {
+		return "", err
+	}
+
+	//pdfContent := "Order Code: " + orderCode + "\n" +
+	//	"Start Time: " + order.StartTime.String() + "\n" +
+	//	"End Time: " + order.EndTime.String() + "\n" +
+	//	"Place: " + place.Name + "\n" +
+	//	"Amount: " + strconv.Itoa(int(order.Amount)) + "\n"
+	pdfContent := &model.ReceiptInfo{
+		Facility:    facility.Facility.Name + " " + place.Name,
+		Activity:    "Rent",
+		StartTime:   order.StartTime.String(),
+		LastingTime: order.EndTime.String(),
+		Amount:      strconv.Itoa(int(order.Amount)),
+	}
+
 	path, err = receipt.GenerateReceiptPDF(pdfFilename, pdfContent, qrFilePath)
 	if err != nil {
 		return "", err
@@ -240,6 +253,7 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 }
 
 func (o *sOrder) GenerateQrSignature(qrContent map[string]interface{}) string {
+	// TODO: Add a salt
 	res := gmd5.MustEncryptString(gjson.MustEncodeString(qrContent))
 	return res
 }
