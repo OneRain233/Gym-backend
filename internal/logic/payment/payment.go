@@ -77,7 +77,17 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 
 	// TODO: payment type and pay logic
 	if paymentRecord.PaymentType == consts.PaymentTypeWallet {
-
+		walletPayForm := model.WalletPayForm{
+			OrderId: order.Id,
+			Amount:  order.Amount,
+		}
+		err = service.Wallet().Pay(ctx, &walletPayForm)
+		if err != nil {
+			// update payment status
+			paymentRecord.Status = consts.PaymentFail
+			_, _ = dao.Payment.Ctx(ctx).Where("id", paymentRecord.Id).Update(paymentRecord)
+			return
+		}
 	} else if paymentRecord.PaymentType == consts.PaymentTypeCard {
 		if form.CardId == 0 {
 			err = gerror.New("card id is required")

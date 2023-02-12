@@ -25,3 +25,8 @@ type WalletInfo struct {
 	Wallet *entity.Wallet       `json:"wallet"`
 	Cards  []*entity.WalletCard `json:"cards"`
 }
+
+type WalletPayForm struct {
+	Amount  float64 `json:"amount"`
+	OrderId int     `json:"orderId"`
+}

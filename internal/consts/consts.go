@@ -12,6 +12,9 @@ const (
 
 	UserKey = "SessionUser"
 
+	WalletStatusNormal = 0
+	WalletStatusFrozen = 1
+
 	PaymentSuccess = 1
 	PaymentFail    = 0
 	PaymentPending = 2

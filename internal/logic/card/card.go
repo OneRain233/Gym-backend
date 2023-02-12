@@ -97,7 +97,9 @@ func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
 		if order == nil {
 			return gerror.New("order not exists")
 		}
-
+		if order.UserId != userId {
+			return gerror.New("order not belongs to you")
+		}
 		// validate card
 		if card == nil {
 			return gerror.New("card not exists")

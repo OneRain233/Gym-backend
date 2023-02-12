@@ -1,11 +1,14 @@
 package wallet
 
 import (
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/dao"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+
+	"github.com/gogf/gf/v2/database/gdb"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 )
@@ -28,6 +31,50 @@ func (s *sWallet) GetWallet(ctx context.Context) (wallet *entity.Wallet, err err
 		return
 	}
 	return
+}
+
+func (s *sWallet) Pay(ctx context.Context, input *model.WalletPayForm) error {
+	return dao.Wallet.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		userId := service.Session().GetUser(ctx).Id
+		var wallet *entity.Wallet
+		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+		if err != nil {
+			return err
+		}
+		if wallet.Status != consts.WalletStatusNormal {
+			return gerror.New("wallet is frozen")
+		}
+
+		if input.OrderId == 0 {
+			return gerror.New("order id is 0")
+		}
+		var order *entity.Order
+		err = dao.Order.Ctx(ctx).Where("id", input.OrderId).Scan(&order)
+		if err != nil {
+			return err
+		}
+		if order == nil {
+			return gerror.New("order not exists")
+		}
+		if order.Status != consts.OrderStatusWaitingPayment {
+			return gerror.New("order status is not waiting payment")
+		}
+		if order.UserId != userId {
+			return gerror.New("order not belongs to user")
+		}
+		if order.Amount != input.Amount {
+			return gerror.New("order amount not match")
+		}
+		if order.Amount > wallet.Amount {
+			return gerror.New("wallet amount not enough")
+		}
+		wallet.Amount -= order.Amount
+		_, err = dao.Wallet.Ctx(ctx).Where("id", wallet.Id).Update(wallet)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 }
 
 func (s *sWallet) GetFullWalletInfo(ctx context.Context) (walletInfo *model.WalletInfo, err error) {
