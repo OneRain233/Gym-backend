@@ -43,6 +43,9 @@ func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityE
 		if err != nil {
 			return
 		}
+		if place == nil {
+			place = []*entity.FacilityPlace{}
+		}
 		res = append(res, &model.FacilityEntity{
 			Facility: facility,
 			Places:   place,
@@ -63,6 +66,9 @@ func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.Fac
 	if err != nil {
 		return
 	}
+	if place == nil {
+		place = []*entity.FacilityPlace{}
+	}
 	res.Places = place
 	return
 }
@@ -74,7 +80,15 @@ func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *mo
 	if err != nil {
 		return
 	}
-
+	var place []*entity.FacilityPlace
+	err = dao.FacilityPlace.Ctx(ctx).Where("id", res.Facility.Id).Scan(&place)
+	if err != nil {
+		return
+	}
+	if place == nil {
+		place = []*entity.FacilityPlace{}
+	}
+	res.Places = place
 	return
 }
 
@@ -94,6 +108,9 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 		err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
 		if err != nil {
 			return
+		}
+		if place == nil {
+			place = []*entity.FacilityPlace{}
 		}
 		res = append(res, &model.FacilityEntity{
 			Facility: facility,
