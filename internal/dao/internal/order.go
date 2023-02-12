@@ -28,6 +28,7 @@ type OrderColumns struct {
 	EndTime   string // End time of the order
 	Amount    string // Amount of the order
 	OrderCode string // Order code
+	Status    string // Status of the order
 }
 
 // orderColumns holds the columns for table order.
@@ -40,6 +41,7 @@ var orderColumns = OrderColumns{
 	EndTime:   "end_time",
 	Amount:    "amount",
 	OrderCode: "order_code",
+	Status:    "status",
 }
 
 // NewOrderDao creates and returns a new DAO object for table data access.

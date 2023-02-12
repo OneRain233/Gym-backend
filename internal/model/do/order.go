@@ -20,4 +20,5 @@ type Order struct {
 	EndTime   *gtime.Time // End time of the order
 	Amount    interface{} // Amount of the order
 	OrderCode interface{} // Order code
+	Status    interface{} // Status of the order
 }

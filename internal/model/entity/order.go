@@ -18,4 +18,5 @@ type Order struct {
 	EndTime   *gtime.Time `json:"endTime"   ` // End time of the order
 	Amount    float64     `json:"amount"    ` // Amount of the order
 	OrderCode string      `json:"orderCode" ` // Order code
+	Status    int         `json:"status"    ` // Status of the order
 }
