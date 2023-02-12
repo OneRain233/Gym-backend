@@ -26,3 +26,12 @@ func (c *cCard) BindCard(ctx context.Context, req *v1.BindCardReq) (res *v1.Bind
 	}
 	return
 }
+
+func (c *cCard) DeleteCard(ctx context.Context, req *v1.DeleteCardReq) (res *v1.DeleteCardRes, err error) {
+	res = &v1.DeleteCardRes{}
+	err = service.Card().DeleteCard(ctx, req.Id)
+	if err != nil {
+		return
+	}
+	return
+}

@@ -24,3 +24,12 @@ type AddAnnouncementReq struct {
 type AddAnnouncementRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
+
+type DeleteAnnouncementReq struct {
+	g.Meta `path:"/announcement/delete" method:"post" mime:"application/json" tags:"Announcement" summary:"Delete announcement"`
+	Id     int `json:"id" v:"required#Please input announcement id"`
+}
+
+type DeleteAnnouncementRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

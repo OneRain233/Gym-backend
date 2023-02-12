@@ -15,6 +15,7 @@ type (
 	IAnnouncement interface {
 		GetAnnouncements(ctx context.Context) (announcements []*entity.Announcement, err error)
 		AddAnnouncement(ctx context.Context, input *model.AddAnnouncement) error
+		DeleteAnnouncement(ctx context.Context, id int) error
 	}
 )
 

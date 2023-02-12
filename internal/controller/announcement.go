@@ -34,3 +34,12 @@ func (c *cAnnouncementAdmin) AddAnnouncement(ctx context.Context, req *v1.AddAnn
 	}
 	return
 }
+
+func (c *cAnnouncementAdmin) DeleteAnnouncement(ctx context.Context, req *v1.DeleteAnnouncementReq) (res *v1.DeleteAnnouncementRes, err error) {
+	res = &v1.DeleteAnnouncementRes{}
+	err = service.Announcement().DeleteAnnouncement(ctx, req.Id)
+	if err != nil {
+		return
+	}
+	return
+}

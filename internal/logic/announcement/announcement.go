@@ -43,3 +43,11 @@ func (s *sAnnouncement) AddAnnouncement(ctx context.Context, input *model.AddAnn
 
 	return nil
 }
+
+func (s *sAnnouncement) DeleteAnnouncement(ctx context.Context, id int) error {
+	_, err := dao.Announcement.Ctx(ctx).Where("id", id).Delete()
+	if err != nil {
+		return err
+	}
+	return nil
+}

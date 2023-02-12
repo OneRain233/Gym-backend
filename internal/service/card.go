@@ -19,6 +19,7 @@ type (
 		GetCardsCountByUserId(ctx context.Context, userId int) (count int, err error)
 		Pay(ctx context.Context, input *model.CardPayForm) error
 		Recharge(ctx context.Context, input *model.CardRechargeForm) error
+		DeleteCard(ctx context.Context, cardId int) error
 	}
 )
 

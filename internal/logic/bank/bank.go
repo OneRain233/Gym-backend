@@ -68,3 +68,11 @@ func (s *sBank) UpdateBank(ctx context.Context, form *model.UpdateBankForm) erro
 	_, err = dao.Bank.Ctx(ctx).Where("id", form.Id).Update(bank)
 	return err
 }
+
+func (s *sBank) DeleteBank(ctx context.Context, bankId int) error {
+	if bankId == 0 {
+		return gerror.New("id is 0")
+	}
+	_, err := dao.Bank.Ctx(ctx).Where("id", bankId).Delete()
+	return err
+}

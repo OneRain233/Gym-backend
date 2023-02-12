@@ -147,3 +147,25 @@ func (s *sCard) Recharge(ctx context.Context, input *model.CardRechargeForm) err
 	}
 	return nil
 }
+
+func (s *sCard) DeleteCard(ctx context.Context, cardId int) error {
+	userId := service.Session().GetUser(ctx)
+	var wallet *entity.Wallet
+	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	var card *entity.WalletCard
+	err = dao.WalletCard.Ctx(ctx).Where("id", cardId).Scan(&card)
+	if err != nil {
+		return err
+	}
+	if card == nil {
+		return gerror.New("card not exists")
+	}
+	if card.WalletId != wallet.Id {
+		return gerror.New("card not belongs to you")
+	}
+	_, err = dao.WalletCard.Ctx(ctx).Where("id", cardId).Delete()
+	if err != nil {
+		return err
+	}
+	return nil
+}

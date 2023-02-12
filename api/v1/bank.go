@@ -33,3 +33,12 @@ type GetBanksRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Data   []*entity.Bank
 }
+
+type DeleteBankReq struct {
+	g.Meta `path:"/bank/delete" method:"post" mime:"application/json" tags:"Bank" summary:"Delete bank"`
+	Id     int `json:"id" v:"required#Please input bank id"`
+}
+
+type DeleteBankRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

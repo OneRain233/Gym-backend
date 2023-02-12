@@ -199,6 +199,7 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 		return receiptEntity.ReceiptPath, nil
 	}
 	// ================================
+
 	// generate order code qr code
 	userId := service.Session().GetUser(ctx).Id
 	qeFilename := strconv.Itoa(int(userId)) + orderCode + ".png"
@@ -227,11 +228,6 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 		return "", err
 	}
 
-	//pdfContent := "Order Code: " + orderCode + "\n" +
-	//	"Start Time: " + order.StartTime.String() + "\n" +
-	//	"End Time: " + order.EndTime.String() + "\n" +
-	//	"Place: " + place.Name + "\n" +
-	//	"Amount: " + strconv.Itoa(int(order.Amount)) + "\n"
 	pdfContent := &model.ReceiptInfo{
 		Facility:    facility.Facility.Name + " " + place.Name,
 		Activity:    "Rent",
@@ -275,4 +271,89 @@ func (o *sOrder) CheckSignature(qrContent map[string]interface{}, sign string) b
 		return false
 	}
 	return true
+}
+
+func (o *sOrder) StartOrder(ctx context.Context, orderCode string) (err error) {
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		return gerror.New("order not found")
+	}
+	switch order.Status {
+	case consts.OrderStatusWaitingPayment:
+		return gerror.New("order not paid")
+
+	case consts.OrderStatusDoing:
+		return gerror.New("order already started")
+
+	case consts.OrderStatusCancelled:
+		return gerror.New("order cancelled")
+
+	case consts.OrderStatusDone:
+		return gerror.New("order already done")
+	}
+	order.Status = consts.OrderStatusDoing
+	_, err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Update(order)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (o *sOrder) EndOrder(ctx context.Context, orderCode string) (err error) {
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		return gerror.New("order not found")
+	}
+	switch order.Status {
+	case consts.OrderStatusWaitingPayment:
+		return gerror.New("order not paid")
+
+	case consts.OrderStatusCancelled:
+		return gerror.New("order cancelled")
+
+	case consts.OrderStatusDone:
+		return gerror.New("order already done")
+
+	case consts.OrderStatusPending:
+		return gerror.New("order not started")
+
+	}
+	order.Status = consts.OrderStatusDone
+	_, err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Update(order)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (o *sOrder) CancelOrder(ctx context.Context, orderCode string) (err error) {
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		return gerror.New("order not found")
+	}
+	switch order.Status {
+	case consts.OrderStatusCancelled:
+		return gerror.New("order already cancelled")
+
+	case consts.OrderStatusDone:
+		return gerror.New("order already done")
+
+	case consts.OrderStatusDoing:
+		return gerror.New("order already started")
+	}
+	order.Status = consts.OrderStatusCancelled
+	_, err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Update(order)
+	if err != nil {
+		return
+	}
+	return
 }

@@ -50,3 +50,13 @@ func (c *cBank) GetBanks(ctx context.Context, req *v1.GetBanksReq) (res *v1.GetB
 	res.Data = banks
 	return
 }
+
+func (c *cBankAdmin) DeleteBank(ctx context.Context, req *v1.DeleteBankReq) (res *v1.DeleteBankRes, err error) {
+	res = &v1.DeleteBankRes{}
+	err = service.Bank().DeleteBank(ctx, req.Id)
+
+	if err != nil {
+		return
+	}
+	return
+}

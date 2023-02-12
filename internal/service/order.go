@@ -26,6 +26,9 @@ type (
 		GenerateOrderReceipt(ctx context.Context, orderCode string) (path string, err error)
 		GenerateQrSignature(qrContent map[string]interface{}) string
 		CheckSignature(qrContent map[string]interface{}, sign string) bool
+		StartOrder(ctx context.Context, orderCode string) (err error)
+		EndOrder(ctx context.Context, orderCode string) (err error)
+		CancelOrder(ctx context.Context, orderCode string) (err error)
 	}
 )
 

@@ -17,6 +17,7 @@ type (
 		GetBankById(ctx context.Context, bankId int) (bank *entity.Bank, err error)
 		AddBank(ctx context.Context, form *model.AddBankForm) error
 		UpdateBank(ctx context.Context, form *model.UpdateBankForm) error
+		DeleteBank(ctx context.Context, bankId int) error
 	}
 )
 
