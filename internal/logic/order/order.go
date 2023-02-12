@@ -52,6 +52,7 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 	orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
 	orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
 	orderEntity.Amount = facilityPlace.Cost
+	orderEntity.Status = consts.OrderStatusWaitingPayment
 	// TODO: order code
 	orderEntity.OrderCode = o.GenerateOrderCode()
 	orderEntity.Time = gtime.Now()

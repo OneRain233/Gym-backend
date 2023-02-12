@@ -103,6 +103,11 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 	if err != nil {
 		return
 	}
+	order.Status = consts.OrderStatusPending
+	_, err = dao.Order.Ctx(ctx).Where("id", order.Id).Update(order)
+	if err != nil {
+		return
+	}
 	response.PaymentCode = paymentRecord.PaymentCode
 	response.Amount = paymentRecord.Amount
 	response.PaymentType = paymentRecord.PaymentType

@@ -16,5 +16,11 @@ const (
 	PaymentFail    = 0
 	PaymentPending = 2
 
+	OrderStatusWaitingPayment = 0 // waiting for payment
+	OrderStatusPending        = 1 // waiting for use
+	OrderStatusDoing          = 2 // using
+	OrderStatusDone           = 3 // done
+	OrderStatusCancelled      = 4 // canceled
+
 	PaymentNotFound = "payment not found"
 )
