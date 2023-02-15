@@ -303,3 +303,34 @@ func (s *sFacility) ModifyFacilityPlace(ctx context.Context, input *model.Modify
 	_, err = g.DB().Model("facility_place").Data(place).Where("id", input.Id).Update()
 	return
 }
+
+func (s *sFacility) GetOccupiedFacilityPlaces(ctx context.Context, placeId int) (res []*model.OccupiedFacilityPlace, err error) {
+	// check if place exist
+	var place *entity.FacilityPlace
+	err = dao.FacilityPlace.Ctx(ctx).Where("id", placeId).Scan(&place)
+	if err != nil {
+		return
+	}
+	if place == nil {
+		err = gerror.New("place not found")
+		return
+	}
+	// get all the orders
+	var orders []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("place_id", placeId).Scan(&orders)
+	if err != nil {
+		return
+	}
+	if orders == nil {
+		return
+	}
+	for _, order := range orders {
+		occupied := model.OccupiedFacilityPlace{
+			PlaceId:   placeId,
+			StartTime: order.StartTime.String(),
+			EndTime:   order.EndTime.String(),
+		}
+		res = append(res, &occupied)
+	}
+	return
+}

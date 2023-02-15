@@ -36,3 +36,9 @@ type ModifyFacilityPlaceForm struct {
 	Cost        float64 `json:"cost"`
 	Description string  `json:"description"`
 }
+
+type OccupiedFacilityPlace struct {
+	PlaceId   int    `json:"placeId"`
+	StartTime string `json:"startTime"`
+	EndTime   string `json:"endTime"`
+}

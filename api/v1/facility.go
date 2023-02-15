@@ -87,3 +87,13 @@ type FacilityDetailRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
 	Facility *model.FacilityEntity `json:"facility"`
 }
+
+type OccupiedFacilityPlaceReq struct {
+	g.Meta  `path:"/facility/place/occupied" tags:"Facility" method:"post" summary:"Get Occupied Facility Place"`
+	PlaceId int `json:"place_id" v:"required#Please input place_id"`
+}
+
+type OccupiedFacilityPlaceRes struct {
+	g.Meta   `mime:"application/json" example:"string"`
+	Occupied []*model.OccupiedFacilityPlace `json:"occupied"`
+}
