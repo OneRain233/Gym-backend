@@ -9,9 +9,11 @@ import (
 
 var Facility = cFacility{}
 var FacilityAdmin = cFacilityAdmin{}
+var FacilityManager = cFacilityManager{}
 
 type cFacility struct{}
 type cFacilityAdmin struct{}
+type cFacilityManager struct{}
 
 func (c *cFacility) GetAllFacility(ctx context.Context, req *v1.FacilityReq) (res *v1.FacilityRes, err error) {
 	res = &v1.FacilityRes{}
