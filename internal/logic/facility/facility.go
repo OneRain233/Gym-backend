@@ -305,6 +305,8 @@ func (s *sFacility) ModifyFacilityPlace(ctx context.Context, input *model.Modify
 }
 
 func (s *sFacility) GetOccupiedFacilityPlaces(ctx context.Context, placeId int) (res []*model.OccupiedFacilityPlace, err error) {
+	// TODO: in a period of time
+
 	// check if place exist
 	var place *entity.FacilityPlace
 	err = dao.FacilityPlace.Ctx(ctx).Where("id", placeId).Scan(&place)
