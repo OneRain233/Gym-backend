@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -64,6 +65,15 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 			err = gerror.New("payment create failed")
 		}
 	}
+	if paymentRecord.PaymentType != form.PaymentType {
+		// update payment type
+		paymentRecord.PaymentType = form.PaymentType
+		_, err = dao.Payment.Ctx(ctx).Where("id", paymentRecord.Id).Update(paymentRecord)
+		if err != nil {
+			err = gerror.New("payment update failed")
+			return
+		}
+	}
 
 	// if this payment is already paid
 	if paymentRecord.Status == consts.PaymentSuccess {
@@ -74,8 +84,7 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 		response.Status = consts.PaymentSuccess
 		return
 	}
-
-	// TODO: payment type and pay logic
+	fmt.Println(paymentRecord.PaymentType)
 	if paymentRecord.PaymentType == consts.PaymentTypeWallet {
 		walletPayForm := model.WalletPayForm{
 			OrderId: order.Id,
