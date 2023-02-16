@@ -205,6 +205,7 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	qeFilename := strconv.Itoa(int(userId)) + orderCode + ".png"
 
 	// json qrContent
+	// TODO: qr code just contain the order code
 	qrContent := map[string]interface{}{
 		"orderCode":     order.OrderCode,
 		"user":          userId,
@@ -252,6 +253,34 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	}
 	return
 
+}
+
+func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) {
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	if order.Status != consts.PaymentSuccess {
+		err = gerror.New("order not paid")
+		return
+	}
+	payment, err := service.Payment().GetPaymentByOrderId(ctx, order.Id)
+	if err != nil {
+		return
+	}
+	if payment == nil {
+		err = gerror.New("payment not found, please contact the manager")
+		return
+	}
+	err = service.Wallet().Refund(ctx, order)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func (o *sOrder) GenerateQrSignature(qrContent map[string]interface{}) string {

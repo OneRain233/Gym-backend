@@ -81,3 +81,12 @@ type GetReceiptRes struct {
 	// file response
 	g.Meta `mime:"application/octet-stream" example:"string"`
 }
+
+type RefundOrderReq struct {
+	g.Meta    `path:"/order/refund" method:"post" tags:"Order" summary:"Refund order by order code"`
+	OrderCode string `json:"orderCode" v:"required#Please input order code"`
+}
+
+type RefundOrderRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

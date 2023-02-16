@@ -146,3 +146,31 @@ func (s *sWallet) GetCardsInWallet(ctx context.Context) (cards []*entity.WalletC
 	}
 	return
 }
+
+func (s *sWallet) Refund(ctx context.Context, order *entity.Order) error {
+	// TODO: refund fee
+	return dao.Wallet.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		var wallet *entity.Wallet
+		user := service.Session().GetUser(ctx)
+		if user.Id != order.UserId {
+			return gerror.New("order not belongs to user")
+		}
+		err := dao.Wallet.Ctx(ctx).Where("user_id", order.UserId).Scan(&wallet)
+		if err != nil {
+			return err
+		}
+		if wallet.Status != consts.WalletStatusNormal {
+			return gerror.New("wallet is frozen")
+		}
+		wallet.Amount += order.Amount
+		_, err = dao.Wallet.Ctx(ctx).Where("id", wallet.Id).Update(wallet)
+		if err != nil {
+			return err
+		}
+		err = service.Payment().UpdatePaymentStatus(ctx, order.Id, consts.PaymentRefund)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}

@@ -214,3 +214,14 @@ func (s *sPayment) GetPaymentByOrderCode(ctx context.Context, orderCode string) 
 	}
 	return
 }
+
+func (s *sPayment) UpdatePaymentStatus(ctx context.Context, paymentId int, status int) (err error) {
+	payment := &entity.Payment{
+		Status: status,
+	}
+	_, err = dao.Payment.Ctx(ctx).Where("id", paymentId).Update(payment)
+	if err != nil {
+		return
+	}
+	return
+}

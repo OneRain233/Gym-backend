@@ -18,6 +18,7 @@ const (
 	PaymentSuccess = 1
 	PaymentFail    = 0
 	PaymentPending = 2
+	PaymentRefund  = 3
 
 	OrderStatusWaitingPayment = 0 // waiting for payment
 	OrderStatusPending        = 1 // waiting for use

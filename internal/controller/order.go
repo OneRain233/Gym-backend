@@ -112,3 +112,12 @@ func (c *cOrder) GetReceipt(ctx context.Context, req *v1.GetReceiptReq) (res *v1
 	g.RequestFromCtx(ctx).Response.ServeFile(path)
 	return
 }
+
+func (c *cOrder) Refund(ctx context.Context, req *v1.RefundOrderReq) (res *v1.RefundOrderRes, err error) {
+	res = &v1.RefundOrderRes{}
+	err = service.Order().RefundOrder(ctx, req.OrderCode)
+	if err != nil {
+		return
+	}
+	return
+}

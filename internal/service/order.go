@@ -24,6 +24,7 @@ type (
 		GetAllOrders(ctx context.Context) (res []*entity.Order, err error)
 		GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time, endTime *gtime.Time) (res []*entity.Order, err error)
 		GenerateOrderReceipt(ctx context.Context, orderCode string) (path string, err error)
+		RefundOrder(ctx context.Context, orderCode string) (err error)
 		GenerateQrSignature(qrContent map[string]interface{}) string
 		CheckSignature(qrContent map[string]interface{}, sign string) bool
 		StartOrder(ctx context.Context, orderCode string) (err error)

@@ -20,6 +20,7 @@ type (
 		CreateWalletForUser(ctx context.Context, userId int) error
 		SetStatus(ctx context.Context, status int) error
 		GetCardsInWallet(ctx context.Context) (cards []*entity.WalletCard, err error)
+		Refund(ctx context.Context, order *entity.Order) error
 	}
 )
 

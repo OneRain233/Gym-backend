@@ -21,6 +21,7 @@ type (
 		GetPaymentByUserId(ctx context.Context, userId int) (payment []*entity.Payment, err error)
 		GetAllPayment(ctx context.Context) (payments []*entity.Payment, err error)
 		GetPaymentByOrderCode(ctx context.Context, orderCode string) (payment *entity.Payment, err error)
+		UpdatePaymentStatus(ctx context.Context, paymentId int, status int) (err error)
 	}
 )
 
