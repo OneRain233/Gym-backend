@@ -7,6 +7,8 @@ import (
 	"context"
 	"strings"
 
+	"github.com/gogf/gf/v2/os/gtime"
+
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/util/gconv"
@@ -30,6 +32,11 @@ var (
 			oai.Config.CommonResponse = response.JsonRes{}
 			oai.Config.CommonResponseDataField = `Data`
 
+			// set time zone
+			err = gtime.SetTimeZone(g.Cfg().MustGet(gctx.New(), "timeZone").String())
+			if err != nil {
+				g.Log().Fatal(gctx.New(), err)
+			}
 			// update config in database
 			// to update the config database from file, just edit the config.yaml file and run the command
 			// customConfigUpdate: 1

@@ -9,6 +9,7 @@ import (
 	"Gym-backend/utility/receipt"
 	"context"
 	"strconv"
+	"time"
 
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -85,11 +86,12 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	if err != nil {
 		return
 	}
-	OpenTime, err := gtime.StrToTime(OpenTimeEntity.Value)
+	// 09:00 <- this is the format
+	OpenTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + OpenTimeEntity.Value)
 	if err != nil {
 		return
 	}
-	CloseTime, err := gtime.StrToTime(CloseTimeEntity.Value)
+	CloseTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + CloseTimeEntity.Value)
 	if err != nil {
 		return
 	}
@@ -110,10 +112,24 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 		return false, nil
 	}
 
+	// check if the time before now
+	if gtime.NewFromStr(input.StartTime).Timestamp() < gtime.Now().Timestamp() {
+		return false, nil
+	}
+
+	// check if startTime and endTime in the same day
+	if gtime.NewFromStr(input.StartTime).Day() != gtime.NewFromStr(input.EndTime).Day() {
+		return false, nil
+	}
+
 	// find all orders in the same place
 	var orders []*entity.Order
 	// TODO: optimize the query for time
-	err = dao.Order.Ctx(ctx).Where("place_id", input.PlaceId).Where("status", consts.OrderStatusPending).Scan(&orders)
+	queryStartTime := gtime.NewFromStr(input.StartTime).Add(time.Duration(-24) * time.Hour) // 24 hour before
+	queryEndTime := gtime.NewFromStr(input.EndTime).Add(time.Duration(24) * time.Hour)      // 24 hour after
+
+	err = dao.Order.Ctx(ctx).Where("place_id = ? AND start_time >= ? AND end_time <= ? AND status = ?", input.PlaceId, queryStartTime, queryEndTime, consts.OrderStatusPending).Scan(&orders)
+	//err = dao.Order.Ctx(ctx).Where("place_id", input.PlaceId).Where("status", consts.OrderStatusPending).Scan(&orders)
 
 	if err != nil {
 		return false, err

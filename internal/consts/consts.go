@@ -29,6 +29,6 @@ const (
 
 	PaymentNotFound = "payment not found"
 
-	OpenTime  = "open_time"
-	CloseTime = "close_time"
+	OpenTime  = "OpenTime"
+	CloseTime = "CloseTime"
 )

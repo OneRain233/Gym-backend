@@ -13,7 +13,7 @@ database:
     level:   "all"
 
   default:
-    link:   "mysql:root:2332@tcp(172.250.0.233:3306)/gym"
+    link:   "mysql:root:2332@tcp(172.250.0.233:3306)/gym?charset=utf8mb4&parseTime=True&loc=Local"
     debug:  true
 
 upload:
@@ -25,8 +25,10 @@ receipt:
   pdfPath: "receipts/pdf/"
   qrPath:  "receipts/qr/"
 
+timeZone: "Asia/Shanghai"
+
 # JUST ADD IT TO THE CUSTOM CONFIGURATION
-customConfigUpdate: 0 # 0 - Dont update when start up
+customConfigUpdate: 1 # 0 - Dont update when start up
                       # 1 - Update when start up
 customConfig:
   OpenTime: "08:00"

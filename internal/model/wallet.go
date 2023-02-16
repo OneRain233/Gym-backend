@@ -30,3 +30,13 @@ type WalletPayForm struct {
 	Amount  float64 `json:"amount"`
 	OrderId int     `json:"orderId"`
 }
+
+type WalletTopUpForm struct {
+	Amount float64 `json:"amount"`
+	CardId int     `json:"cardId"`
+}
+
+type WalletWithdrawForm struct {
+	Amount float64 `json:"amount"`
+	CardId int     `json:"cardId"`
+}
