@@ -268,6 +268,11 @@ func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) 
 		err = gerror.New("order not paid")
 		return
 	}
+	user := service.Session().GetUser(ctx)
+	if user.Id != order.UserId {
+		err = gerror.New("user not authorized")
+		return
+	}
 	payment, err := service.Payment().GetPaymentByOrderId(ctx, order.Id)
 	if err != nil {
 		return
