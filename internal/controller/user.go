@@ -10,9 +10,10 @@ import (
 )
 
 var User = cUser{}
+var UserAdmin = cUserAdmin{}
 
-type cUser struct {
-}
+type cUser struct{}
+type cUserAdmin struct{}
 
 func (c *cUser) Register(ctx context.Context, req *v1.RegisterReq) (res *v1.RegisterRes, err error) {
 	res = &v1.RegisterRes{}
@@ -69,6 +70,33 @@ func (c *cUser) ChangePassword(ctx context.Context, req *v1.ChangePasswdReq) (re
 	user := service.Session().GetUser(ctx)
 
 	err = service.User().UpdatePassword(ctx, user, newPassword, oldPassword)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cUserAdmin) GetAllUser(ctx context.Context, req *v1.GetUserListReq) (res *v1.GetUserListRes, err error) {
+	res = &v1.GetUserListRes{}
+	res.User, err = service.User().GetAllUser(ctx)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cUserAdmin) SearchUser(ctx context.Context, req *v1.GetUserSearchReq) (res *v1.GetUserSearchRes, err error) {
+	res = &v1.GetUserSearchRes{}
+	res.User, err = service.User().GetUserBySearch(ctx, req.Username)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cUserAdmin) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (res *v1.GetUserByIdRes, err error) {
+	res = &v1.GetUserByIdRes{}
+	res.User, err = service.User().GetUserById(ctx, req.Id)
 	if err != nil {
 		return
 	}

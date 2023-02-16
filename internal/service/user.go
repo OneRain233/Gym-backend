@@ -23,6 +23,9 @@ type (
 		UpdateAvatar(ctx context.Context, userId uint, avatar string) error
 		GetCurrentUser(ctx context.Context) (user *entity.User)
 		UpdatePassword(ctx context.Context, user *entity.User, newPassword string, oldPassword string) error
+		GetAllUser(ctx context.Context) (users []*entity.User, err error)
+		GetUserBySearch(ctx context.Context, search string) (users []*entity.User, err error)
+		GetUserById(ctx context.Context, id uint) (user *entity.User, err error)
 	}
 )
 

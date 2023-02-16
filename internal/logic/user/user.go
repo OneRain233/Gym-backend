@@ -212,3 +212,18 @@ func (u *sUser) UpdatePassword(ctx context.Context, user *entity.User, newPasswo
 	return nil
 
 }
+
+func (u *sUser) GetAllUser(ctx context.Context) (users []*entity.User, err error) {
+	err = dao.User.Ctx(ctx).Scan(&users)
+	return
+}
+
+func (u *sUser) GetUserBySearch(ctx context.Context, search string) (users []*entity.User, err error) {
+	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Username+" like ?", "%"+search+"%").Scan(&users)
+	return
+}
+
+func (u *sUser) GetUserById(ctx context.Context, id uint) (user *entity.User, err error) {
+	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, id).Scan(&user)
+	return
+}

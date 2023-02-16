@@ -111,6 +111,7 @@ var (
 						controller.OrderAdmin,
 						controller.AnnouncementAdmin,
 						controller.Config,
+						controller.UserAdmin,
 					)
 				})
 			})
