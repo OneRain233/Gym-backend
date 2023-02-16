@@ -35,10 +35,28 @@ func (c *sConfig) GetConfigByKey(ctx context.Context, key string) (res *entity.C
 	return
 }
 
-func (c *sConfig) UpdateConfig(ctx context.Context, config *entity.Config) (err error) {
-	_, err = dao.Config.Ctx(ctx).Where("id", config.Id).Update(config)
+func (c *sConfig) UpdateConfig(ctx context.Context, config *model.Config) (err error) {
+	// check if the config exists
+	// if not, create it
+	var configEntity *entity.Config
+	configEntity, err = c.GetConfigByKey(ctx, config.Key)
 	if err != nil {
 		return
+	}
+	if configEntity == nil {
+		err = c.CreateConfig(ctx, &model.Config{
+			Key:   config.Key,
+			Value: config.Value,
+		})
+		if err != nil {
+			return
+		}
+		return
+	} else {
+		_, err = dao.Config.Ctx(ctx).Where("id", configEntity.Id).Data(config).Update()
+		if err != nil {
+			return
+		}
 	}
 	return
 }

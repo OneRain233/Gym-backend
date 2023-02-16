@@ -15,7 +15,7 @@ type (
 	IConfig interface {
 		GetConfig(ctx context.Context) (res []*entity.Config, err error)
 		GetConfigByKey(ctx context.Context, key string) (res *entity.Config, err error)
-		UpdateConfig(ctx context.Context, config *entity.Config) (err error)
+		UpdateConfig(ctx context.Context, config *model.Config) (err error)
 		DeleteConfig(ctx context.Context, id int) (err error)
 		CreateConfig(ctx context.Context, config *model.Config) (err error)
 	}

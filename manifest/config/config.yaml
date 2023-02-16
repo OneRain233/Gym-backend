@@ -24,3 +24,10 @@ receipt:
   path: "receipts/"
   pdfPath: "receipts/pdf/"
   qrPath:  "receipts/qr/"
+
+# JUST ADD IT TO THE CUSTOM CONFIGURATION
+customConfigUpdate: 0 # 0 - Dont update when start up
+                      # 1 - Update when start up
+customConfig:
+  OpenTime: "08:00"
+  CloseTime: "22:00"

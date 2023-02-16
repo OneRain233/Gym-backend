@@ -77,8 +77,22 @@ func (o *sOrder) GenerateOrderCode() string {
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
 	// check if we have open
-	OpenTime := gtime.NewFromStr(consts.OpenTime)
-	CloseTime := gtime.NewFromStr(consts.CloseTime)
+	OpenTimeEntity, err := service.Config().GetConfigByKey(ctx, consts.OpenTime)
+	if err != nil {
+		return
+	}
+	CloseTimeEntity, err := service.Config().GetConfigByKey(ctx, consts.CloseTime)
+	if err != nil {
+		return
+	}
+	OpenTime, err := gtime.StrToTime(OpenTimeEntity.Value)
+	if err != nil {
+		return
+	}
+	CloseTime, err := gtime.StrToTime(CloseTimeEntity.Value)
+	if err != nil {
+		return
+	}
 
 	if gtime.Now().Timestamp() < OpenTime.Timestamp() || gtime.Now().Timestamp() > CloseTime.Timestamp() {
 		return false, nil

@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
 	"context"
+	"strings"
 
 	"github.com/gogf/gf/v2/os/gctx"
 	"github.com/gogf/gf/v2/os/gfile"
+	"github.com/gogf/gf/v2/util/gconv"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -26,6 +29,26 @@ var (
 			oai.Info.Title = `API Reference`
 			oai.Config.CommonResponse = response.JsonRes{}
 			oai.Config.CommonResponseDataField = `Data`
+
+			// update config in database
+			// to update the config database from file, just edit the config.yaml file and run the command
+			// customConfigUpdate: 1
+			// Note: this operation will overwrite the config in database
+			status := g.Cfg().MustGet(gctx.New(), "customConfigUpdate").Uint()
+			if status == 1 {
+				customConfigs, _ := g.Cfg().Get(gctx.New(), "customConfig")
+				for k, v := range customConfigs.Map() {
+					config := &model.Config{
+						Key:   k,
+						Value: strings.TrimSpace(gconv.String(v)),
+					}
+					err := service.Config().UpdateConfig(gctx.New(), config)
+					if err != nil {
+						g.Log().Fatal(gctx.New(), err)
+					}
+				}
+			}
+
 			// register static files
 			uploadPath := g.Cfg().MustGet(gctx.New(), "upload.path").String()
 			if !gfile.Exists(uploadPath) {
@@ -80,6 +103,7 @@ var (
 						controller.PaymentAdmin,
 						controller.OrderAdmin,
 						controller.AnnouncementAdmin,
+						controller.Config,
 					)
 				})
 			})
