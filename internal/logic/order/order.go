@@ -76,6 +76,21 @@ func (o *sOrder) GenerateOrderCode() string {
 }
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
+	// check if we have open
+	OpenTime := gtime.NewFromStr(consts.OpenTime)
+	CloseTime := gtime.NewFromStr(consts.CloseTime)
+
+	if gtime.Now().Timestamp() < OpenTime.Timestamp() || gtime.Now().Timestamp() > CloseTime.Timestamp() {
+		return false, nil
+	}
+	// check if the time is end with 00 15 30 45
+	if gtime.NewFromStr(input.StartTime).Minute() != 0 && gtime.NewFromStr(input.StartTime).Minute() != 15 && gtime.NewFromStr(input.StartTime).Minute() != 30 && gtime.NewFromStr(input.StartTime).Minute() != 45 {
+		return false, nil
+	}
+	if gtime.NewFromStr(input.EndTime).Minute() != 0 && gtime.NewFromStr(input.EndTime).Minute() != 15 && gtime.NewFromStr(input.EndTime).Minute() != 30 && gtime.NewFromStr(input.EndTime).Minute() != 45 {
+		return false, nil
+	}
+
 	// start time should be before end time
 	if gtime.NewFromStr(input.StartTime).Timestamp() >= gtime.NewFromStr(input.EndTime).Timestamp() {
 		return false, nil
@@ -83,8 +98,8 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 
 	// find all orders in the same place
 	var orders []*entity.Order
-	// TODO: optimize the query
-	err = dao.Order.Ctx(ctx).Where("place_id", input.PlaceId).Scan(&orders)
+	// TODO: optimize the query for time
+	err = dao.Order.Ctx(ctx).Where("place_id", input.PlaceId).Where("status", consts.OrderStatusPending).Scan(&orders)
 
 	if err != nil {
 		return false, err
@@ -147,6 +162,14 @@ func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res
 
 func (o *sOrder) GetAllOrders(ctx context.Context) (res []*entity.Order, err error) {
 	err = dao.Order.Ctx(ctx).Scan(&res)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (o *sOrder) GetRefundedOrder(ctx context.Context) (res []*entity.Order, err error) {
+	err = dao.Order.Ctx(ctx).Where("status", consts.OrderStatusRefunded).Scan(&res)
 	if err != nil {
 		return
 	}

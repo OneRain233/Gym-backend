@@ -28,4 +28,7 @@ const (
 	OrderStatusRefunded       = 5 // refunded
 
 	PaymentNotFound = "payment not found"
+
+	OpenTime  = "08:00:00"
+	CloseTime = "22:00:00"
 )

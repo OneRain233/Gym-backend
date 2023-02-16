@@ -22,6 +22,7 @@ type (
 		GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error)
 		GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error)
 		GetAllOrders(ctx context.Context) (res []*entity.Order, err error)
+		GetRefundedOrder(ctx context.Context) (res []*entity.Order, err error)
 		GetOrderByTimeRange(ctx context.Context, startTime *gtime.Time, endTime *gtime.Time) (res []*entity.Order, err error)
 		GenerateOrderReceipt(ctx context.Context, orderCode string) (path string, err error)
 		RefundOrder(ctx context.Context, orderCode string) (err error)
