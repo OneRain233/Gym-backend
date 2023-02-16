@@ -5,6 +5,7 @@ const (
 
 	PaymentTypeCard   = 1
 	PaymentTypeWallet = 2
+	PaymentTypeRefund = 3
 
 	RoleAdmin      = 1
 	RoleNormalUser = 0

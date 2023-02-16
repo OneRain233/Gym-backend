@@ -137,6 +137,23 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 
 }
 
+func (s *sPayment) CreatePaymentForRefund(ctx context.Context, form *model.RefundPaymentForm) error {
+	paymentEntity := &entity.Payment{
+		WalletId:    form.OriginalPayment.WalletId,
+		OrderId:     form.Order.Id,
+		PaymentCode: form.OriginalPayment.PaymentCode,
+		Time:        gtime.Now(),
+		Amount:      form.OriginalPayment.Amount,
+		PaymentType: consts.PaymentRefund,
+		Status:      consts.PaymentSuccess,
+	}
+	_, err := dao.Payment.Ctx(ctx).Insert(paymentEntity)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *sPayment) GeneratePaymentCode() string {
 	// YearMonthDay + 8 digits
 	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())

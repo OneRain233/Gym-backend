@@ -151,6 +151,7 @@ func (s *sWallet) Refund(ctx context.Context, order *entity.Order) error {
 	// TODO: refund fee
 	return dao.Wallet.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
 		var wallet *entity.Wallet
+		var payment *entity.Payment
 		user := service.Session().GetUser(ctx)
 		if user.Id != order.UserId {
 			return gerror.New("order not belongs to user")
@@ -168,6 +169,20 @@ func (s *sWallet) Refund(ctx context.Context, order *entity.Order) error {
 			return err
 		}
 		err = service.Payment().UpdatePaymentStatus(ctx, order.Id, consts.PaymentRefund)
+		if err != nil {
+			return err
+		}
+
+		payment, err = service.Payment().GetPaymentByOrderId(ctx, order.Id)
+		if err != nil {
+			return err
+		}
+
+		form := &model.RefundPaymentForm{
+			Order:           order,
+			OriginalPayment: payment,
+		}
+		err = service.Payment().CreatePaymentForRefund(ctx, form)
 		if err != nil {
 			return err
 		}

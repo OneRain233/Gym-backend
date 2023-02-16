@@ -14,6 +14,7 @@ import (
 type (
 	IPayment interface {
 		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
+		CreatePaymentForRefund(ctx context.Context, form *model.RefundPaymentForm) error
 		GeneratePaymentCode() string
 		GetPaymentByPaymentCode(ctx context.Context, paymentCode string) (payment *entity.Payment, err error)
 		GetPaymentById(ctx context.Context, paymentId int) (payment *entity.Payment, err error)
