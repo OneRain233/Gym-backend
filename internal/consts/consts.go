@@ -25,6 +25,7 @@ const (
 	OrderStatusDoing          = 2 // using
 	OrderStatusDone           = 3 // done
 	OrderStatusCancelled      = 4 // canceled
+	OrderStatusRefunded       = 5 // refunded
 
 	PaymentNotFound = "payment not found"
 )

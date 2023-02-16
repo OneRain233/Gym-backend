@@ -280,6 +280,11 @@ func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) 
 	if err != nil {
 		return
 	}
+	order.Status = consts.OrderStatusRefunded
+	_, err = dao.Order.Ctx(ctx).Where("id", order.Id).Data(order).Update()
+	if err != nil {
+		return
+	}
 	return
 }
 
