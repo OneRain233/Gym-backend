@@ -9,6 +9,15 @@ type UserRegisterForm struct {
 	Password        string
 	ConfirmPassword string
 	Email           string
-	Gender          string
+	Gender          uint
 	Phone           string
+}
+
+type UserUpdateForm struct {
+	Id       uint
+	Username string
+	Role     uint
+	Email    string
+	Phone    string
+	Gender   uint
 }

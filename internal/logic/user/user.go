@@ -227,3 +227,37 @@ func (u *sUser) GetUserById(ctx context.Context, id uint) (user *entity.User, er
 	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, id).Scan(&user)
 	return
 }
+
+func (u *sUser) UpdateUser(ctx context.Context, form *model.UserUpdateForm) error {
+	user, err := u.GetUserById(ctx, form.Id)
+	if err != nil {
+		return err
+	}
+	if user == nil {
+		return gerror.New("user not found")
+	}
+	// merge form data
+	// if xx != original.xx and xx != "" then update
+	if form.Username != "" && form.Username != user.Username {
+		user.Username = form.Username
+	}
+	if form.Email != "" && form.Email != user.Email {
+		user.Email = form.Email
+	}
+	if form.Phone != "" && form.Phone != user.Phone {
+		user.Phone = form.Phone
+	}
+	if form.Gender != uint(user.Gender) {
+		user.Gender = int(form.Gender)
+	}
+	if form.Role != uint(user.Role) {
+		user.Role = int(form.Role)
+	}
+
+	// update user
+	_, err = dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
+	if err != nil {
+		return err
+	}
+	return nil
+}

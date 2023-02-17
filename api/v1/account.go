@@ -28,7 +28,7 @@ type RegisterReq struct {
 	Password        string `v:"required#Please input password"`
 	ConfirmPassword string `v:"required#Please input confirm password"`
 	Email           string `v:"required#Please input email"`
-	Gender          string `v:"required#Please input gender"`
+	Gender          uint   `v:"required#Please input gender"`
 	Phone           string `v:"required#Please input phone"`
 }
 
@@ -94,4 +94,17 @@ type GetUserByIdReq struct {
 type GetUserByIdRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	User   *entity.User `json:"user"`
+}
+
+type UpdateUserReq struct {
+	g.Meta   `path:"/user/update" tags:"Account" method:"post" summary:"Update user"`
+	Id       uint
+	Role     uint
+	Username string
+	Email    string
+	Phone    string
+	Gender   uint
+}
+
+type UpdateUserRes struct {
 }

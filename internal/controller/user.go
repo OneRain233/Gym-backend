@@ -102,3 +102,20 @@ func (c *cUserAdmin) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (r
 	}
 	return
 }
+
+func (c *cUserAdmin) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserReq) (res *v1.UpdateUserRes, err error) {
+	res = &v1.UpdateUserRes{}
+	form := model.UserUpdateForm{
+		Id:       req.Id,
+		Username: req.Username,
+		Role:     req.Role,
+		Email:    req.Email,
+		Phone:    req.Phone,
+		Gender:   req.Gender,
+	}
+	err = service.User().UpdateUser(ctx, &form)
+	if err != nil {
+		return
+	}
+	return
+}

@@ -26,6 +26,7 @@ type (
 		GetAllUser(ctx context.Context) (users []*entity.User, err error)
 		GetUserBySearch(ctx context.Context, search string) (users []*entity.User, err error)
 		GetUserById(ctx context.Context, id uint) (user *entity.User, err error)
+		UpdateUser(ctx context.Context, form *model.UserUpdateForm) error
 	}
 )
 
