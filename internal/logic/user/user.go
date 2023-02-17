@@ -1,6 +1,7 @@
 package user
 
 import (
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/dao"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
@@ -149,6 +150,20 @@ func (u *sUser) ValidateEmail(ctx context.Context, email string) error {
 	return nil
 }
 
+func (u *sUser) ValidateGender(ctx context.Context, gender int) error {
+	if gender != consts.GenderOther && gender != consts.GenderFemale && gender != consts.GenderMale {
+		return gerror.New(`Gender is invalid`)
+	}
+	return nil
+}
+
+func (u *sUser) ValidateRole(ctx context.Context, role int) error {
+	if role != consts.RoleAdmin && role != consts.RoleManager && role != consts.RoleNormalUser {
+		return gerror.New(`Role is invalid`)
+	}
+	return nil
+}
+
 func (u *sUser) UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) error {
 	path := user.Avatar
 	if path == "" {
@@ -239,18 +254,32 @@ func (u *sUser) UpdateUser(ctx context.Context, form *model.UserUpdateForm) erro
 	// merge form data
 	// if xx != original.xx and xx != "" then update
 	if form.Username != "" && form.Username != user.Username {
+		if err = u.ValidateUsername(ctx, form.Username); err != nil {
+			return err
+		}
 		user.Username = form.Username
 	}
 	if form.Email != "" && form.Email != user.Email {
+		if err = u.ValidateEmail(ctx, form.Email); err != nil {
+			return err
+		}
 		user.Email = form.Email
 	}
 	if form.Phone != "" && form.Phone != user.Phone {
 		user.Phone = form.Phone
 	}
 	if form.Gender != uint(user.Gender) {
+		// check if the gender is valid
+		if err = u.ValidateGender(ctx, int(form.Gender)); err != nil {
+			return err
+		}
 		user.Gender = int(form.Gender)
 	}
 	if form.Role != uint(user.Role) {
+		// check if the role is valid
+		if err = u.ValidateRole(ctx, int(form.Role)); err != nil {
+			return err
+		}
 		user.Role = int(form.Role)
 	}
 

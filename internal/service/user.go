@@ -19,6 +19,8 @@ type (
 		GetUserByID(ctx context.Context, id uint) (user *entity.User, err error)
 		ValidateUsername(ctx context.Context, username string) error
 		ValidateEmail(ctx context.Context, email string) error
+		ValidateGender(ctx context.Context, gender int) error
+		ValidateRole(ctx context.Context, role int) error
 		UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) error
 		UpdateAvatar(ctx context.Context, userId uint, avatar string) error
 		GetCurrentUser(ctx context.Context) (user *entity.User)

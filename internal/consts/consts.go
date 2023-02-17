@@ -33,3 +33,9 @@ const (
 	OpenTime  = "OpenTime"
 	CloseTime = "CloseTime"
 )
+
+const (
+	GenderMale   = 1
+	GenderFemale = 2
+	GenderOther  = 3
+)
