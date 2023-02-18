@@ -41,13 +41,13 @@ type ProfileReq struct {
 type ProfileRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Data   struct {
-		Username string
-		Gender   uint
-		Role     uint
-		Email    string
-		Phone    string
-		Avatar   string
-	}
+		Username string `json:"username"`
+		Gender   uint   `json:"gender"`
+		Role     uint   `json:"role"`
+		Email    string `json:"email"`
+		Phone    string `json:"phone"`
+		Avatar   string `json:"avatar"`
+	} `json:"data"`
 }
 
 type LogoutReq struct {
