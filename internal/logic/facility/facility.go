@@ -62,7 +62,7 @@ func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.Fac
 		return
 	}
 	var place []*entity.FacilityPlace
-	err = dao.FacilityPlace.Ctx(ctx).Where("id", id).Scan(&place)
+	err = dao.FacilityPlace.Ctx(ctx).Where("facility_id", id).Scan(&place)
 	if err != nil {
 		return
 	}
