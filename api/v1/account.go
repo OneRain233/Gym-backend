@@ -19,6 +19,7 @@ type LoginRes struct {
 		Username string `json:"username"`
 		Avatar   string `json:"avatar"`
 		Role     int    `json:"role"`
+		Token    string `json:"token"`
 	}
 }
 
