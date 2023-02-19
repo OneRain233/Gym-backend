@@ -20,7 +20,7 @@ type LoginRes struct {
 		Avatar   string `json:"avatar"`
 		Role     int    `json:"role"`
 		Token    string `json:"token"`
-	}
+	} `json:"data"`
 }
 
 type RegisterReq struct {
