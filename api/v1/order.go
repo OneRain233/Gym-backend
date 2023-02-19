@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"Gym-backend/internal/model/entity"
+	"Gym-backend/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -28,7 +28,7 @@ type GetAllOrderReq struct {
 
 type GetAllOrderRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Order  []*entity.Order `json:"order"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
 
 type GetOrderByUserIdReq struct {
@@ -38,7 +38,7 @@ type GetOrderByUserIdReq struct {
 
 type GetOrderByUserIdRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Order  []*entity.Order `json:"order"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
 
 type GetOrderByPlaceIdReq struct {
@@ -48,7 +48,7 @@ type GetOrderByPlaceIdReq struct {
 
 type GetOrderByPlaceIdRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Order  []*entity.Order `json:"order"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
 
 type GetOrderByTimeReq struct {
@@ -59,7 +59,7 @@ type GetOrderByTimeReq struct {
 
 type GetOrderByTimeRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Order  []*entity.Order `json:"order"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
 
 type GetOrderByOrderCodeReq struct {
@@ -69,7 +69,7 @@ type GetOrderByOrderCodeReq struct {
 
 type GetOrderByOrderCodeRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Order  *entity.Order `json:"order"`
+	Order  *model.AdminResponseOrderForm `json:"order"`
 }
 
 type GetReceiptReq struct {

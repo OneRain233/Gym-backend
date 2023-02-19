@@ -3,6 +3,7 @@ package controller
 import (
 	v1 "Gym-backend/api/v1"
 	"Gym-backend/internal/model"
+	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
 
@@ -44,46 +45,100 @@ func (c *cOrder) CreateOrder(ctx context.Context, req *v1.CreateOrderReq) (res *
 
 func (c *cOrderAdmin) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (res *v1.GetAllOrderRes, err error) {
 	res = &v1.GetAllOrderRes{}
-	res.Order, err = service.Order().GetAllOrders(ctx)
+	var orders []*entity.Order
+
+	orders, err = service.Order().GetAllOrders(ctx)
 	if err != nil {
 		return
 	}
+	for _, order := range orders {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+	}
+	if err != nil {
+		return
+	}
+
 	return
 }
 
 func (c *cOrderAdmin) GetOrderById(ctx context.Context, req *v1.GetOrderByUserIdReq) (res *v1.GetOrderByUserIdRes, err error) {
 	res = &v1.GetOrderByUserIdRes{}
-	res.Order, err = service.Order().GetOrdersByUserId(ctx, req.UserId)
+	var order []*entity.Order
+	order, err = service.Order().GetOrdersByUserId(ctx, req.UserId)
 	if err != nil {
 		return
 	}
-	if res.Order == nil {
+	if order == nil {
 		err = gerror.New("order not found")
+		return
 	}
+
+	for _, order := range order {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+	}
+
 	return
 }
 
 func (c *cOrderAdmin) GetOrderByPlaceId(ctx context.Context, req *v1.GetOrderByPlaceIdReq) (res *v1.GetOrderByPlaceIdRes, err error) {
 	res = &v1.GetOrderByPlaceIdRes{}
-	res.Order, err = service.Order().GetOrdersByPlaceId(ctx, req.PlaceId)
+	var order []*entity.Order
+	order, err = service.Order().GetOrdersByPlaceId(ctx, req.PlaceId)
 	if err != nil {
 		return
 	}
-	if res.Order == nil {
+	if order == nil {
 		err = gerror.New("order not found")
+		return
 	}
+	for _, order := range order {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+	}
+
 	return
 }
 
 func (c *cOrderAdmin) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderByOrderCodeReq) (res *v1.GetOrderByOrderCodeRes, err error) {
 	res = &v1.GetOrderByOrderCodeRes{}
-	res.Order, err = service.Order().GetOrderByOrderCode(ctx, req.OrderCode)
+	var order *entity.Order
+	order, err = service.Order().GetOrderByOrderCode(ctx, req.OrderCode)
 	if err != nil {
 		return
 	}
-	if res.Order == nil {
+	if order == nil {
 		err = gerror.New("order not found")
+		return
 	}
+	place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+	if err1 != nil {
+		err = err1
+	}
+	res.Order = &model.AdminResponseOrderForm{
+		Order: order,
+		Place: place,
+	}
+
 	return
 }
 
@@ -91,12 +146,25 @@ func (c *cOrderAdmin) GetOrderByTime(ctx context.Context, req *v1.GetOrderByTime
 	res = &v1.GetOrderByTimeRes{}
 	startTime := gtime.NewFromStr(req.StartTime)
 	endTime := gtime.NewFromStr(req.EndTime)
-	res.Order, err = service.Order().GetOrderByTimeRange(ctx, startTime, endTime)
+	var orders []*entity.Order
+	orders, err = service.Order().GetOrderByTimeRange(ctx, startTime, endTime)
+	if orders == nil {
+		err = gerror.New("order not found")
+		return
+	}
+
 	if err != nil {
 		return
 	}
-	if res.Order == nil {
-		err = gerror.New("order not found")
+	for _, order := range orders {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
 	}
 
 	return

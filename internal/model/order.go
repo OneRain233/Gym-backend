@@ -1,5 +1,7 @@
 package model
 
+import "Gym-backend/internal/model/entity"
+
 type CreateOrderForm struct {
 	UserId    int
 	PlaceId   int
@@ -19,4 +21,9 @@ type CreateReceiptForm struct {
 	OrderCode   string
 	OrderId     int
 	ReceiptPath string
+}
+
+type AdminResponseOrderForm struct {
+	Order *entity.Order         `json:"order"`
+	Place *entity.FacilityPlace `json:"place"`
 }
