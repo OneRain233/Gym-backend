@@ -14,6 +14,10 @@ type (
 	ICredit interface {
 		GetCredit(ctx context.Context) (credit *entity.Credit, err error)
 		UpdateAmount(ctx context.Context, amount int) error
+		GetAllCredit(ctx context.Context) (credits []*entity.Credit, err error)
+		GetCreditByUserId(ctx context.Context, userId int) (credit *entity.Credit, err error)
+		UpdateCreditByUserId(ctx context.Context, userId int, amount int) error
+		CreateCreditForUser(ctx context.Context, userId int) error
 	}
 )
 

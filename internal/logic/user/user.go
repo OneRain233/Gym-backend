@@ -105,6 +105,10 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		if err != nil {
 			return err
 		}
+		err = service.Credit().CreateCreditForUser(ctx, user.Id)
+		if err != nil {
+			return err
+		}
 		return err1
 	})
 }

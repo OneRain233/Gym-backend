@@ -95,6 +95,7 @@ var (
 						controller.Card,
 						controller.Announcement,
 						controller.Wallet,
+						controller.Credit,
 					)
 				})
 
@@ -112,6 +113,7 @@ var (
 						controller.AnnouncementAdmin,
 						controller.Config,
 						controller.UserAdmin,
+						controller.CreditAdmin,
 					)
 				})
 			})
