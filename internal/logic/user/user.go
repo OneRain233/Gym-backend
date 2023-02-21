@@ -91,7 +91,7 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 			return err
 		}
 		user.Role = 0
-		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
+		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 		user.UpdateTime = gtime.Now()
 		_, err1 := dao.User.Ctx(ctx).Data(user).OmitEmpty().Save()
 		if err1 != nil {
@@ -172,7 +172,7 @@ func (u *sUser) UpdateEmptyAvatarPath(ctx context.Context, user *entity.User) er
 	path := user.Avatar
 	if path == "" {
 		path = g.Cfg().MustGet(gctx.New(), "upload.path").String()
-		defaultAvatar := g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
+		defaultAvatar := "avatar/" + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 
 		user.Avatar = path + defaultAvatar
 		_, err := dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
@@ -189,7 +189,7 @@ func (u *sUser) UpdateAvatar(ctx context.Context, userId uint, avatar string) er
 		return err
 	}
 	// check if avatar path is existed
-	path := g.Cfg().MustGet(gctx.New(), "upload.path").String() + avatar
+	path := g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + avatar
 	if !gfile.Exists(path) {
 		return gerror.New(`Avatar path not found`)
 	}
