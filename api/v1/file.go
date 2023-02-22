@@ -16,8 +16,6 @@ type FileUploadReq struct {
 // FileUploadRes File Upload response
 type FileUploadRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Data   struct {
-		Url  string `json:"url"`
-		Name string `json:"name"`
-	}
+	Url    string `json:"url"`
+	Name   string `json:"name"`
 }

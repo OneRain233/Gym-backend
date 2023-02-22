@@ -21,7 +21,7 @@ func (c *cFile) UploadFile(ctx context.Context, req *v1.FileUploadReq) (res *v1.
 	if err != nil {
 		return
 	}
-	res.Data.Url = output.URL
-	res.Data.Name = output.Name
+	res.Url = output.URL
+	res.Name = output.Name
 	return
 }
