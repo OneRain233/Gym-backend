@@ -5,6 +5,7 @@ import (
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
 	"context"
+	"encoding/base64"
 	"strings"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -56,6 +57,27 @@ var (
 				}
 			}
 
+			// check if default avatar file exists
+			avatarPath := g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
+			if !gfile.Exists(avatarPath) {
+				g.Log().Info(gctx.New(), "Default avatar file not found, generating new one...")
+				err := gfile.Mkdir(g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/")
+				if err != nil {
+					g.Log().Fatal(gctx.New(), err)
+				}
+				defaultAvatarBase64 := g.Cfg().MustGet(gctx.New(), "upload.defaultAvatarBase64").String()
+				// decode base64 string to image
+				rawData, err := base64.StdEncoding.DecodeString(defaultAvatarBase64)
+				if err != nil {
+					g.Log().Fatal(gctx.New(), err)
+				}
+				g.Log().Info(gctx.New(), "Default avatar file generated successfully")
+				err = gfile.PutBytes(avatarPath, gconv.Bytes(rawData))
+				if err != nil {
+					g.Log().Fatal(gctx.New(), err)
+				}
+
+			}
 			// register static files
 			uploadPath := g.Cfg().MustGet(gctx.New(), "upload.path").String()
 			if !gfile.Exists(uploadPath) {
