@@ -31,7 +31,7 @@ type GetBanksReq struct {
 
 type GetBanksRes struct {
 	g.Meta `mime:"application/json" example:"string"`
-	Data   []*entity.Bank
+	Data   []*entity.Bank `json:"data"`
 }
 
 type DeleteBankReq struct {
