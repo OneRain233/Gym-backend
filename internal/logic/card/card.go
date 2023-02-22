@@ -154,6 +154,9 @@ func (s *sCard) DeleteCard(ctx context.Context, cardId int) error {
 	userId := service.Session().GetUser(ctx)
 	var wallet *entity.Wallet
 	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	if err != nil {
+		return err
+	}
 	var card *entity.WalletCard
 	err = dao.WalletCard.Ctx(ctx).Where("id", cardId).Scan(&card)
 	if err != nil {
