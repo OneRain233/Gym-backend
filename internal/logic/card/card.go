@@ -128,7 +128,7 @@ func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
 }
 
 func (s *sCard) Recharge(ctx context.Context, input *model.CardRechargeForm) error {
-	userId := service.Session().GetUser(ctx)
+	userId := service.Session().GetUser(ctx).Id
 	var wallet *entity.Wallet
 	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
 	var card *entity.WalletCard
@@ -151,12 +151,13 @@ func (s *sCard) Recharge(ctx context.Context, input *model.CardRechargeForm) err
 }
 
 func (s *sCard) DeleteCard(ctx context.Context, cardId int) error {
-	userId := service.Session().GetUser(ctx)
+	userId := service.Session().GetUser(ctx).Id
 	var wallet *entity.Wallet
 	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
 	if err != nil {
 		return err
 	}
+	err := dao.Wallet.Ctx(ctx).Where(dao.Wallet.Columns().UserId, userId).Scan(&wallet)
 	var card *entity.WalletCard
 	err = dao.WalletCard.Ctx(ctx).Where("id", cardId).Scan(&card)
 	if err != nil {
