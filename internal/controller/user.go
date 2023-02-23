@@ -126,3 +126,29 @@ func (c *cUserAdmin) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserRe
 	}
 	return
 }
+
+func (c *cUser) UpdateUserProfile(ctx context.Context, req *v1.UserUpdateUserReq) (res *v1.UserUpdateUserRes, err error) {
+	res = &v1.UserUpdateUserRes{}
+	form := model.UserUpdateForm{
+		Id:     uint(service.Session().GetUser(ctx).Id),
+		Role:   uint(service.Session().GetUser(ctx).Role),
+		Email:  req.Email,
+		Phone:  req.Phone,
+		Gender: req.Gender,
+	}
+	err = service.User().UpdateUser(ctx, &form)
+	if err != nil {
+		return
+	}
+	// update session
+	user, err := service.User().GetUserById(ctx, form.Id)
+	if err != nil {
+		return
+	}
+	err = service.Session().SetUser(ctx, user)
+	if err != nil {
+		return
+	}
+
+	return
+}

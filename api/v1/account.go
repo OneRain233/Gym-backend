@@ -107,5 +107,16 @@ type UpdateUserReq struct {
 	Gender   uint
 }
 
+type UserUpdateUserReq struct {
+	g.Meta `path:"/user/profile/update" tags:"Account" method:"post" summary:"Normal User Update user"`
+	Email  string
+	Phone  string
+	Gender uint
+}
+
+type UserUpdateUserRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}
+
 type UpdateUserRes struct {
 }
