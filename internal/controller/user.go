@@ -109,6 +109,9 @@ func (c *cUserAdmin) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (r
 
 func (c *cUserAdmin) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserReq) (res *v1.UpdateUserRes, err error) {
 	res = &v1.UpdateUserRes{}
+	if req.Id == 0 {
+		req.Id = uint(service.Session().GetUser(ctx).Id)
+	}
 	form := model.UserUpdateForm{
 		Id:       req.Id,
 		Username: req.Username,
