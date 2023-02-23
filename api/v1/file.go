@@ -9,8 +9,8 @@ import (
 type FileUploadReq struct {
 	g.Meta `path:"/upload" method:"post" mime:"multipart/form-data" tags:"File" summary:"Upload file"`
 	File   *ghttp.UploadFile `json:"file" v:"required#Please select file to upload"`
-	Name   string            `json:"name" v:"required#Please input file name"`
-	Type   string            `json:"type" v:"required#Please input file type"`
+	//Name   string            `json:"name" v:"required#Please input file name"`
+	//Type   string            `json:"type" v:"required#Please input file type"`
 }
 
 // FileUploadRes File Upload response

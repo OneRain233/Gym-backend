@@ -122,6 +122,7 @@ func (u *sUser) GetUserByUsernameAndPassword(ctx context.Context, username strin
 }
 
 func (u *sUser) GetUserByID(ctx context.Context, id uint) (user *entity.User, err error) {
+	user = &entity.User{}
 	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, id).Scan(&user)
 	return
 }
@@ -189,7 +190,7 @@ func (u *sUser) UpdateAvatar(ctx context.Context, userId uint, avatar string) er
 		return err
 	}
 	// check if avatar path is existed
-	path := g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + avatar
+	path := avatar
 	if !gfile.Exists(path) {
 		return gerror.New(`Avatar path not found`)
 	}

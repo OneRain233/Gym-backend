@@ -13,6 +13,7 @@ import (
 type (
 	IPlace interface {
 		GetPlaceById(ctx context.Context, id int) (res *entity.FacilityPlace, err error)
+		DeletePlaceById(ctx context.Context, id int) error
 	}
 )
 

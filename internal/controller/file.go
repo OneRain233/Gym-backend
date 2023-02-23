@@ -15,8 +15,6 @@ func (c *cFile) UploadFile(ctx context.Context, req *v1.FileUploadReq) (res *v1.
 	res = &v1.FileUploadRes{}
 	output, err := service.File().UploadFile(ctx, model.FileUploadForm{
 		File: req.File,
-		Type: req.Type,
-		Name: req.Name,
 	})
 	if err != nil {
 		return

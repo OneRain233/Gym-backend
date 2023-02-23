@@ -120,3 +120,12 @@ type UserUpdateUserRes struct {
 
 type UpdateUserRes struct {
 }
+
+type UpdateAvatarReq struct {
+	g.Meta `path:"/user/avatar/update" tags:"Account" method:"post" summary:"Update user's avatar"`
+	Avatar string `v:"required#Please input avatar"`
+}
+
+type UpdateAvatarRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

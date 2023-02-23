@@ -336,3 +336,12 @@ func (s *sFacility) GetOccupiedFacilityPlaces(ctx context.Context, placeId int) 
 	}
 	return
 }
+
+func (s *sFacility) DeleteFacility(ctx context.Context, id int) (err error) {
+	if id == 0 {
+		err = gerror.New("Id is empty")
+		return
+	}
+	_, err = dao.Facility.Ctx(ctx).Where("id", id).Delete()
+	return
+}

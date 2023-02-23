@@ -127,3 +127,21 @@ func (c *cFacility) GetOccupiedFacilityPlaces(ctx context.Context, req *v1.Occup
 	}
 	return
 }
+
+func (c *cFacilityAdmin) DeleteFacility(ctx context.Context, req *v1.DeleteFacilityReq) (res *v1.DeleteFacilityRes, err error) {
+	res = &v1.DeleteFacilityRes{}
+	err = service.Facility().DeleteFacility(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cFacilityAdmin) DeleteFacilityPlace(ctx context.Context, req *v1.DeleteFacilityPlaceReq) (res *v1.DeleteFacilityPlaceRes, err error) {
+	res = &v1.DeleteFacilityPlaceRes{}
+	err = service.Place().DeletePlaceById(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	return
+}

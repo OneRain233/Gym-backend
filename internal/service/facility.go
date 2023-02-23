@@ -23,6 +23,7 @@ type (
 		AddFacilityPlace(ctx context.Context, input *model.AddFacilityPlaceForm) (err error)
 		ModifyFacilityPlace(ctx context.Context, input *model.ModifyFacilityPlaceForm) (err error)
 		GetOccupiedFacilityPlaces(ctx context.Context, placeId int) (res []*model.OccupiedFacilityPlace, err error)
+		DeleteFacility(ctx context.Context, id int) (err error)
 	}
 )
 

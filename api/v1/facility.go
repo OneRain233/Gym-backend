@@ -97,3 +97,21 @@ type OccupiedFacilityPlaceRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
 	Occupied []*model.OccupiedFacilityPlace `json:"occupied"`
 }
+
+type DeleteFacilityReq struct {
+	g.Meta `path:"/facility/delete" tags:"Facility" method:"post" summary:"Delete Facility"`
+	ID     int `json:"id" v:"required#Please input id"`
+}
+
+type DeleteFacilityRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}
+
+type DeleteFacilityPlaceReq struct {
+	g.Meta `path:"/facility/place/delete" tags:"Facility" method:"post" summary:"Delete Facility Place"`
+	ID     int `json:"id" v:"required#Please input id"`
+}
+
+type DeleteFacilityPlaceRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

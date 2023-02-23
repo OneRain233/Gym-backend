@@ -25,3 +25,8 @@ func (p *sPlace) GetPlaceById(ctx context.Context, id int) (res *entity.Facility
 	}
 	return res, nil
 }
+
+func (p *sPlace) DeletePlaceById(ctx context.Context, id int) error {
+	_, err := dao.FacilityPlace.Ctx(ctx).Where("id", id).Delete()
+	return err
+}

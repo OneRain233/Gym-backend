@@ -152,3 +152,23 @@ func (c *cUser) UpdateUserProfile(ctx context.Context, req *v1.UserUpdateUserReq
 
 	return
 }
+
+func (c *cUser) UpdateAvatar(ctx context.Context, req *v1.UpdateAvatarReq) (res *v1.UpdateAvatarRes, err error) {
+	res = &v1.UpdateAvatarRes{}
+	avatar := req.Avatar
+	user := service.Session().GetUser(ctx)
+	err = service.User().UpdateAvatar(ctx, uint(user.Id), avatar)
+	if err != nil {
+		return
+	}
+	// update session
+	user, err = service.User().GetUserById(ctx, uint(user.Id))
+	if err != nil {
+		return
+	}
+	err = service.Session().SetUser(ctx, user)
+	if err != nil {
+		return
+	}
+	return
+}
