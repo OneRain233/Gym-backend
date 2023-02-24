@@ -19,3 +19,25 @@ type FileUploadRes struct {
 	Url    string `json:"url"`
 	Name   string `json:"name"`
 }
+
+type AvatarUploadReq struct {
+	g.Meta `path:"/upload/avatar" method:"post" mime:"multipart/form-data" tags:"File" summary:"Upload avatar"`
+	File   *ghttp.UploadFile `json:"file" v:"required#Please select file to upload"`
+}
+
+type AvatarUploadRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Url    string `json:"url"`
+	Name   string `json:"name"`
+}
+
+type FacilityImageUploadReq struct {
+	g.Meta `path:"/upload/facility" method:"post" mime:"multipart/form-data" tags:"File" summary:"Upload facility image"`
+	File   *ghttp.UploadFile `json:"file" v:"required#Please select file to upload"`
+}
+
+type FacilityImageUploadRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Url    string `json:"url"`
+	Name   string `json:"name"`
+}

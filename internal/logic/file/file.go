@@ -24,13 +24,17 @@ func (s *sFile) UploadFile(ctx context.Context, input model.FileUploadForm) (out
 	uploadPath := g.Cfg().MustGet(gctx.New(), "upload.path").String()
 
 	file := input.File
-	//uploadType := input.Type
-	//switch uploadType {
-	//case "avatar":
-	//	uploadPath += "avatar/"
-	//case "facility":
-	//	uploadPath += "facility/"
-	//}
+	uploadType := input.Type
+	switch uploadType {
+	case "avatar":
+		uploadPath += "avatar/"
+	case "facility":
+		uploadPath += "facility/"
+	case "common":
+		uploadPath += "common/"
+	default:
+		uploadPath += "common/"
+	}
 	if !gfile.Exists(uploadPath) {
 		err = gfile.Mkdir(uploadPath)
 		if err != nil {

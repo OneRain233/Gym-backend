@@ -98,7 +98,6 @@ var (
 				// Unauthorized user
 				group.Bind(
 					controller.User,
-					controller.File, // TODO: Move this to do auth
 					controller.Facility,
 					controller.Bank,
 					controller.BankAdmin, //TODO: Move this to do auth
@@ -118,6 +117,7 @@ var (
 						controller.Announcement,
 						controller.Wallet,
 						controller.Credit,
+						controller.File,
 					)
 				})
 

@@ -5,7 +5,7 @@ import "github.com/gogf/gf/v2/net/ghttp"
 type FileUploadForm struct {
 	File *ghttp.UploadFile
 	//Name string
-	//Type string // file type: avatar or facility
+	Type string // file type: avatar or facility
 }
 
 type FileUploadRes struct {
