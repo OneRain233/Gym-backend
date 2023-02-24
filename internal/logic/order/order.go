@@ -30,6 +30,28 @@ func New() *sOrder {
 	return &sOrder{}
 }
 
+func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, err error) {
+	startTime := input.StartTime
+	endTime := input.EndTime
+	startTimeTime, err := gtime.StrToTime(startTime)
+	endTimeTime, err := gtime.StrToTime(endTime)
+	duration := endTimeTime.Sub(startTimeTime)
+
+	if err != nil {
+		return
+	}
+	if duration.Hours() < 0 {
+		err = gerror.New("invalid time")
+		return
+	}
+	if duration.Hours() < 1 {
+		amount = 1
+		return
+	}
+	amount += duration.Hours()
+	return
+}
+
 func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error) {
 	response = &model.ResponseOrderForm{}
 	// check if the time is taken
@@ -47,12 +69,16 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 		err = gerror.New("place not found")
 		return
 	}
+	amountCnt, err := o.CalculateAmount(ctx, input)
+	if err != nil {
+		return
+	}
 	orderEntity := &entity.Order{}
 	orderEntity.UserId = input.UserId
 	orderEntity.PlaceId = input.PlaceId
 	orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
 	orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
-	orderEntity.Amount = facilityPlace.Cost
+	orderEntity.Amount = facilityPlace.Cost * amountCnt
 	orderEntity.Status = consts.OrderStatusWaitingPayment
 	// TODO: order code
 	orderEntity.OrderCode = o.GenerateOrderCode()
