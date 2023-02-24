@@ -127,25 +127,25 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	}
 	// check if the time is end with 00 15 30 45
 	if gtime.NewFromStr(input.StartTime).Minute() != 0 && gtime.NewFromStr(input.StartTime).Minute() != 15 && gtime.NewFromStr(input.StartTime).Minute() != 30 && gtime.NewFromStr(input.StartTime).Minute() != 45 {
-		return false, nil
+		return false, gerror.New("invalid time(start time does not end with 00 15 30 45)")
 	}
 	if gtime.NewFromStr(input.EndTime).Minute() != 0 && gtime.NewFromStr(input.EndTime).Minute() != 15 && gtime.NewFromStr(input.EndTime).Minute() != 30 && gtime.NewFromStr(input.EndTime).Minute() != 45 {
-		return false, nil
+		return false, gerror.New("invalid time(end time does not end with 00 15 30 45)")
 	}
 
 	// start time should be before end time
 	if gtime.NewFromStr(input.StartTime).Timestamp() >= gtime.NewFromStr(input.EndTime).Timestamp() {
-		return false, nil
+		return false, gerror.New("invalid time(start time should be before end time)")
 	}
 
 	// check if the time before now
 	if gtime.NewFromStr(input.StartTime).Timestamp() < gtime.Now().Timestamp() {
-		return false, nil
+		return false, gerror.New("invalid time(start time should be after now)")
 	}
 
 	// check if startTime and endTime in the same day
 	if gtime.NewFromStr(input.StartTime).Day() != gtime.NewFromStr(input.EndTime).Day() {
-		return false, nil
+		return false, gerror.New("invalid time(start time and end time should be in the same day)")
 	}
 
 	// find all orders in the same place
@@ -168,11 +168,11 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 		tmpEndTime := order.EndTime.Timestamp()
 		// if the start time is in the range of an order
 		if startTime >= tmpStartTime && startTime <= tmpEndTime {
-			return false, nil
+			return false, gerror.New("invalid time(start time is in the range of an order)")
 		}
 		// if the end time is in the range of an order
 		if endTime >= tmpStartTime && endTime <= tmpEndTime {
-			return false, nil
+			return false, gerror.New("invalid time(end time is in the range of an order)")
 		}
 	}
 	return true, nil
