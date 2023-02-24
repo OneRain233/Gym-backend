@@ -60,7 +60,6 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 		return
 	}
 	if !validated {
-		err = gerror.New("time is taken or invalid")
 		return
 	}
 	// TODO: check amount
