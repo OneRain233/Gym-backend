@@ -60,6 +60,7 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 		return
 	}
 	if !validated {
+		err = gerror.New("time is taken or invalid")
 		return
 	}
 	// TODO: check amount
@@ -122,7 +123,7 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	}
 
 	if gtime.Now().Timestamp() < OpenTime.Timestamp() || gtime.Now().Timestamp() > CloseTime.Timestamp() {
-		return false, nil
+		return false, gerror.New("invalid time(we are not open now)")
 	}
 	// check if the time is end with 00 15 30 45
 	if gtime.NewFromStr(input.StartTime).Minute() != 0 && gtime.NewFromStr(input.StartTime).Minute() != 15 && gtime.NewFromStr(input.StartTime).Minute() != 30 && gtime.NewFromStr(input.StartTime).Minute() != 45 {
