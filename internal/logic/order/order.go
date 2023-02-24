@@ -112,19 +112,21 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	if err != nil {
 		return false, err
 	}
-	// 09:00 <- this is the format
-	OpenTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + OpenTimeEntity.Value)
-	if err != nil {
-		return false, err
-	}
-	CloseTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + CloseTimeEntity.Value)
-	if err != nil {
-		return false, err
-	}
 
-	if gtime.Now().Timestamp() < OpenTime.Timestamp() || gtime.Now().Timestamp() > CloseTime.Timestamp() {
+	StartTime := gtime.NewFromStr(input.StartTime)
+	EndTime := gtime.NewFromStr(input.EndTime)
+	OpenTime, err := gtime.StrToTime(StartTime.Format("Y-m-d") + " " + OpenTimeEntity.Value)
+	CloseTime, err := gtime.StrToTime(EndTime.Format("Y-m-d") + " " + CloseTimeEntity.Value)
+
+	// check if the time is in open time
+	if StartTime.Timestamp() < OpenTime.Timestamp() || EndTime.Timestamp() > CloseTime.Timestamp() {
 		return false, gerror.New("invalid time(we are not open now)")
 	}
+
+	if gtime.NewFromStr(input.StartTime).Timestamp() < OpenTime.Timestamp() || gtime.NewFromStr(input.EndTime).Timestamp() > CloseTime.Timestamp() {
+		return false, gerror.New("invalid time(we are not open now)")
+	}
+
 	// check if the time is end with 00 15 30 45
 	if gtime.NewFromStr(input.StartTime).Minute() != 0 && gtime.NewFromStr(input.StartTime).Minute() != 15 && gtime.NewFromStr(input.StartTime).Minute() != 30 && gtime.NewFromStr(input.StartTime).Minute() != 45 {
 		return false, gerror.New("invalid time(start time does not end with 00 15 30 45)")
