@@ -106,20 +106,20 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	// check if we have open
 	OpenTimeEntity, err := service.Config().GetConfigByKey(ctx, consts.OpenTime)
 	if err != nil {
-		return
+		return false, err
 	}
 	CloseTimeEntity, err := service.Config().GetConfigByKey(ctx, consts.CloseTime)
 	if err != nil {
-		return
+		return false, err
 	}
 	// 09:00 <- this is the format
 	OpenTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + OpenTimeEntity.Value)
 	if err != nil {
-		return
+		return false, err
 	}
 	CloseTime, err := gtime.StrToTime(gtime.Now().Format("Y-m-d") + " " + CloseTimeEntity.Value)
 	if err != nil {
-		return
+		return false, err
 	}
 
 	if gtime.Now().Timestamp() < OpenTime.Timestamp() || gtime.Now().Timestamp() > CloseTime.Timestamp() {
