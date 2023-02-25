@@ -189,3 +189,28 @@ func (c *cOrder) Refund(ctx context.Context, req *v1.RefundOrderReq) (res *v1.Re
 	}
 	return
 }
+
+func (c *cOrder) GetOwnOrder(ctx context.Context, req *v1.GetOwnOrderReq) (res *v1.GetOwnOrderRes, err error) {
+	res = &v1.GetOwnOrderRes{}
+	userId := service.Session().GetUser(ctx).Id
+	orders, err := service.Order().GetOrdersByUserId(ctx, userId)
+	if err != nil {
+		return
+	}
+	if orders == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	for _, order := range orders {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+	}
+
+	return
+}

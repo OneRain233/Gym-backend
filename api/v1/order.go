@@ -90,3 +90,12 @@ type RefundOrderReq struct {
 type RefundOrderRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
+
+type GetOwnOrderReq struct {
+	g.Meta `path:"/order/own" method:"post" tags:"Order" summary:"Get own order"`
+}
+
+type GetOwnOrderRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
+}
