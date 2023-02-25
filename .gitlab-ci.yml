@@ -60,7 +60,7 @@ deploy:
     - rm -rf temp
     - cp manifest/config/config.prod.yaml manifest/config/config.yaml
     - gf docker -tn gym-demo -tp gym_kneethaimay
-    - docker run -itd --name gym-demo -p "16800:8000" -e TZ=Asia/Shanghai gym_kneethaimay/gym-demo
+    - docker run -itd --name gym-demo -p "16800:8000" -e TZ=Asia/Shanghai -v /opt/gym-backend:/app gym_kneethaimay/gym-demo
     - echo "Done"
   environment: production
 
