@@ -128,6 +128,19 @@ func (u *sUser) CheckUserEmailFormat(email string) error {
 	return nil
 }
 
+func (u *sUser) CheckUserPhoneFormat(phone string) error {
+	// check if the phone format is correct or not
+	pattern := `^1[3456789]\d{9}$`
+	// length of phone number should be 11
+	if len(phone) != 11 {
+		return gerror.New(`Phone format is incorrect`)
+	}
+	if !gregex.IsMatchString(pattern, phone) {
+		return gerror.New(`Phone format is incorrect`)
+	}
+	return nil
+}
+
 func (u *sUser) GetUserByUsernameAndPassword(ctx context.Context, username string, password string) (user *entity.User, err error) {
 	err = dao.User.Ctx(ctx).Where(g.Map{
 		dao.User.Columns().Username: username,
