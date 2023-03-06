@@ -90,6 +90,9 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		if err := u.ValidateEmail(ctx, user.Email); err != nil {
 			return err
 		}
+		if err := u.ValidatePhone(ctx, user.Phone); err != nil {
+			return err
+		}
 		user.Role = 0
 		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 		user.UpdateTime = gtime.Now()
@@ -140,6 +143,17 @@ func (u *sUser) ValidateUsername(ctx context.Context, username string) error {
 	}
 	if cnt > 0 {
 		return gerror.New(`Username already exists`)
+	}
+	return nil
+}
+
+func (u *sUser) ValidatePhone(ctx context.Context, phone string) error {
+	cnt, err := dao.User.Ctx(ctx).Where(dao.User.Columns().Phone, phone).Count()
+	if err != nil {
+		return err
+	}
+	if cnt > 0 {
+		return gerror.New(`Phone already exists`)
 	}
 	return nil
 }
