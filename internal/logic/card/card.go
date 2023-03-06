@@ -31,10 +31,26 @@ func (s *sCard) GetCard(ctx context.Context) (card *entity.WalletCard, err error
 	return
 }
 
+func (s *sCard) ValidateCard(ctx context.Context, input *model.BindCardForm) error {
+	cnt, err := dao.WalletCard.Ctx(ctx).Where("card_account", input.CardAccount).Count()
+	if err != nil {
+		return err
+	}
+	if cnt > 0 {
+		return gerror.New("card account already exists")
+	}
+	return nil
+}
+
 func (s *sCard) BindCard(ctx context.Context, input *model.BindCardForm) error {
 	userId := service.Session().GetUser(ctx).Id
 	var wallet *entity.Wallet
 	err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+	if err != nil {
+		return err
+	}
+	// validate card
+	err = s.ValidateCard(ctx, input)
 	if err != nil {
 		return err
 	}
