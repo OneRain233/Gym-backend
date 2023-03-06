@@ -7,8 +7,8 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
-
 	"github.com/gogf/gf/v2/os/gtime"
+	"github.com/gogf/gf/v2/text/gregex"
 
 	"github.com/gogf/gf/v2/os/gfile"
 
@@ -93,6 +93,9 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		if err := u.ValidatePhone(ctx, user.Phone); err != nil {
 			return err
 		}
+		if err := u.CheckUserEmailFormat(user.Email); err != nil {
+			return err
+		}
 		user.Role = 0
 		user.Avatar = g.Cfg().MustGet(gctx.New(), "upload.path").String() + "avatar/" + g.Cfg().MustGet(gctx.New(), "upload.defaultAvatar").String()
 		user.UpdateTime = gtime.Now()
@@ -114,6 +117,28 @@ func (u *sUser) Register(ctx context.Context, input model.UserRegisterForm) erro
 		}
 		return err1
 	})
+}
+
+func (u *sUser) CheckUserEmailFormat(email string) error {
+	// check if the email format is correct or not
+	pattern := `^[0-9a-z][_.0-9a-z-]{0,31}@([0-9a-z][0-9a-z-]{0,30}[0-9a-z]\.){1,4}[a-z]{2,4}$`
+	if !gregex.IsMatchString(pattern, email) {
+		return gerror.New(`Email format is incorrect`)
+	}
+	return nil
+}
+
+func (u *sUser) CheckUserPhoneFormat(phone string) error {
+	// check if the phone format is correct or not
+	pattern := `^1[3456789]\d{9}$`
+	// length of phone number should be 11
+	if len(phone) != 11 {
+		return gerror.New(`Phone format is incorrect`)
+	}
+	if !gregex.IsMatchString(pattern, phone) {
+		return gerror.New(`Phone format is incorrect`)
+	}
+	return nil
 }
 
 func (u *sUser) GetUserByUsernameAndPassword(ctx context.Context, username string, password string) (user *entity.User, err error) {
