@@ -42,11 +42,25 @@ func (s *sBank) AddBank(ctx context.Context, form *model.AddBankForm) error {
 	if form.Name == "" {
 		return gerror.New("name is empty")
 	}
+	if err := s.ValidateBankName(ctx, form.Name); err != nil {
+		return err
+	}
 	bank := entity.Bank{
 		Name: form.Name,
 	}
 	_, err := dao.Bank.Ctx(ctx).Insert(&bank)
 	return err
+}
+
+func (s *sBank) ValidateBankName(ctx context.Context, name string) error {
+	cnt, err := dao.Bank.Ctx(ctx).Where(dao.Bank.Columns().Name, name).Count()
+	if err != nil {
+		return err
+	}
+	if cnt > 0 {
+		return gerror.New("name is already existed")
+	}
+	return nil
 }
 
 func (s *sBank) UpdateBank(ctx context.Context, form *model.UpdateBankForm) error {
