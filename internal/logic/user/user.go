@@ -257,6 +257,10 @@ func (u *sUser) UpdatePassword(ctx context.Context, user *entity.User, newPasswo
 	if EncryptPassword(oldPassword) != user.Password {
 		return gerror.New("Error old password")
 	}
+	// check if the new password is the same as the old password
+	if EncryptPassword(newPassword) == user.Password {
+		return gerror.New("New password is the same as the old password")
+	}
 
 	user.Password = EncryptPassword(newPassword)
 	_, err := dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
