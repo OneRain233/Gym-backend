@@ -255,7 +255,6 @@ func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacili
 		Cost:        input.Cost,
 		Description: input.Description,
 	}
-
 	_, err = g.DB().Model("facility_place").Data(place).Insert()
 	return
 }
