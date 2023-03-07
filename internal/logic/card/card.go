@@ -7,6 +7,8 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 
+	"github.com/gogf/gf/v2/text/gregex"
+
 	"github.com/gogf/gf/v2/database/gdb"
 
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -39,6 +41,20 @@ func (s *sCard) ValidateCard(ctx context.Context, input *model.BindCardForm) err
 	if cnt > 0 {
 		return gerror.New("card account already exists")
 	}
+
+	// check format of card account
+	// all card account should be digit
+	if !gregex.IsMatchString(`^\d+$`, input.CardAccount) {
+		return gerror.New("card account should be digit")
+	}
+
+	return nil
+}
+
+func (s *sCard) ValidatePhone(ctx context.Context, input *model.BindCardForm) error {
+	if !gregex.IsMatchString(`^1[3-9]\d{9}$`, input.Phone) {
+		return gerror.New("phone format is not correct")
+	}
 	return nil
 }
 
@@ -51,6 +67,10 @@ func (s *sCard) BindCard(ctx context.Context, input *model.BindCardForm) error {
 	}
 	// validate card
 	err = s.ValidateCard(ctx, input)
+	if err != nil {
+		return err
+	}
+	err = s.ValidatePhone(ctx, input)
 	if err != nil {
 		return err
 	}
