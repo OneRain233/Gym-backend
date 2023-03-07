@@ -15,6 +15,7 @@ type (
 	ICard interface {
 		GetCard(ctx context.Context) (card *entity.WalletCard, err error)
 		ValidateCard(ctx context.Context, input *model.BindCardForm) error
+		ValidatePhone(ctx context.Context, input *model.BindCardForm) error
 		BindCard(ctx context.Context, input *model.BindCardForm) error
 		GetCardsByUserId(ctx context.Context, userId int) (cards []*entity.WalletCard, err error)
 		GetCardsCountByUserId(ctx context.Context, userId int) (count int, err error)
