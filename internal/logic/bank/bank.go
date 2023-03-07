@@ -78,6 +78,10 @@ func (s *sBank) UpdateBank(ctx context.Context, form *model.UpdateBankForm) erro
 	if bank == nil {
 		return gerror.New("bank not found")
 	}
+	err = s.ValidateBankName(ctx, form.Name)
+	if err != nil {
+		return err
+	}
 	bank.Name = form.Name
 	_, err = dao.Bank.Ctx(ctx).Where("id", form.Id).Update(bank)
 	return err
