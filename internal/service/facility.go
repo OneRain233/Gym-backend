@@ -13,7 +13,7 @@ import (
 type (
 	IFacility interface {
 		ProcessImage(images string) []string
-		GetFacilityList(ctx context.Context) (res []*model.FacilityEntity, err error)
+		GetFacilityList(ctx context.Context, pagination *model.Pagination) (res []*model.FacilityEntity, err error)
 		GetFacilityById(ctx context.Context, id int) (res *model.FacilityEntity, err error)
 		GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error)
 		GetFacilityBySearch(ctx context.Context, search string) (res []*model.FacilityEntity, err error)
@@ -21,6 +21,7 @@ type (
 		ModifyFacility(ctx context.Context, input *model.ModifyFacilityForm) (err error)
 		ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error)
 		AddFacilityPlace(ctx context.Context, input *model.AddFacilityPlaceForm) (err error)
+		ValidateAddFacilityPlace(ctx context.Context, facilityName string) (err error)
 		ModifyFacilityPlace(ctx context.Context, input *model.ModifyFacilityPlaceForm) (err error)
 		GetOccupiedFacilityPlaces(ctx context.Context, placeId int) (res []*model.OccupiedFacilityPlace, err error)
 		DeleteFacility(ctx context.Context, id int) (err error)

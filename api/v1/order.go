@@ -24,6 +24,8 @@ type CreateOrderRes struct {
 
 type GetAllOrderReq struct {
 	g.Meta `path:"/order/all" method:"post" tags:"Order" summary:"Get all order"`
+	Limit  int `json:"limit"`
+	Page   int `json:"page"`
 }
 
 type GetAllOrderRes struct {

@@ -17,7 +17,11 @@ type cFacilityManager struct{}
 
 func (c *cFacility) GetAllFacility(ctx context.Context, req *v1.FacilityReq) (res *v1.FacilityRes, err error) {
 	res = &v1.FacilityRes{}
-	res.Facility, err = service.Facility().GetFacilityList(ctx)
+	pagination := &model.Pagination{
+		Limit: req.Limit,
+		Page:  req.Page,
+	}
+	res.Facility, err = service.Facility().GetFacilityList(ctx, pagination)
 	if err != nil {
 		return
 	}
@@ -27,6 +31,10 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 	res = &v1.FacilitySearchRes{}
 	name := req.Name
 	id := req.ID
+	pagination := &model.Pagination{
+		Limit: 10,
+		Page:  1,
+	}
 	var facilities []*model.FacilityEntity
 	var aFacility *model.FacilityEntity
 	if id != 0 {
@@ -38,7 +46,7 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 	} else if name != "" {
 		facilities, err = service.Facility().GetFacilityBySearch(ctx, name)
 	} else {
-		facilities, err = service.Facility().GetFacilityList(ctx)
+		facilities, err = service.Facility().GetFacilityList(ctx, pagination)
 	}
 
 	res.Facility = facilities

@@ -47,7 +47,12 @@ func (c *cOrderAdmin) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (
 	res = &v1.GetAllOrderRes{}
 	var orders []*entity.Order
 
-	orders, err = service.Order().GetAllOrders(ctx)
+	pagination := &model.Pagination{
+		Limit: req.Limit,
+		Page:  req.Page,
+	}
+
+	orders, err = service.Order().GetAllOrders(ctx, pagination)
 	if err != nil {
 		return
 	}

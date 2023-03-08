@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/text/gregex"
 
@@ -276,8 +277,15 @@ func (u *sUser) UpdatePassword(ctx context.Context, user *entity.User, newPasswo
 
 }
 
-func (u *sUser) GetAllUser(ctx context.Context) (users []*entity.User, err error) {
-	err = dao.User.Ctx(ctx).Scan(&users)
+func (u *sUser) GetAllUser(ctx context.Context, pagination *model.Pagination) (users []*entity.User, err error) {
+	limit := pagination.Limit
+	page := pagination.Page
+	offset := (page - 1) * limit
+	if page == 0 || limit == 0 {
+		err = dao.User.Ctx(ctx).Scan(&users)
+		return
+	}
+	err = dao.User.Ctx(ctx).Offset(offset).Limit(limit).Scan(&users)
 	return
 }
 

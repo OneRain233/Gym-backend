@@ -28,10 +28,15 @@ func (s *sFacility) ProcessImage(images string) []string {
 }
 
 // GetFacilityList gets the facility list.
-func (s *sFacility) GetFacilityList(ctx context.Context) (res []*model.FacilityEntity, err error) {
+func (s *sFacility) GetFacilityList(ctx context.Context, pagination *model.Pagination) (res []*model.FacilityEntity, err error) {
 	// get all facility first
 	var facilities []*entity.Facility
-	err = dao.Facility.Ctx(ctx).Scan(&facilities)
+	if pagination.Limit == 0 || pagination.Page == 0 {
+		err = dao.Facility.Ctx(ctx).Scan(&facilities)
+	} else {
+		offset := (pagination.Page - 1) * pagination.Limit
+		err = dao.Facility.Ctx(ctx).Limit(pagination.Limit).Offset(offset).Scan(&facilities)
+	}
 	if err != nil {
 		return
 	}

@@ -15,9 +15,12 @@ type (
 	IUser interface {
 		Login(ctx context.Context, input model.UserLoginForm) error
 		Register(ctx context.Context, input model.UserRegisterForm) error
+		CheckUserEmailFormat(email string) error
+		CheckUserPhoneFormat(phone string) error
 		GetUserByUsernameAndPassword(ctx context.Context, username string, password string) (user *entity.User, err error)
 		GetUserByID(ctx context.Context, id uint) (user *entity.User, err error)
 		ValidateUsername(ctx context.Context, username string) error
+		ValidatePhone(ctx context.Context, phone string) error
 		ValidateEmail(ctx context.Context, email string) error
 		ValidateGender(ctx context.Context, gender int) error
 		ValidateRole(ctx context.Context, role int) error
@@ -25,7 +28,7 @@ type (
 		UpdateAvatar(ctx context.Context, userId uint, avatar string) error
 		GetCurrentUser(ctx context.Context) (user *entity.User)
 		UpdatePassword(ctx context.Context, user *entity.User, newPassword string, oldPassword string) error
-		GetAllUser(ctx context.Context) (users []*entity.User, err error)
+		GetAllUser(ctx context.Context, pagination *model.Pagination) (users []*entity.User, err error)
 		GetUserBySearch(ctx context.Context, search string) (users []*entity.User, err error)
 		GetUserById(ctx context.Context, id uint) (user *entity.User, err error)
 		UpdateUser(ctx context.Context, form *model.UserUpdateForm) error

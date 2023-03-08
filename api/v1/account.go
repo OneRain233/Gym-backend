@@ -70,6 +70,8 @@ type ChangePasswdRes struct {
 
 type GetUserListReq struct {
 	g.Meta `path:"/user/list" tags:"Account" method:"post" summary:"Get user list"`
+	Limit  int `json:"limit"`
+	Page   int `json:"page"`
 }
 
 type GetUserListRes struct {

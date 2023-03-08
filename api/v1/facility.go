@@ -7,7 +7,9 @@ import (
 )
 
 type FacilityReq struct {
-	g.Meta `path:"/facility/facility" tags:"Facility" method:"get" summary:"Get All Facilities"`
+	g.Meta `path:"/facility/facility" tags:"Facility" method:"post" summary:"Get All Facilities"`
+	Limit  int `json:"limit"`
+	Page   int `json:"page"`
 }
 
 type FacilityRes struct {

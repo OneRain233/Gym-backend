@@ -82,7 +82,13 @@ func (c *cUser) ChangePassword(ctx context.Context, req *v1.ChangePasswdReq) (re
 
 func (c *cUserAdmin) GetAllUser(ctx context.Context, req *v1.GetUserListReq) (res *v1.GetUserListRes, err error) {
 	res = &v1.GetUserListRes{}
-	res.User, err = service.User().GetAllUser(ctx)
+	limit := req.Limit
+	page := req.Page
+	pagination := &model.Pagination{
+		Limit: limit,
+		Page:  page,
+	}
+	res.User, err = service.User().GetAllUser(ctx, pagination)
 	if err != nil {
 		return
 	}

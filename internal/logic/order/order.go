@@ -218,12 +218,15 @@ func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res
 	return
 }
 
-func (o *sOrder) GetAllOrders(ctx context.Context) (res []*entity.Order, err error) {
-	err = dao.Order.Ctx(ctx).Scan(&res)
-	if err != nil {
+func (o *sOrder) GetAllOrders(ctx context.Context, pagination *model.Pagination) (res []*entity.Order, err error) {
+	if pagination.Page == 0 || pagination.Limit == 0 {
+		err = dao.Order.Ctx(ctx).Scan(&res)
+		return
+	} else {
+		offset := (pagination.Page - 1) * pagination.Limit
+		err = dao.Order.Ctx(ctx).Limit(pagination.Limit).Offset(offset).Scan(&res)
 		return
 	}
-	return
 }
 
 func (o *sOrder) GetRefundedOrder(ctx context.Context) (res []*entity.Order, err error) {
