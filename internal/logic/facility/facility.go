@@ -239,7 +239,11 @@ func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacili
 		err = gerror.New("The facility is not exist")
 		return
 	}
-
+	// check if the place is exist
+	err = s.ValidateAddFacilityPlace(ctx, input.Name)
+	if err != nil {
+		return
+	}
 	var place = &entity.FacilityPlace{
 		FacilityId:  input.FacilityId,
 		Name:        input.Name,
@@ -248,6 +252,18 @@ func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacili
 	}
 
 	_, err = g.DB().Model("facility_place").Data(place).Insert()
+	return
+}
+
+func (s *sFacility) ValidateAddFacilityPlace(ctx context.Context, facilityName string) (err error) {
+	cnt, err := dao.FacilityPlace.Ctx(ctx).Where(dao.FacilityPlace.Columns().Name, facilityName).Count()
+	if err != nil {
+		return
+	}
+	if cnt > 0 {
+		err = gerror.New("The facility already exists")
+		return
+	}
 	return
 }
 
