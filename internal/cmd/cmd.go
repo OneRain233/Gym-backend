@@ -101,6 +101,7 @@ var (
 					controller.Facility,
 					controller.Bank,
 					controller.BankAdmin, //TODO: Move this to do auth
+					controller.Announcement,
 				)
 
 				// Normal user
@@ -114,7 +115,6 @@ var (
 						controller.Order,
 						controller.Payment,
 						controller.Card,
-						controller.Announcement,
 						controller.Wallet,
 						controller.Credit,
 						controller.File,
