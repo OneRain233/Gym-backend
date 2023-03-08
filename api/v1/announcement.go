@@ -11,8 +11,8 @@ type GetAnnouncementsReq struct {
 }
 
 type GetAnnouncementsRes struct {
-	g.Meta `mime:"application/json" example:"string"`
-	Data   []*entity.Announcement `json:"data"`
+	g.Meta       `mime:"application/json" example:"string"`
+	Announcement []*entity.Announcement `json:"announcement"`
 }
 
 type AddAnnouncementReq struct {

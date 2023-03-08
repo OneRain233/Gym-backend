@@ -15,7 +15,7 @@ type cAnnouncementAdmin struct{}
 
 func (c *cAnnouncement) GetAllAnnouncement(ctx context.Context, req *v1.GetAnnouncementsReq) (res *v1.GetAnnouncementsRes, err error) {
 	res = &v1.GetAnnouncementsRes{}
-	res.Data, err = service.Announcement().GetAnnouncements(ctx)
+	res.Announcement, err = service.Announcement().GetAnnouncements(ctx)
 	if err != nil {
 		return
 	}
