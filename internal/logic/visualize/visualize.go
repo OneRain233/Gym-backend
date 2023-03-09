@@ -23,3 +23,26 @@ func (v *sVisualize) GetFacilityWeeklyUsage(ctx context.Context) (res []*model.F
 func (v *sVisualize) GetFacilityMonthlyUsage(ctx context.Context) (res []*model.FacilityMonthlyUsage, err error) {
 	return
 }
+
+func (v *sVisualize) GetWeeklyIncomeForAYear(ctx context.Context) (res []*model.WeeklyIncome, err error) {
+	// used to draw bar chart
+	return
+}
+
+func (v *sVisualize) GetDailyIncome(ctx context.Context, timeRange *model.TimeRange) (res []*model.DailyIncome, err error) {
+	// used to draw line chart
+	startDate := timeRange.StartDate
+	endDate := timeRange.EndDate
+	for startDate.Before(endDate) {
+		income, err := service.Order().GetDailyOrderIncome(ctx, startDate)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, &model.DailyIncome{
+			Date:   startDate.FormatNew("Y-m-d"),
+			Income: income,
+		})
+		startDate = startDate.AddDate(0, 0, 1)
+	}
+	return
+}

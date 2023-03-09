@@ -136,6 +136,7 @@ var (
 						controller.Config,
 						controller.UserAdmin,
 						controller.CreditAdmin,
+						controller.Visualize,
 					)
 				})
 			})

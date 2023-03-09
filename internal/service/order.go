@@ -32,6 +32,7 @@ type (
 		StartOrder(ctx context.Context, orderCode string) (err error)
 		EndOrder(ctx context.Context, orderCode string) (err error)
 		CancelOrder(ctx context.Context, orderCode string) (err error)
+		GetDailyOrderIncome(ctx context.Context, date *gtime.Time) (income float64, err error)
 	}
 )
 

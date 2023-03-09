@@ -480,3 +480,17 @@ func (o *sOrder) CancelOrder(ctx context.Context, orderCode string) (err error) 
 	}
 	return
 }
+
+func (o *sOrder) GetDailyOrderIncome(ctx context.Context, date *gtime.Time) (income float64, err error) {
+	startDate := date.Format("Y-m-d 00:00:00")
+	endDate := date.Format("Y-m-d 23:59:59")
+	var orders []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("status", consts.PaymentSuccess).Where("time BETWEEN ? AND ?", startDate, endDate).Scan(&orders)
+	if err != nil {
+		return
+	}
+	for _, order := range orders {
+		income += order.Amount
+	}
+	return
+}

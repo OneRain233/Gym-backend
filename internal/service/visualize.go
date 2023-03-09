@@ -14,6 +14,8 @@ type (
 	IVisualize interface {
 		GetFacilityWeeklyUsage(ctx context.Context) (res []*model.FacilityWeeklyUsage, err error)
 		GetFacilityMonthlyUsage(ctx context.Context) (res []*model.FacilityMonthlyUsage, err error)
+		GetWeeklyIncomeForAYear(ctx context.Context) (res []*model.WeeklyIncome, err error)
+		GetDailyIncome(ctx context.Context, timeRange *model.TimeRange) (res []*model.DailyIncome, err error)
 	}
 )
 
