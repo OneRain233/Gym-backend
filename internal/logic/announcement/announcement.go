@@ -34,6 +34,8 @@ func (s *sAnnouncement) AddAnnouncement(ctx context.Context, input *model.AddAnn
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),
 		UserId:     service.Session().GetUser(ctx).Id,
+		Delete:     0,
+		Images:     input.Images,
 	}
 	_, err := dao.Announcement.Ctx(ctx).Insert(announcement)
 	if err != nil {
