@@ -16,9 +16,8 @@ type GetConfigRes struct {
 }
 
 type UpdateConfigReq struct {
-	g.Meta `path:"/config/update" tags:"Config" method:"post" summary:"Update Config"`
-	Key    string `json:"key" v:"required#Please input key"`
-	Value  string `json:"value" v:"required#Please input value"`
+	g.Meta  `path:"/config/update" tags:"Config" method:"post" summary:"Update Config"`
+	Configs []*entity.Config `json:"configs" v:"required#Please input config"`
 }
 
 type UpdateConfigRes struct {

@@ -23,13 +23,16 @@ func (c *cConfig) GetConfig(ctx context.Context, req *v1.GetConfigReq) (res *v1.
 
 func (c *cConfig) UpdateConfig(ctx context.Context, req *v1.UpdateConfigReq) (res *v1.UpdateConfigRes, err error) {
 	res = &v1.UpdateConfigRes{}
-	config := &model.Config{
-		Key:   req.Key,
-		Value: req.Value,
-	}
-	err = service.Config().UpdateConfig(ctx, config)
-	if err != nil {
-		return
+	configs := req.Configs
+	for _, config := range configs {
+		err = service.Config().UpdateConfig(ctx, &model.Config{
+			Key:   config.Key,
+			Value: config.Value,
+			Type:  config.Type,
+		})
+		if err != nil {
+			return
+		}
 	}
 	return
 }
