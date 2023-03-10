@@ -70,7 +70,10 @@ func (c *cUser) ChangePassword(ctx context.Context, req *v1.ChangePasswdReq) (re
 		err = gerror.New("The two passwords do not match")
 		return
 	}
-
+	if newPassword == oldPassword {
+		err = gerror.New("The new password cannot be the same as the old password")
+		return
+	}
 	user := service.Session().GetUser(ctx)
 
 	err = service.User().UpdatePassword(ctx, user, newPassword, oldPassword)
