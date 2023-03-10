@@ -44,3 +44,18 @@ func (c *cAnnouncementAdmin) DeleteAnnouncement(ctx context.Context, req *v1.Del
 	}
 	return
 }
+
+func (c *cAnnouncementAdmin) ModifyAnnouncement(ctx context.Context, req *v1.ModifyAnnouncementReq) (res *v1.ModifyAnnouncementRes, err error) {
+	res = &v1.ModifyAnnouncementRes{}
+	form := model.ModifyAnnouncement{
+		Id:      req.Id,
+		Title:   req.Title,
+		Content: req.Content,
+		Images:  req.Images,
+	}
+	err = service.Announcement().ModifyAnnouncement(ctx, &form)
+	if err != nil {
+		return
+	}
+	return
+}
