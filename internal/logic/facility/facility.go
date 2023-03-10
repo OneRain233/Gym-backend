@@ -339,7 +339,8 @@ func (s *sFacility) GetOccupiedFacilityPlaces(ctx context.Context, placeId int) 
 	}
 	// get all the orders
 	var orders []*entity.Order
-	err = dao.Order.Ctx(ctx).Where("place_id", placeId).Scan(&orders)
+	// where place_id = placeId and (status = 1 or status = 2)
+	err = dao.Order.Ctx(ctx).Where("place_id = ? and (status = ? or status = ?)", placeId, 1, 2).Scan(&orders)
 	if err != nil {
 		return
 	}
