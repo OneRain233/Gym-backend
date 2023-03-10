@@ -23,6 +23,7 @@ type ConfigColumns struct {
 	Id    string //
 	Key   string //
 	Value string //
+	Type  string //
 }
 
 // configColumns holds the columns for table config.
@@ -30,6 +31,7 @@ var configColumns = ConfigColumns{
 	Id:    "id",
 	Key:   "key",
 	Value: "value",
+	Type:  "type",
 }
 
 // NewConfigDao creates and returns a new DAO object for table data access.

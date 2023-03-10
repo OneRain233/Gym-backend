@@ -45,10 +45,13 @@ var (
 			status := g.Cfg().MustGet(gctx.New(), "customConfigUpdate").Uint()
 			if status == 1 {
 				customConfigs, _ := g.Cfg().Get(gctx.New(), "customConfig")
-				for k, v := range customConfigs.Map() {
+				for k, _ := range customConfigs.Map() {
+					value := g.Cfg().MustGet(gctx.New(), "customConfig."+k+".Value").String()
+					valType := g.Cfg().MustGet(gctx.New(), "customConfig."+k+".Type").String()
 					config := &model.Config{
 						Key:   k,
-						Value: strings.TrimSpace(gconv.String(v)),
+						Value: strings.TrimSpace(gconv.String(value)),
+						Type:  valType,
 					}
 					err := service.Config().UpdateConfig(gctx.New(), config)
 					if err != nil {

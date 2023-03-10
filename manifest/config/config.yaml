@@ -33,5 +33,9 @@ timeZone: "Asia/Shanghai"
 customConfigUpdate: 1 # 0 - Dont update when start up
                       # 1 - Update when start up
 customConfig:
-  OpenTime: "08:00"
-  CloseTime: "22:00"
+  OpenTime:
+    Value: "08:00"
+    Type: "time"
+  CloseTime:
+    Value: "22:00"
+    Type: "time"

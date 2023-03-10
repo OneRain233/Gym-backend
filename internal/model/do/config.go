@@ -14,4 +14,5 @@ type Config struct {
 	Id     interface{} //
 	Key    interface{} //
 	Value  interface{} //
+	Type   interface{} //
 }
