@@ -16,6 +16,7 @@ type (
 		GetBanks(ctx context.Context) (banks []*entity.Bank, err error)
 		GetBankById(ctx context.Context, bankId int) (bank *entity.Bank, err error)
 		AddBank(ctx context.Context, form *model.AddBankForm) error
+		ValidateBankName(ctx context.Context, name string) error
 		UpdateBank(ctx context.Context, form *model.UpdateBankForm) error
 		DeleteBank(ctx context.Context, bankId int) error
 	}
