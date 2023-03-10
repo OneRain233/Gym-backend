@@ -55,6 +55,10 @@ func (s *sCard) ValidatePhone(ctx context.Context, input *model.BindCardForm) er
 	if !gregex.IsMatchString(`^1[3-9]\d{9}$`, input.Phone) {
 		return gerror.New("phone format is not correct")
 	}
+	// check length of phone
+	if len(input.Phone) != 11 {
+		return gerror.New("phone length is not correct")
+	}
 	return nil
 }
 
