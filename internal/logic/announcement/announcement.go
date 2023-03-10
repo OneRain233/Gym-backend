@@ -1,11 +1,13 @@
 package announcement
 
 import (
+	_ "Gym-backend/api/v1"
 	"Gym-backend/internal/dao"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
@@ -51,4 +53,25 @@ func (s *sAnnouncement) DeleteAnnouncement(ctx context.Context, id int) error {
 		return err
 	}
 	return nil
+}
+
+func (s *sAnnouncement) ModifyAnnouncement(ctx context.Context, input *model.ModifyAnnouncement) error {
+	if input.Id == 0 {
+		err := gerror.New("id is empty")
+		return err
+	}
+	announcement := entity.Announcement{
+		Title:      input.Title,
+		Content:    input.Content,
+		UpdateTime: gtime.Now(),
+		UserId:     service.Session().GetUser(ctx).Id,
+		Delete:     0,
+		Images:     input.Images,
+	}
+	_, err := dao.Announcement.Ctx(ctx).Where("id", input.Id).Update(announcement)
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
