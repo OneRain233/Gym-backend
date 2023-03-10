@@ -27,6 +27,7 @@ func (c *cAnnouncementAdmin) AddAnnouncement(ctx context.Context, req *v1.AddAnn
 	form := model.AddAnnouncement{
 		Title:   req.Title,
 		Content: req.Content,
+		Images:  req.Images,
 	}
 	err = service.Announcement().AddAnnouncement(ctx, &form)
 	if err != nil {

@@ -25,6 +25,8 @@ type AnnouncementColumns struct {
 	Content    string // Content
 	UpdateTime string // Update time
 	UserId     string // User ID
+	Delete     string //
+	Images     string //
 }
 
 // announcementColumns holds the columns for table announcement.
@@ -34,6 +36,8 @@ var announcementColumns = AnnouncementColumns{
 	Content:    "content",
 	UpdateTime: "update_time",
 	UserId:     "user_id",
+	Delete:     "delete",
+	Images:     "images",
 }
 
 // NewAnnouncementDao creates and returns a new DAO object for table data access.

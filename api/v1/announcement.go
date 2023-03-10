@@ -2,7 +2,6 @@ package v1
 
 import (
 	"Gym-backend/internal/model/entity"
-
 	"github.com/gogf/gf/v2/frame/g"
 )
 
@@ -19,6 +18,7 @@ type AddAnnouncementReq struct {
 	g.Meta  `path:"/announcement/add" method:"post" mime:"application/json" tags:"Announcement" summary:"Add announcement"`
 	Title   string `json:"title" v:"required#Please input announcement title"`
 	Content string `json:"content" v:"required#Please input announcement content"`
+	Images  string `json:"images"`
 }
 
 type AddAnnouncementRes struct {
