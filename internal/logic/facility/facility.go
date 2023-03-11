@@ -151,24 +151,6 @@ func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityFor
 
 // ValidateAddFacility validates the facility.
 func (s *sFacility) ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error) {
-	if facility.Name == "" {
-		err = gerror.New("Name is empty")
-		return
-	}
-	if facility.Description == "" {
-		err = gerror.New("Description is empty")
-		return
-	}
-	if facility.Location == "" {
-		err = gerror.New("Location is empty")
-		return
-	}
-
-	if facility.Images == nil {
-		err = gerror.New("Images is empty")
-		return
-	}
-
 	cnt, err := dao.Facility.Ctx(ctx).Where("name", facility.Name).Count()
 	if err != nil {
 		return
