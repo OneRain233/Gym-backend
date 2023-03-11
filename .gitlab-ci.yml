@@ -48,6 +48,8 @@ deploy:
   stage: deploy
   tags:
     - shell
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
     - echo "Delete previous container"
     - docker stop gym-demo

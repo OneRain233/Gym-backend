@@ -101,3 +101,12 @@ type GetOwnOrderRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
+
+type StartOrderReq struct {
+	g.Meta    `path:"/order/start" method:"post" tags:"Order" summary:"Start order by order code"`
+	OrderCode string `json:"orderCode" v:"required#Please input order code"`
+}
+
+type StartOrderRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

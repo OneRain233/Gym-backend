@@ -219,3 +219,12 @@ func (c *cOrder) GetOwnOrder(ctx context.Context, req *v1.GetOwnOrderReq) (res *
 
 	return
 }
+
+func (c *cOrderAdmin) StartOrder(ctx context.Context, req *v1.StartOrderReq) (res *v1.StartOrderRes, err error) {
+	res = &v1.StartOrderRes{}
+	err = service.Order().StartOrder(ctx, req.OrderCode)
+	if err != nil {
+		return
+	}
+	return
+}
