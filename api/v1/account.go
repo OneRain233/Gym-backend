@@ -101,19 +101,19 @@ type GetUserByIdRes struct {
 
 type UpdateUserReq struct {
 	g.Meta   `path:"/user/update" tags:"Account" method:"post" summary:"Update user"`
-	Id       uint
-	Role     uint
-	Username string
-	Email    string
-	Phone    string
-	Gender   uint
+	Id       uint   `json:"id"`
+	Role     uint   `json:"role"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Phone    string `json:"phone"`
+	Gender   uint   `json:"gender"`
 }
 
 type UserUpdateUserReq struct {
 	g.Meta `path:"/user/profile/update" tags:"Account" method:"post" summary:"Normal User Update user"`
-	Email  string
-	Phone  string
-	Gender uint
+	Email  string `json:"email"`
+	Phone  string `json:"phone"`
+	Gender uint   `json:"gender"`
 }
 
 type UserUpdateUserRes struct {
