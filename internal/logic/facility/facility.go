@@ -149,6 +149,19 @@ func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityFor
 	return
 }
 
+// ValidateAddFacility validates the facility.
+func (s *sFacility) ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error) {
+	cnt, err := dao.Facility.Ctx(ctx).Where("name", facility.Name).Count()
+	if err != nil {
+		return
+	}
+	if cnt > 0 {
+		err = gerror.New("The facility already exists")
+		return
+	}
+	return
+}
+
 // ModifyFacility modifies the facility.
 func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacilityForm) (err error) {
 	// check if all the fields are filled
@@ -164,6 +177,10 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 	}
 	if facility == nil {
 		err = gerror.New("facility not found")
+		return
+	}
+	err = s.ValidateModifyFacility(ctx, input)
+	if err != nil {
 		return
 	}
 	if input.Name != "" {
@@ -189,26 +206,7 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 	return
 }
 
-// ValidateAddFacility validates the facility.
-func (s *sFacility) ValidateAddFacility(ctx context.Context, facility *model.AddFacilityForm) (err error) {
-	if facility.Name == "" {
-		err = gerror.New("Name is empty")
-		return
-	}
-	if facility.Description == "" {
-		err = gerror.New("Description is empty")
-		return
-	}
-	if facility.Location == "" {
-		err = gerror.New("Location is empty")
-		return
-	}
-
-	if facility.Images == nil {
-		err = gerror.New("Images is empty")
-		return
-	}
-
+func (s *sFacility) ValidateModifyFacility(ctx context.Context, facility *model.ModifyFacilityForm) (err error) {
 	cnt, err := dao.Facility.Ctx(ctx).Where("name", facility.Name).Count()
 	if err != nil {
 		return
