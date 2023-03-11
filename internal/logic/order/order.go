@@ -348,7 +348,7 @@ func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) 
 		err = gerror.New("order not found")
 		return
 	}
-	if order.Status != consts.PaymentSuccess {
+	if order.Status != consts.OrderStatusPending {
 		err = gerror.New("order not paid")
 		return
 	}
@@ -491,6 +491,40 @@ func (o *sOrder) GetDailyOrderIncome(ctx context.Context, date *gtime.Time) (inc
 	}
 	for _, order := range orders {
 		income += order.Amount
+	}
+	return
+}
+
+func (o *sOrder) CheckExpiredOrder(ctx context.Context) (err error) {
+	// using order -> done
+	var usingOrder []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("status", consts.OrderStatusDoing).Scan(&usingOrder)
+	if err != nil {
+		return
+	}
+	for _, order := range usingOrder {
+		if order.EndTime.Before(gtime.Now()) {
+			err = o.EndOrder(ctx, order.OrderCode)
+			if err != nil {
+				return
+			}
+		}
+	}
+	// pending order -> start order
+	// TODO: I think it should refund the money
+	var pendingOrder []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("status", consts.OrderStatusPending).Scan(&pendingOrder)
+	if err != nil {
+		return
+	}
+	for _, order := range pendingOrder {
+		if order.StartTime.Before(gtime.Now()) {
+			// refund
+			err = o.RefundOrder(ctx, order.OrderCode)
+			if err != nil {
+				return
+			}
+		}
 	}
 	return
 }

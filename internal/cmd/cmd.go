@@ -3,6 +3,7 @@ package cmd
 import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/cron"
 	"Gym-backend/utility/response"
 	"context"
 	"encoding/base64"
@@ -89,6 +90,13 @@ var (
 					g.Log().Fatal(gctx.New(), err)
 				}
 			}
+
+			// cron job
+			err = cron.OrderExpired()
+			if err != nil {
+				g.Log().Fatal(gctx.New(), err)
+			}
+
 			s.AddStaticPath("/uploads", uploadPath)
 
 			s.Group("/api/v1", func(group *ghttp.RouterGroup) {
