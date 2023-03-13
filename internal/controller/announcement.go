@@ -24,6 +24,7 @@ func (c *cAnnouncement) GetAllAnnouncement(ctx context.Context, req *v1.GetAnnou
 
 func (c *cAnnouncementAdmin) AddAnnouncement(ctx context.Context, req *v1.AddAnnouncementReq) (res *v1.AddAnnouncementRes, err error) {
 	res = &v1.AddAnnouncementRes{}
+
 	form := model.AddAnnouncement{
 		Title:   req.Title,
 		Content: req.Content,
