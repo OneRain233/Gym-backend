@@ -211,7 +211,7 @@ func (s *sFacility) ValidateModifyFacility(ctx context.Context, facility *model.
 	if err != nil {
 		return
 	}
-	if cnt > 0 {
+	if cnt > 1 {
 		err = gerror.New("The facility already exists")
 		return
 	}
