@@ -209,3 +209,21 @@ func TestGetFacilityDetail(t *testing.T) {
 	})
 
 }
+
+func TestDeleteFacility(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"id": 8,
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/delete", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
