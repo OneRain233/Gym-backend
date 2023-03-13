@@ -176,6 +176,69 @@ func TestGetUserInfo(t *testing.T) {
 	})
 }
 
+func TestGetUserList(t *testing.T) {
+	ctx := gctx.New()
+
+	normalUserLogin()
+
+	// define the request object
+	req := map[string]interface{}{
+		"page":     1,
+		"pageSize": 10,
+	}
+
+	// test getting user list
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/user/list", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+
+		// decode response JSON
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+
+		// check response fields
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+		t.Assert(respJson.Get("data.data.total"), 2)
+	})
+}
+
+func TestGetUserSearch(t *testing.T) {
+	ctx := gctx.New()
+
+	normalUserLogin()
+
+	// define the request object
+	req := map[string]interface{}{
+		"page":     1,
+		"pageSize": 10,
+		"username": "2332",
+	}
+
+	// test getting user list
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/user/search", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+
+		// decode response JSON
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+
+		// check response fields
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+		t.Assert(respJson.Get("data.data.total"), 1)
+	})
+}
+
+func TestGetUserById(t *testing.T) {
+
+}
+
 func TestGetFacility(t *testing.T) {
 	ctx := gctx.New()
 	gtest.C(t, func(t *gtest.T) {
@@ -218,6 +281,210 @@ func TestDeleteFacility(t *testing.T) {
 
 	gtest.C(t, func(t *gtest.T) {
 		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/delete", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestGetFacilityList(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"page":     1,
+		"pageSize": 10,
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/list", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+		t.Assert(respJson.Get("data.data.total"), 1)
+	})
+}
+
+func TestGetFacilitySearch(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"page":     1,
+		"pageSize": 10,
+		"name":     "2332",
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/search", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+		t.Assert(respJson.Get("data.data.total"), 1)
+	})
+}
+
+func TestAddFacility(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"name":        "2332",
+		"description": "2332",
+		"places":      []int{1},
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/add", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestUpdateFacility(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"id":          8,
+		"name":        "2332",
+		"description": "2332",
+		"places":      []int{1},
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/facility/update", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestGetPlace(t *testing.T) {
+	ctx := gctx.New()
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Get(ctx, "/api/v1/place")
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestAddPlace(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"name": "2332",
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/place/add", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestModifyPlace(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"id":   1,
+		"name": "2332",
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/place/modify", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestOccupiedPlace(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"id": 1,
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/place/occupied", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestGetAnnouncement(t *testing.T) {
+	ctx := gctx.New()
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Get(ctx, "/api/v1/announcement")
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestAddAnnouncement(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"title":   "2332",
+		"content": "2332",
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/announcement/add", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		t.Assert(resp.StatusCode, 200)
+		respJson, err := gjson.DecodeToJson(resp.ReadAllString())
+		t.Assert(err, nil)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+func TestModifyAnnouncement(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"id":      1,
+		"title":   "2332",
+		"content": "2332",
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/announcement/modify", req)
 		t.Assert(err, nil)
 		t.AssertNE(resp, nil)
 		t.Assert(resp.StatusCode, 200)
