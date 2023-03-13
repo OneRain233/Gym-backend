@@ -60,9 +60,9 @@ type LogoutRes struct {
 
 type ChangePasswdReq struct {
 	g.Meta          `path:"/change-passwd" tags:"Account" method:"post" summary:"Change password"`
-	OldPassword     string `v:"required#Please input old password"`
-	NewPassword     string `v:"required#Please input new password"`
-	ConfirmPassword string `v:"required#Please input confirm password"`
+	OldPassword     string `v:"required#Please input old password" json:"old_password"`
+	NewPassword     string `v:"required#Please input new password" json:"new_password"`
+	ConfirmPassword string `v:"required#Please input confirm password" json:"confirm_password"`
 }
 
 type ChangePasswdRes struct {
