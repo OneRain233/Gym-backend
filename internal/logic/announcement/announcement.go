@@ -31,13 +31,18 @@ func (s *sAnnouncement) GetAnnouncements(ctx context.Context) (announcements []*
 }
 
 func (s *sAnnouncement) AddAnnouncement(ctx context.Context, input *model.AddAnnouncement) error {
+
+	var images string
+	for _, image := range input.Images {
+		images += image + ","
+	}
 	announcement := entity.Announcement{
 		Title:      input.Title,
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),
 		UserId:     service.Session().GetUser(ctx).Id,
 		Delete:     0,
-		Images:     input.Images,
+		Images:     images,
 	}
 	_, err := dao.Announcement.Ctx(ctx).Insert(announcement)
 	if err != nil {
@@ -60,13 +65,17 @@ func (s *sAnnouncement) ModifyAnnouncement(ctx context.Context, input *model.Mod
 		err := gerror.New("id is empty")
 		return err
 	}
+	var images string
+	for _, image := range input.Images {
+		images += image + ","
+	}
 	announcement := entity.Announcement{
 		Title:      input.Title,
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),
 		UserId:     service.Session().GetUser(ctx).Id,
 		Delete:     0,
-		Images:     input.Images,
+		Images:     images,
 	}
 	_, err := dao.Announcement.Ctx(ctx).Where("id", input.Id).Update(announcement)
 	if err != nil {

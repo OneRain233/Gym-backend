@@ -16,9 +16,9 @@ type GetAnnouncementsRes struct {
 
 type AddAnnouncementReq struct {
 	g.Meta  `path:"/announcement/add" method:"post" mime:"application/json" tags:"Announcement" summary:"Add announcement"`
-	Title   string `json:"title" v:"required#Please input announcement title"`
-	Content string `json:"content" v:"required#Please input announcement content"`
-	Images  string `json:"images"`
+	Title   string   `json:"title" v:"required#Please input announcement title"`
+	Content string   `json:"content" v:"required#Please input announcement content"`
+	Images  []string `json:"images"`
 }
 
 type AddAnnouncementRes struct {
@@ -36,10 +36,10 @@ type DeleteAnnouncementRes struct {
 
 type ModifyAnnouncementReq struct {
 	g.Meta  `path:"/announcement/modify" method:"post" mime:"application/json" tags:"Announcement" summary:"Modify announcement"`
-	Id      int    `json:"id" v:"required#Please input announcement id"`
-	Title   string `json:"title" v:"required#Please input announcement title"`
-	Content string `json:"content" v:"required#Please input announcement content"`
-	Images  string `json:"images"`
+	Id      int      `json:"id" v:"required#Please input announcement id"`
+	Title   string   `json:"title" v:"required#Please input announcement title"`
+	Content string   `json:"content" v:"required#Please input announcement content"`
+	Images  []string `json:"images"`
 }
 
 type ModifyAnnouncementRes struct {
