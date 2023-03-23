@@ -39,3 +39,8 @@ const (
 	GenderFemale = 2
 	GenderOther  = 3
 )
+
+const (
+	SubscriptionTypeMonth = 1
+	SubscriptionTypeYear  = 2
+)

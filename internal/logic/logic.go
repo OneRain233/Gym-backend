@@ -19,6 +19,7 @@ import (
 	_ "Gym-backend/internal/logic/place"
 	_ "Gym-backend/internal/logic/receipt"
 	_ "Gym-backend/internal/logic/session"
+	_ "Gym-backend/internal/logic/subscription"
 	_ "Gym-backend/internal/logic/user"
 	_ "Gym-backend/internal/logic/visualize"
 	_ "Gym-backend/internal/logic/wallet"

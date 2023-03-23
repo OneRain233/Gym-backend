@@ -15,6 +15,7 @@ type (
 	IWallet interface {
 		GetWallet(ctx context.Context) (wallet *entity.Wallet, err error)
 		Pay(ctx context.Context, input *model.WalletPayForm) error
+		PayForSubscription(ctx context.Context, input *model.WalletPayForm) error
 		GetFullWalletInfo(ctx context.Context) (walletInfo *model.WalletInfo, err error)
 		CreateWallet(ctx context.Context) error
 		CreateWalletForUser(ctx context.Context, userId int) error

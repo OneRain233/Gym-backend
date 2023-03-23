@@ -15,6 +15,5 @@ type Announcement struct {
 	Content    string      `json:"content"    ` // Content
 	UpdateTime *gtime.Time `json:"updateTime" ` // Update time
 	UserId     int         `json:"userId"     ` // User ID
-	Delete     int         `json:"delete"     ` //
 	Images     string      `json:"images"     ` //
 }

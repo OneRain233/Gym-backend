@@ -17,6 +17,5 @@ type Announcement struct {
 	Content    interface{} // Content
 	UpdateTime *gtime.Time // Update time
 	UserId     interface{} // User ID
-	Delete     interface{} //
 	Images     interface{} //
 }

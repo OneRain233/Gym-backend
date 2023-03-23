@@ -15,5 +15,5 @@ type Subscription struct {
 	Id        interface{} // ID
 	UserId    interface{} //
 	StartTime *gtime.Time //
-	ENDTIME   *gtime.Time //
+	EndTime   *gtime.Time //
 }

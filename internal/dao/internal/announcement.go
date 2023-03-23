@@ -25,7 +25,6 @@ type AnnouncementColumns struct {
 	Content    string // Content
 	UpdateTime string // Update time
 	UserId     string // User ID
-	Delete     string //
 	Images     string //
 }
 
@@ -36,7 +35,6 @@ var announcementColumns = AnnouncementColumns{
 	Content:    "content",
 	UpdateTime: "update_time",
 	UserId:     "user_id",
-	Delete:     "delete",
 	Images:     "images",
 }
 

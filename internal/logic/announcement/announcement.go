@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -41,8 +42,8 @@ func (s *sAnnouncement) AddAnnouncement(ctx context.Context, input *model.AddAnn
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),
 		UserId:     service.Session().GetUser(ctx).Id,
-		Delete:     0,
-		Images:     images,
+		//Delete:     0,
+		Images: images,
 	}
 	_, err := dao.Announcement.Ctx(ctx).Insert(announcement)
 	if err != nil {
@@ -74,8 +75,8 @@ func (s *sAnnouncement) ModifyAnnouncement(ctx context.Context, input *model.Mod
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),
 		UserId:     service.Session().GetUser(ctx).Id,
-		Delete:     0,
-		Images:     images,
+		//Delete:     0,
+		Images: images,
 	}
 	_, err := dao.Announcement.Ctx(ctx).Where("id", input.Id).Update(announcement)
 	if err != nil {

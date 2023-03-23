@@ -77,6 +77,27 @@ func (s *sWallet) Pay(ctx context.Context, input *model.WalletPayForm) error {
 	})
 }
 
+func (s *sWallet) PayForSubscription(ctx context.Context, input *model.WalletPayForm) error {
+	return dao.Wallet.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		userId := service.Session().GetUser(ctx).Id
+		var wallet *entity.Wallet
+		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+		if err != nil {
+			return err
+		}
+		if wallet.Status != consts.WalletStatusNormal {
+			return gerror.New("wallet is frozen")
+		}
+
+		wallet.Amount -= input.Amount
+		_, err = dao.Wallet.Ctx(ctx).Where("id", wallet.Id).Update(wallet)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
 func (s *sWallet) GetFullWalletInfo(ctx context.Context) (walletInfo *model.WalletInfo, err error) {
 	user := service.Session().GetUser(ctx)
 	userId := user.Id

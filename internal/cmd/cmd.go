@@ -129,6 +129,7 @@ var (
 						controller.Wallet,
 						controller.Credit,
 						controller.File,
+						controller.Subscription,
 					)
 				})
 

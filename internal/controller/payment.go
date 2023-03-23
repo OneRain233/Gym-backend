@@ -19,9 +19,10 @@ type cPaymentAdmin struct{}
 func (c *cPayment) CreatePayment(ctx context.Context, req *v1.CreatePaymentReq) (res *v1.CreatePaymentRes, err error) {
 	res = &v1.CreatePaymentRes{}
 	form := model.CreatePaymentForm{
-		OrderCode:   req.OrderCode,
-		PaymentType: req.PaymentType,
-		CardId:      req.CardId,
+		OrderCode:      req.OrderCode,
+		PaymentType:    req.PaymentType,
+		CardId:         req.CardId,
+		IsSubscription: false,
 	}
 	resp, err := service.Payment().CreatePayment(ctx, &form)
 	if err != nil {

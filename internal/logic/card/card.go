@@ -167,6 +167,40 @@ func (s *sCard) Pay(ctx context.Context, input *model.CardPayForm) error {
 
 }
 
+func (s *sCard) PayForSubscription(ctx context.Context, input *model.CardPayForm) error {
+	return dao.WalletCard.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		userId := service.Session().GetUser(ctx).Id
+		var wallet *entity.Wallet
+		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+		var card *entity.WalletCard
+		err = dao.WalletCard.Ctx(ctx).Where("id", input.CardId).Scan(&card)
+		if err != nil {
+			return err
+		}
+
+		// validate card
+		if card == nil {
+			return gerror.New("card not exists")
+		}
+		if card.WalletId != wallet.Id {
+			return gerror.New("card not belongs to you")
+		}
+
+		if card.Amount < input.Amount {
+			return gerror.New("amount not enough")
+		}
+
+		card.Amount -= input.Amount
+		_, err = dao.WalletCard.Ctx(ctx).Data(card).Save()
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+}
+
 func (s *sCard) Recharge(ctx context.Context, input *model.CardRechargeForm) error {
 	userId := service.Session().GetUser(ctx).Id
 	var wallet *entity.Wallet

@@ -13,5 +13,5 @@ type Subscription struct {
 	Id        int         `json:"id"        ` // ID
 	UserId    int         `json:"userId"    ` //
 	StartTime *gtime.Time `json:"startTime" ` //
-	ENDTIME   *gtime.Time `json:"eNDTIME"   ` //
+	EndTime   *gtime.Time `json:"endTime"   ` //
 }
