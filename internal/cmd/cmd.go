@@ -150,6 +150,7 @@ var (
 						controller.UserAdmin,
 						controller.CreditAdmin,
 						controller.Visualize,
+						controller.EvaluationAdmin,
 					)
 				})
 			})

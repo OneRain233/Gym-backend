@@ -14,8 +14,16 @@ import (
 type (
 	IEvaluation interface {
 		AddEvaluation(ctx context.Context, form *model.AddEvaluationForm) error
-		ValidateEvaluation(ctx context.Context, form *model.AddEvaluationForm) error
+		ValidateAddEvaluation(ctx context.Context, form *model.AddEvaluationForm) error
+		ValidateUpdateEvaluation(ctx context.Context, form *model.UpdateEvaluationForm) error
 		GetEvaluationByFacilityIdAndUserId(ctx context.Context, userId int, facilityId int) (evaluation *entity.Evaluation, err error)
+		GetAllEvaluations(ctx context.Context) (evaluations []*entity.Evaluation, err error)
+		GetEvaluationsByUserId(ctx context.Context, userId int) (evaluations []*entity.Evaluation, err error)
+		GetEvaluationByFacilityId(ctx context.Context, facilityId int) (evaluations []*entity.Evaluation, err error)
+		DeleteEvaluationByUserIdAndFacilityId(ctx context.Context, userId int, facilityId int) error
+		DeleteEvaluationById(ctx context.Context, id int) error
+		GetEvaluationById(ctx context.Context, id int) (evaluation *entity.Evaluation, err error)
+		UpdateEvaluation(ctx context.Context, form *model.UpdateEvaluationForm) error
 	}
 )
 
