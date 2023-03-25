@@ -11,6 +11,7 @@ import (
 	_ "Gym-backend/internal/logic/card"
 	_ "Gym-backend/internal/logic/config"
 	_ "Gym-backend/internal/logic/credit"
+	_ "Gym-backend/internal/logic/evaluation"
 	_ "Gym-backend/internal/logic/facility"
 	_ "Gym-backend/internal/logic/file"
 	_ "Gym-backend/internal/logic/middleware"

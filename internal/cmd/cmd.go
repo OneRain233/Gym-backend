@@ -130,6 +130,7 @@ var (
 						controller.Credit,
 						controller.File,
 						controller.Subscription,
+						controller.Evaluation,
 					)
 				})
 
