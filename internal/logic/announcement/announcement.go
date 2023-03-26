@@ -71,6 +71,7 @@ func (s *sAnnouncement) ModifyAnnouncement(ctx context.Context, input *model.Mod
 		images += image + ","
 	}
 	announcement := entity.Announcement{
+		Id:         input.Id,
 		Title:      input.Title,
 		Content:    input.Content,
 		UpdateTime: gtime.Now(),

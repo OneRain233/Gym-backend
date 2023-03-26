@@ -1,5 +1,7 @@
 package model
 
+import "Gym-backend/internal/model/entity"
+
 type UserLoginForm struct {
 	Username string
 	Password string
@@ -20,4 +22,9 @@ type UserUpdateForm struct {
 	Email    string
 	Phone    string
 	Gender   uint
+}
+
+type UserProfileWithCredit struct {
+	User   *entity.User
+	Credit *entity.Credit
 }
