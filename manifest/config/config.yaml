@@ -39,3 +39,7 @@ customConfig:
   CloseTime:
     Value: "22:00"
     Type: "time"
+
+  Subscription:
+    Value: "10"
+    Type: "string"

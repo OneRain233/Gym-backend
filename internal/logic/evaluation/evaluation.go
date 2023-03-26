@@ -188,3 +188,19 @@ func (c *sEvaluation) UpdateEvaluation(ctx context.Context, form *model.UpdateEv
 	}
 	return nil
 }
+
+func (c *sEvaluation) GetFacilityScore(ctx context.Context, facilityId int) (score int, err error) {
+	evaluations, err := c.GetEvaluationByFacilityId(ctx, facilityId)
+	if err != nil {
+		return
+	}
+	if len(evaluations) == 0 {
+		return
+	}
+	var total int
+	for _, evaluation := range evaluations {
+		total += evaluation.Score
+	}
+	score = total / len(evaluations)
+	return
+}

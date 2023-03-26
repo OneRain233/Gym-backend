@@ -50,6 +50,20 @@ func (s *sSubscription) GetSubscriptionListByUserId(ctx context.Context, userId 
 func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.CreateSubscriptionForm) error {
 	userId := form.UserId
 	paymentType := form.PaymentType
+	amount, err := service.Config().GetConfigByKey(ctx, "Subscription")
+	if err != nil {
+		return err
+	}
+	if amount.Value == "" {
+		return gerror.New("Subscription config not found")
+	}
+	// convert string 2 int
+	amountVal := 0
+	amountVal, err = strconv.Atoi(amount.Value)
+	if err != nil {
+		return err
+	}
+
 	endDay, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
 	if err != nil {
 		return err
@@ -63,7 +77,7 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 		if paymentType == consts.PaymentTypeCard {
 			cardPaymentForm := &model.CardPayForm{
 				CardId: form.CardId,
-				Amount: 1, // TODO
+				Amount: float64(amountVal),
 			}
 			err = service.Card().PayForSubscription(ctx, cardPaymentForm)
 			if err != nil {
@@ -71,7 +85,7 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 			}
 		} else if paymentType == consts.PaymentTypeWallet {
 			walletPayForm := &model.WalletPayForm{
-				Amount: 1, // TODO
+				Amount: float64(amountVal),
 			}
 			err = service.Wallet().PayForSubscription(ctx, walletPayForm)
 			if err != nil {

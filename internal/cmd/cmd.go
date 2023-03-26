@@ -7,6 +7,7 @@ import (
 	"Gym-backend/utility/response"
 	"context"
 	"encoding/base64"
+	"fmt"
 	"strings"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -49,6 +50,7 @@ var (
 				for k, _ := range customConfigs.Map() {
 					value := g.Cfg().MustGet(gctx.New(), "customConfig."+k+".Value").String()
 					valType := g.Cfg().MustGet(gctx.New(), "customConfig."+k+".Type").String()
+					fmt.Println(k, value, valType)
 					config := &model.Config{
 						Key:   k,
 						Value: strings.TrimSpace(gconv.String(value)),
