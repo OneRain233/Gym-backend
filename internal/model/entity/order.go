@@ -19,4 +19,5 @@ type Order struct {
 	Amount    float64     `json:"amount"    ` // Amount of the order
 	OrderCode string      `json:"orderCode" ` // Order code
 	Status    int         `json:"status"    ` // Status of the order
+	Discount  float64     `json:"discount"  ` //
 }

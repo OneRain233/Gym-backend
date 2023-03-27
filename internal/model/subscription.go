@@ -2,7 +2,7 @@ package model
 
 type CreateSubscriptionForm struct {
 	UserId      int
-	Days        int
+	Type        int
 	PaymentType int
 	CardId      int
 }

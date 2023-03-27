@@ -115,6 +115,7 @@ var (
 					controller.Bank,
 					controller.BankAdmin, //TODO: Move this to do auth
 					controller.Announcement,
+					controller.SubscriptionUnauthorized,
 				)
 
 				// Normal user

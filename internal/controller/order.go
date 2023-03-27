@@ -124,7 +124,7 @@ func (c *cOrderAdmin) GetOrderByPlaceId(ctx context.Context, req *v1.GetOrderByP
 	return
 }
 
-func (c *cOrderAdmin) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderByOrderCodeReq) (res *v1.GetOrderByOrderCodeRes, err error) {
+func (c *cOrder) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderByOrderCodeReq) (res *v1.GetOrderByOrderCodeRes, err error) {
 	res = &v1.GetOrderByOrderCodeRes{}
 	var order *entity.Order
 	order, err = service.Order().GetOrderByOrderCode(ctx, req.OrderCode)
@@ -133,6 +133,10 @@ func (c *cOrderAdmin) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderB
 	}
 	if order == nil {
 		err = gerror.New("order not found")
+		return
+	}
+	if order.UserId != service.Session().GetUser(ctx).Id {
+		err = gerror.New("permission denied")
 		return
 	}
 	place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)

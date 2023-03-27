@@ -22,3 +22,11 @@ type GetOwnSubscriptionReq struct {
 type GetOwnSubscriptionRes struct {
 	Subscription []*entity.Subscription `json:"subscription"`
 }
+
+type GetSubscriptionTypeReq struct {
+	g.Meta `path:"/subscription/type" tags:"Subscription" method:"post" summary:"Get Subscription Type"`
+}
+
+type GetSubscriptionTypeRes struct {
+	SubscriptionType []*entity.SubscriptionType `json:"subscription_type"`
+}

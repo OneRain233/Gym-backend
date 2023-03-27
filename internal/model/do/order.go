@@ -21,4 +21,5 @@ type Order struct {
 	Amount    interface{} // Amount of the order
 	OrderCode interface{} // Order code
 	Status    interface{} // Status of the order
+	Discount  interface{} //
 }

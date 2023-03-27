@@ -25,6 +25,24 @@ func New() *sSubscription {
 	return &sSubscription{}
 }
 
+func (s *sSubscription) GetTypesOfSubscription(ctx context.Context) (res []*entity.SubscriptionType, err error) {
+	res = make([]*entity.SubscriptionType, 0)
+	err = dao.SubscriptionType.Ctx(ctx).Scan(&res)
+	return
+}
+
+func (s *sSubscription) GetSubscriptionPermissionById(ctx context.Context, permissionId int) (res *entity.SubscriptionPermission, err error) {
+	res = &entity.SubscriptionPermission{}
+	err = dao.SubscriptionPermission.Ctx(ctx).Where("id", permissionId).Scan(res)
+	return
+}
+
+func (s *sSubscription) GetSubscriptionTypeById(ctx context.Context, id int) (res *entity.SubscriptionType, err error) {
+	res = &entity.SubscriptionType{}
+	err = dao.SubscriptionType.Ctx(ctx).Where("id", id).Scan(res)
+	return
+}
+
 func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (res *gtime.Time, err error) {
 	res = gtime.Now()
 	var allSubscription []*entity.Subscription
@@ -47,22 +65,21 @@ func (s *sSubscription) GetSubscriptionListByUserId(ctx context.Context, userId 
 	return
 }
 
+func (s *sSubscription) GetSubscriptionByUserId(ctx context.Context, userId int) (res *entity.Subscription, err error) {
+	res = &entity.Subscription{}
+	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Scan(res)
+	return
+}
+
 func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.CreateSubscriptionForm) error {
 	userId := form.UserId
 	paymentType := form.PaymentType
-	amount, err := service.Config().GetConfigByKey(ctx, "Subscription")
+	subscriptionType, err := s.GetSubscriptionTypeById(ctx, form.Type)
 	if err != nil {
 		return err
 	}
-	if amount.Value == "" {
-		return gerror.New("Subscription config not found")
-	}
-	// convert string 2 int
-	amountVal := 0
-	amountVal, err = strconv.Atoi(amount.Value)
-	if err != nil {
-		return err
-	}
+	days := subscriptionType.Days
+	amount := subscriptionType.Amount
 
 	endDay, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
 	if err != nil {
@@ -77,7 +94,7 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 		if paymentType == consts.PaymentTypeCard {
 			cardPaymentForm := &model.CardPayForm{
 				CardId: form.CardId,
-				Amount: float64(amountVal),
+				Amount: amount,
 			}
 			err = service.Card().PayForSubscription(ctx, cardPaymentForm)
 			if err != nil {
@@ -85,7 +102,7 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 			}
 		} else if paymentType == consts.PaymentTypeWallet {
 			walletPayForm := &model.WalletPayForm{
-				Amount: float64(amountVal),
+				Amount: amount,
 			}
 			err = service.Wallet().PayForSubscription(ctx, walletPayForm)
 			if err != nil {
@@ -97,7 +114,7 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 		_, err = dao.Subscription.Ctx(ctx).Data(&entity.Subscription{
 			UserId:    userId,
 			StartTime: gtime.Now(),
-			EndTime:   gtime.Now().AddDate(0, 0, form.Days),
+			EndTime:   gtime.Now().AddDate(0, 0, days),
 		}).Insert()
 		return err
 	}

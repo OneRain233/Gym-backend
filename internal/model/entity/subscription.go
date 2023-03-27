@@ -10,8 +10,9 @@ import (
 
 // Subscription is the golang structure for table subscription.
 type Subscription struct {
-	Id        int         `json:"id"        ` // ID
-	UserId    int         `json:"userId"    ` //
-	StartTime *gtime.Time `json:"startTime" ` //
-	EndTime   *gtime.Time `json:"endTime"   ` //
+	Id               int         `json:"id"               ` // ID
+	UserId           int         `json:"userId"           ` //
+	StartTime        *gtime.Time `json:"startTime"        ` //
+	EndTime          *gtime.Time `json:"endTime"          ` //
+	SubscriptionType int         `json:"subscriptionType" ` //
 }

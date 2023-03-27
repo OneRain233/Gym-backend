@@ -30,26 +30,58 @@ func New() *sOrder {
 	return &sOrder{}
 }
 
-func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, err error) {
+func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, discount float64, err error) {
+	unit := 0
 	startTime := input.StartTime
 	endTime := input.EndTime
 	startTimeTime, err := gtime.StrToTime(startTime)
-	endTimeTime, err := gtime.StrToTime(endTime)
-	duration := endTimeTime.Sub(startTimeTime)
-
 	if err != nil {
 		return
 	}
+	endTimeTime, err := gtime.StrToTime(endTime)
+	if err != nil {
+		return
+	}
+	duration := endTimeTime.Sub(startTimeTime)
+	userId := service.Session().GetUser(ctx).Id
+	subscription, err := service.Subscription().GetSubscriptionByUserId(ctx, userId)
+	if err != nil {
+		return
+	}
+	subscriptionType, err := service.Subscription().GetSubscriptionTypeById(ctx, subscription.SubscriptionType)
+	if err != nil {
+		return
+	}
+
+	//place := &entity.FacilityPlace{}
+	place, err := service.Place().GetPlaceById(ctx, input.PlaceId)
+	if err != nil {
+		return
+	}
+
 	if duration.Hours() < 0 {
 		err = gerror.New("invalid time")
 		return
 	}
 	if duration.Hours() < 1 {
-		amount = 1
+		unit = 1
 		return
 	}
-	amount += duration.Hours()
-	return
+	unit = unit + int(duration.Hours()/1)
+
+	if subscriptionType.Name == "monthly" {
+		amount = place.Cost * float64(unit) * 0.8
+		discount = 0.8
+		return
+	} else if subscriptionType.Name == "yearly" {
+		amount = place.Cost * float64(unit) * 0.7
+		discount = 0.7
+		return
+	} else {
+		amount = place.Cost * float64(unit)
+		discount = 1
+		return
+	}
 }
 
 func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error) {
@@ -63,13 +95,8 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 		err = gerror.New("time is taken or invalid")
 		return
 	}
-	// TODO: check amount
-	facilityPlace, err := service.Place().GetPlaceById(ctx, input.PlaceId)
-	if err != nil {
-		err = gerror.New("place not found")
-		return
-	}
-	amountCnt, err := o.CalculateAmount(ctx, input)
+
+	amountCnt, discount, err := o.CalculateAmount(ctx, input)
 	if err != nil {
 		return
 	}
@@ -78,11 +105,11 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 	orderEntity.PlaceId = input.PlaceId
 	orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
 	orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
-	orderEntity.Amount = facilityPlace.Cost * amountCnt
+	orderEntity.Amount = amountCnt
 	orderEntity.Status = consts.OrderStatusWaitingPayment
-	// TODO: order code
 	orderEntity.OrderCode = o.GenerateOrderCode()
 	orderEntity.Time = gtime.Now()
+	orderEntity.Discount = discount
 
 	_, err = dao.Order.Ctx(ctx).Save(orderEntity)
 	response.OrderCode = orderEntity.OrderCode

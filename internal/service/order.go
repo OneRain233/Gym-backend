@@ -15,7 +15,7 @@ import (
 
 type (
 	IOrder interface {
-		CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, err error)
+		CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, discount float64, err error)
 		CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error)
 		GenerateOrderCode() string
 		ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error)

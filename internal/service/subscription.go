@@ -15,8 +15,12 @@ import (
 
 type (
 	ISubscription interface {
+		GetTypesOfSubscription(ctx context.Context) (res []*entity.SubscriptionType, err error)
+		GetSubscriptionPermissionById(ctx context.Context, permissionId int) (res *entity.SubscriptionPermission, err error)
+		GetSubscriptionTypeById(ctx context.Context, id int) (res *entity.SubscriptionType, err error)
 		GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (res *gtime.Time, err error)
 		GetSubscriptionListByUserId(ctx context.Context, userId int) (res []*entity.Subscription, err error)
+		GetSubscriptionByUserId(ctx context.Context, userId int) (res *entity.Subscription, err error)
 		CreateSubscription(ctx context.Context, form *model.CreateSubscriptionForm) error
 		GenerateOrderCode() string
 	}
