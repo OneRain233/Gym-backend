@@ -129,7 +129,11 @@ func (c *cFacilityAdmin) ModifyFacilityPlace(ctx context.Context, req *v1.Modify
 func (c *cFacility) GetOccupiedFacilityPlaces(ctx context.Context, req *v1.OccupiedFacilityPlaceReq) (res *v1.OccupiedFacilityPlaceRes, err error) {
 	res = &v1.OccupiedFacilityPlaceRes{}
 	places, err := service.Facility().GetOccupiedFacilityPlaces(ctx, req.PlaceId)
-	res.Occupied = places
+	if places == nil {
+		res.Occupied = make([]*model.OccupiedFacilityPlace, 0)
+	} else {
+		res.Occupied = places
+	}
 	if err != nil {
 		return
 	}
