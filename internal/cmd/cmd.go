@@ -116,6 +116,7 @@ var (
 					controller.BankAdmin, //TODO: Move this to do auth
 					controller.Announcement,
 					controller.SubscriptionUnauthorized,
+					controller.Tag,
 				)
 
 				// Normal user
@@ -154,6 +155,7 @@ var (
 						controller.CreditAdmin,
 						controller.Visualize,
 						controller.EvaluationAdmin,
+						controller.TagAdmin,
 					)
 				})
 			})

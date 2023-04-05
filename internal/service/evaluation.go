@@ -24,6 +24,7 @@ type (
 		DeleteEvaluationById(ctx context.Context, id int) error
 		GetEvaluationById(ctx context.Context, id int) (evaluation *entity.Evaluation, err error)
 		UpdateEvaluation(ctx context.Context, form *model.UpdateEvaluationForm) error
+		GetFacilityScore(ctx context.Context, facilityId int) (score int, err error)
 	}
 )
 

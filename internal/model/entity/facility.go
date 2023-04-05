@@ -11,4 +11,5 @@ type Facility struct {
 	Description string `json:"description" ` // Facility Description
 	Location    string `json:"location"    ` // Facility Location
 	Images      string `json:"images"      ` // Image urls
+	Tags        string `json:"tags"        ` //
 }

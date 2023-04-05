@@ -6,11 +6,10 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"strconv"
 	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
-
-	"github.com/gogf/gf/v2/frame/g"
 )
 
 type sFacility struct{}
@@ -27,6 +26,26 @@ func (s *sFacility) ProcessImage(images string) []string {
 	return strings.Split(images, ",")
 }
 
+func (s *sFacility) FetchTags(ctx context.Context, facility *entity.Facility) (tags []string, err error) {
+	if facility.Tags == "" {
+		return
+	}
+	tagIdsStr := strings.Split(facility.Tags, ",")
+	for _, tagIdStr := range tagIdsStr {
+		tagId, err := strconv.Atoi(tagIdStr)
+		if err != nil {
+			return nil, gerror.New("tag id is not valid")
+		}
+		var tag *entity.Tag
+		tag, err = service.Tag().GetTagById(ctx, tagId)
+		if err != nil {
+			return nil, gerror.New("tag id is not valid")
+		}
+		tags = append(tags, tag.Name)
+	}
+	return
+}
+
 // GetFacilityList gets the facility list.
 func (s *sFacility) GetFacilityList(ctx context.Context, pagination *model.Pagination) (res []*model.FacilityEntity, err error) {
 	// get all facility first
@@ -40,7 +59,14 @@ func (s *sFacility) GetFacilityList(ctx context.Context, pagination *model.Pagin
 	if err != nil {
 		return
 	}
-
+	// get tags
+	for _, facility := range facilities {
+		tags, err := s.FetchTags(ctx, facility)
+		if err != nil {
+			return nil, err
+		}
+		facility.Tags = strings.Join(tags, ",")
+	}
 	// map the places to facility
 	for _, facility := range facilities {
 		var place []*entity.FacilityPlace
@@ -66,6 +92,11 @@ func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.Fac
 	if err != nil {
 		return
 	}
+	tags, err := s.FetchTags(ctx, res.Facility)
+	if err != nil {
+		return nil, err
+	}
+	res.Facility.Tags = strings.Join(tags, ",")
 	var place []*entity.FacilityPlace
 	err = dao.FacilityPlace.Ctx(ctx).Where("facility_id", id).Scan(&place)
 	if err != nil {
@@ -85,6 +116,11 @@ func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *mo
 	if err != nil {
 		return
 	}
+	tags, err := s.FetchTags(ctx, res.Facility)
+	if err != nil {
+		return nil, err
+	}
+	res.Facility.Tags = strings.Join(tags, ",")
 	var place []*entity.FacilityPlace
 	err = dao.FacilityPlace.Ctx(ctx).Where("id", res.Facility.Id).Scan(&place)
 	if err != nil {
@@ -109,6 +145,12 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 	}
 	// map the places to facility
 	for _, facility := range facilities {
+		if tags, err := s.FetchTags(ctx, facility); err != nil {
+			return nil, err
+		} else {
+			facility.Tags = strings.Join(tags, ",")
+		}
+
 		var place []*entity.FacilityPlace
 		err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
 		if err != nil {
@@ -134,18 +176,29 @@ func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityFor
 	}
 	// convert images to string like "image1,image2,image3"
 	var images string
-	for _, image := range input.Images {
-		images += image + ","
+	//for _, image := range input.Images {
+	//	images += image + ","
+	//}
+	images = strings.Join(input.Images, ",")
+
+	var tags string
+	var tagIds []string
+	for _, tag := range input.TagIds {
+		// to string
+		tagIdStr := strconv.Itoa(tag)
+		tagIds = append(tagIds, tagIdStr)
 	}
+	tags = strings.Join(tagIds, ",")
 
 	var facility = &entity.Facility{
 		Name:        input.Name,
 		Description: input.Description,
 		Location:    input.Location,
 		Images:      images,
+		Tags:        tags,
 	}
 
-	_, err = g.DB().Model("facility").Data(facility).Insert()
+	_, err = dao.Facility.Ctx(ctx).Insert(facility)
 	return
 }
 
@@ -194,12 +247,21 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 	}
 	if input.Images != nil {
 		var images string
-		for _, image := range input.Images {
-			images += image + ","
-		}
+		images = strings.Join(input.Images, ",")
 		facility.Images = images
 	}
-	_, err = g.DB().Model("facility").Data(facility).Where("id", input.Id).Update()
+	if input.TagIds != nil {
+		var tags string
+		var tagIds []string
+		for _, tag := range input.TagIds {
+			// to string
+			tagIdStr := strconv.Itoa(tag)
+			tagIds = append(tagIds, tagIdStr)
+		}
+		tags = strings.Join(tagIds, ",")
+		facility.Tags = tags
+	}
+	_, err = dao.Facility.Ctx(ctx).Where("id", input.Id).Update(facility)
 	if err != nil {
 		return
 	}
@@ -253,7 +315,7 @@ func (s *sFacility) AddFacilityPlace(ctx context.Context, input *model.AddFacili
 		Cost:        input.Cost,
 		Description: input.Description,
 	}
-	_, err = g.DB().Model("facility_place").Data(place).Insert()
+	_, err = dao.FacilityPlace.Ctx(ctx).Insert(place)
 	return
 }
 
@@ -318,7 +380,7 @@ func (s *sFacility) ModifyFacilityPlace(ctx context.Context, input *model.Modify
 		place.FacilityId = input.FacilityId
 	}
 
-	_, err = g.DB().Model("facility_place").Data(place).Where("id", input.Id).Update()
+	_, err = dao.FacilityPlace.Ctx(ctx).Where("id", input.Id).Update(place)
 	return
 }
 

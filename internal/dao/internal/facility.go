@@ -25,6 +25,7 @@ type FacilityColumns struct {
 	Description string // Facility Description
 	Location    string // Facility Location
 	Images      string // Image urls
+	Tags        string //
 }
 
 // facilityColumns holds the columns for table facility.
@@ -34,6 +35,7 @@ var facilityColumns = FacilityColumns{
 	Description: "description",
 	Location:    "location",
 	Images:      "images",
+	Tags:        "tags",
 }
 
 // NewFacilityDao creates and returns a new DAO object for table data access.

@@ -7,12 +7,14 @@ package service
 
 import (
 	"Gym-backend/internal/model"
+	"Gym-backend/internal/model/entity"
 	"context"
 )
 
 type (
 	IFacility interface {
 		ProcessImage(images string) []string
+		FetchTags(ctx context.Context, facility *entity.Facility) (tags []string, err error)
 		GetFacilityList(ctx context.Context, pagination *model.Pagination) (res []*model.FacilityEntity, err error)
 		GetFacilityById(ctx context.Context, id int) (res *model.FacilityEntity, err error)
 		GetFacilityByName(ctx context.Context, name string) (res *model.FacilityEntity, err error)

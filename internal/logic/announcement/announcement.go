@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -34,9 +35,8 @@ func (s *sAnnouncement) GetAnnouncements(ctx context.Context) (announcements []*
 func (s *sAnnouncement) AddAnnouncement(ctx context.Context, input *model.AddAnnouncement) error {
 
 	var images string
-	for _, image := range input.Images {
-		images += image + ","
-	}
+	images = strings.Join(input.Images, ",")
+
 	announcement := entity.Announcement{
 		Title:      input.Title,
 		Content:    input.Content,
@@ -67,9 +67,7 @@ func (s *sAnnouncement) ModifyAnnouncement(ctx context.Context, input *model.Mod
 		return err
 	}
 	var images string
-	for _, image := range input.Images {
-		images += image + ","
-	}
+	images = strings.Join(input.Images, ",")
 	announcement := entity.Announcement{
 		Id:         input.Id,
 		Title:      input.Title,

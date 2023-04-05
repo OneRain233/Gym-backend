@@ -5,6 +5,7 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"context"
+	"strings"
 )
 
 var Evaluation = cEvaluation{}
@@ -52,18 +53,11 @@ func (s *cEvaluationAdmin) GetEvaluations(ctx context.Context, req *v1.AdminGetE
 func (c *cEvaluation) AddEvaluation(ctx context.Context, req *v1.AddEvaluationReq) (res *v1.AddEvaluationRes, err error) {
 	res = &v1.AddEvaluationRes{}
 	videos := ""
-	if len(req.Videos) != 0 {
-		for _, v := range req.Videos {
-			videos += v + ","
-		}
-	}
+	videos = strings.Join(req.Videos, ",")
 
 	images := ""
-	if len(req.Images) != 0 {
-		for _, v := range req.Images {
-			images += v + ","
-		}
-	}
+	images = strings.Join(req.Images, ",")
+
 	form := &model.AddEvaluationForm{
 		UserId:      service.Session().GetUser(ctx).Id,
 		FacilityId:  req.FacilityId,
@@ -92,18 +86,11 @@ func (c *cEvaluation) DeleteOwnEvaluation(ctx context.Context, req *v1.DeleteOwn
 func (c *cEvaluation) UpdateEvaluation(ctx context.Context, req *v1.UpdateEvaluationReq) (res *v1.UpdateEvaluationRes, err error) {
 	res = &v1.UpdateEvaluationRes{}
 	videos := ""
-	if len(req.Videos) != 0 {
-		for _, v := range req.Videos {
-			videos += v + ","
-		}
-	}
+	videos = strings.Join(req.Videos, ",")
 
 	images := ""
-	if len(req.Images) != 0 {
-		for _, v := range req.Images {
-			images += v + ","
-		}
-	}
+	images = strings.Join(req.Images, ",")
+
 	form := &model.UpdateEvaluationForm{
 		Id:          req.Id,
 		Score:       req.Score,
