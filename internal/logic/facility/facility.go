@@ -167,6 +167,44 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 	return
 }
 
+// GetFacilityByTagId gets the facility by tag.
+func (s *sFacility) GetFacilityByTagId(ctx context.Context, tagId int) (res []*model.FacilityEntity, err error) {
+	res = []*model.FacilityEntity{}
+	// get all facility first
+	var facilities []*entity.Facility
+	err = dao.Facility.Ctx(ctx).Scan(&facilities)
+	if err != nil {
+		return
+	}
+	// map the places to facility
+	for _, facility := range facilities {
+		tags := strings.Split(facility.Tags, ",")
+		for _, t := range tags {
+			if t == strconv.Itoa(tagId) {
+				if tags, err := s.FetchTags(ctx, facility); err != nil {
+					return nil, err
+				} else {
+					facility.Tags = strings.Join(tags, ",")
+				}
+
+				var place []*entity.FacilityPlace
+				err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
+				if err != nil {
+					return
+				}
+				if place == nil {
+					place = []*entity.FacilityPlace{}
+				}
+				res = append(res, &model.FacilityEntity{
+					Facility: facility,
+					Places:   place,
+				})
+			}
+		}
+	}
+	return
+}
+
 // AddFacility adds the facility.
 func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityForm) (err error) {
 	// check if all the fields are filled

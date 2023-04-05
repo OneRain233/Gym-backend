@@ -118,3 +118,13 @@ type DeleteFacilityPlaceReq struct {
 type DeleteFacilityPlaceRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
+
+type GetFacilityByTagReq struct {
+	g.Meta `path:"/facility/tag" tags:"Facility" method:"post" summary:"Get Facility By Tag"`
+	TagId  int `json:"tag_id" v:"required#Please input tag_id"`
+}
+
+type GetFacilityByTagRes struct {
+	g.Meta   `mime:"application/json" example:"string"`
+	Facility []*model.FacilityEntity `json:"facility"`
+}

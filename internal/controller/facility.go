@@ -53,6 +53,15 @@ func (c *cFacility) GetFacilityBySearching(ctx context.Context, req *v1.Facility
 	return
 }
 
+func (c *cFacility) GetFacilityByTag(ctx context.Context, req *v1.GetFacilityByTagReq) (res *v1.GetFacilityByTagRes, err error) {
+	res = &v1.GetFacilityByTagRes{}
+	res.Facility, err = service.Facility().GetFacilityByTagId(ctx, req.TagId)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (res *v1.AddFacilityRes, err error) {
 	res = &v1.AddFacilityRes{}
 	form := model.AddFacilityForm{
