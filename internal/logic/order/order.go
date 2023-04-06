@@ -555,3 +555,13 @@ func (o *sOrder) CheckExpiredOrder(ctx context.Context) (err error) {
 	}
 	return
 }
+
+func (o *sOrder) GetOrderByStatus(ctx context.Context, status int) (order []*entity.Order, err error) {
+	user := service.Session().GetUser(ctx)
+	userId := user.Id
+	err = dao.Order.Ctx(ctx).Where("status", status).Where("user_id", userId).Scan(&order)
+	if err != nil {
+		return
+	}
+	return
+}

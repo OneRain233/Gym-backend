@@ -232,3 +232,15 @@ func (c *cOrderAdmin) StartOrder(ctx context.Context, req *v1.StartOrderReq) (re
 	}
 	return
 }
+
+func (c *cOrder) GetOrderStatus(ctx context.Context, req *v1.GetOrdersByStatusReq) (res *v1.GetOrdersByStatusRes, err error) {
+	res = &v1.GetOrdersByStatusRes{}
+	orders, err := service.Order().GetOrderByStatus(ctx, req.Status)
+	if err != nil {
+		return
+	}
+	if orders == nil {
+		res.Order = make([]*model.AdminResponseOrderForm, 0)
+	}
+	return
+}

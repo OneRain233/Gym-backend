@@ -34,6 +34,7 @@ type (
 		CancelOrder(ctx context.Context, orderCode string) (err error)
 		GetDailyOrderIncome(ctx context.Context, date *gtime.Time) (income float64, err error)
 		CheckExpiredOrder(ctx context.Context) (err error)
+		GetOrderByStatus(ctx context.Context, status int) (order []*entity.Order, err error)
 	}
 )
 

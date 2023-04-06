@@ -110,3 +110,13 @@ type StartOrderReq struct {
 type StartOrderRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
+
+type GetOrdersByStatusReq struct {
+	g.Meta `path:"/order/status" method:"post" tags:"Order" summary:"Get orders by status"`
+	Status int `json:"status" v:"required#Please input status"`
+}
+
+type GetOrdersByStatusRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Order  []*model.AdminResponseOrderForm `json:"order"`
+}
