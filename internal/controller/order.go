@@ -242,5 +242,15 @@ func (c *cOrder) GetOrderStatus(ctx context.Context, req *v1.GetOrdersByStatusRe
 	if orders == nil {
 		res.Order = make([]*model.AdminResponseOrderForm, 0)
 	}
+	for _, order := range orders {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Order = append(res.Order, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+	}
 	return
 }
