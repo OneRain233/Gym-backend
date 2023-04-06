@@ -128,3 +128,13 @@ type GetFacilityByTagRes struct {
 	g.Meta   `mime:"application/json" example:"string"`
 	Facility []*model.FacilityEntity `json:"facility"`
 }
+
+type GetFacilityByTagNameReq struct {
+	g.Meta `path:"/facility/tag/name" tags:"Facility" method:"post" summary:"Get Facility By Tag Name"`
+	Name   string `json:"name" v:"required#Please input name"`
+}
+
+type GetFacilityByTagNameRes struct {
+	g.Meta   `mime:"application/json" example:"string"`
+	Facility []*model.FacilityEntity `json:"facility"`
+}

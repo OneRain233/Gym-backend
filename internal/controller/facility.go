@@ -62,6 +62,18 @@ func (c *cFacility) GetFacilityByTag(ctx context.Context, req *v1.GetFacilityByT
 	return
 }
 
+func (c *cFacility) GetFacilityByTagName(ctx context.Context, req *v1.GetFacilityByTagNameReq) (res *v1.GetFacilityByTagNameRes, err error) {
+	res = &v1.GetFacilityByTagNameRes{}
+	res.Facility, err = service.Facility().GetFacilityByTagName(ctx, req.Name)
+	if err != nil {
+		return
+	}
+	if res.Facility == nil {
+		res.Facility = make([]*model.FacilityEntity, 0)
+	}
+	return
+}
+
 func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq) (res *v1.AddFacilityRes, err error) {
 	res = &v1.AddFacilityRes{}
 	form := model.AddFacilityForm{

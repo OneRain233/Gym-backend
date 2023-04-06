@@ -205,6 +205,54 @@ func (s *sFacility) GetFacilityByTagId(ctx context.Context, tagId int) (res []*m
 	return
 }
 
+func (s *sFacility) GetFacilityByTagName(ctx context.Context, tagName string) (res []*model.FacilityEntity, err error) {
+	// check if the tag is exist
+	var tag *entity.Tag
+	err = dao.Tag.Ctx(ctx).Where("name", tagName).Scan(&tag)
+	if err != nil {
+		return
+	}
+	if tag == nil {
+		err = gerror.New("The tag is not exist")
+		return
+	}
+	// get all the facilities
+	var facilities []*entity.Facility
+	err = dao.Facility.Ctx(ctx).Scan(&facilities)
+	if err != nil {
+		return
+	}
+	if facilities == nil {
+		return
+	}
+	for _, facility := range facilities {
+		tagIds := strings.Split(facility.Tags, ",")
+		// find the tag
+		for _, tagId := range tagIds {
+			if tagId == strconv.Itoa(tag.Id) {
+				if tags, err := s.FetchTags(ctx, facility); err != nil {
+					return nil, err
+				} else {
+					facility.Tags = strings.Join(tags, ",")
+				}
+				var place []*entity.FacilityPlace
+				err = dao.FacilityPlace.Ctx(ctx).Where("id", facility.Id).Scan(&place)
+				if err != nil {
+					return
+				}
+				if place == nil {
+					place = []*entity.FacilityPlace{}
+				}
+				res = append(res, &model.FacilityEntity{
+					Facility: facility,
+					Places:   place,
+				})
+			}
+		}
+	}
+	return
+}
+
 // AddFacility adds the facility.
 func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityForm) (err error) {
 	// check if all the fields are filled
