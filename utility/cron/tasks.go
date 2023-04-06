@@ -12,7 +12,7 @@ import (
 func OrderExpired() error {
 	// check in **:00:00 an d **:30:00
 	ctx := gctx.New()
-	_, err := gcron.Add(ctx, "0 0,30 * * * *", func(ctx context.Context) {
+	_, err := gcron.Add(ctx, "*/60 * * * * *", func(ctx context.Context) {
 		err := service.Order().CheckExpiredOrder(ctx)
 		if err != nil {
 			return

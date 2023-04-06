@@ -8,6 +8,7 @@ import (
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/receipt"
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -404,6 +405,23 @@ func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) 
 	return
 }
 
+func (o *sOrder) UpdateOrderStatus(ctx context.Context, orderCode string, status int) (err error) {
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	order.Status = status
+	_, err = dao.Order.Ctx(ctx).Where("id", order.Id).Data(order).Update()
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (o *sOrder) GenerateQrSignature(qrContent map[string]interface{}) string {
 	// TODO: Add a salt
 	res := gmd5.MustEncryptString(gjson.MustEncodeString(qrContent))
@@ -545,9 +563,26 @@ func (o *sOrder) CheckExpiredOrder(ctx context.Context) (err error) {
 		return
 	}
 	for _, order := range pendingOrder {
-		if order.StartTime.Before(gtime.Now()) {
+		if order.StartTime.Timestamp() <= gtime.Now().Timestamp() {
 			// refund
-			err = o.RefundOrder(ctx, order.OrderCode)
+			err = o.UpdateOrderStatus(ctx, order.OrderCode, consts.OrderStatusCancelled)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		}
+	}
+
+	// unpaid order
+	var unpaidOrder []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("status", consts.OrderStatusWaitingPayment).Scan(&unpaidOrder)
+	if err != nil {
+		return
+	}
+	for _, order := range unpaidOrder {
+		if order.StartTime.Before(gtime.Now()) {
+			// update order status to cancelled
+			err = o.CancelOrder(ctx, order.OrderCode)
 			if err != nil {
 				return
 			}
