@@ -16,6 +16,7 @@ type (
 		DeleteTag(ctx context.Context, tagId int) (err error)
 		GetAllTags(ctx context.Context) (res []*entity.Tag, err error)
 		GetTagById(ctx context.Context, id int) (res *entity.Tag, err error)
+		GetTagByName(ctx context.Context, name string) (res *entity.Tag, err error)
 	}
 )
 

@@ -12,7 +12,7 @@ type AddFacilityForm struct {
 	Description string   `json:"description"`
 	Location    string   `json:"location"`
 	Images      []string `json:"images"`
-	TagIds      []int    `json:"tagIds"`
+	Tags        []string `json:"tags"`
 }
 
 type ModifyFacilityForm struct {
@@ -21,7 +21,7 @@ type ModifyFacilityForm struct {
 	Description string   `json:"description"`
 	Location    string   `json:"location"`
 	Images      []string `json:"images"`
-	TagIds      []int    `json:"tagIds"`
+	Tags        []string `json:"tags"`
 }
 
 type AddFacilityPlaceForm struct {

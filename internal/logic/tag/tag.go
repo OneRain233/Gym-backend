@@ -41,3 +41,9 @@ func (s *sTag) GetTagById(ctx context.Context, id int) (res *entity.Tag, err err
 	err = dao.Tag.Ctx(ctx).Where("id", id).Scan(res)
 	return
 }
+
+func (s *sTag) GetTagByName(ctx context.Context, name string) (res *entity.Tag, err error) {
+	res = &entity.Tag{}
+	err = dao.Tag.Ctx(ctx).Where("name", name).Scan(res)
+	return
+}

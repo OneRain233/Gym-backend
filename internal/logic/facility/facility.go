@@ -269,10 +269,28 @@ func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityFor
 
 	var tags string
 	var tagIds []string
-	for _, tag := range input.TagIds {
+	for _, tag := range input.Tags {
 		// to string
-		tagIdStr := strconv.Itoa(tag)
-		tagIds = append(tagIds, tagIdStr)
+		// check if the tag is exist
+		var tagEntity *entity.Tag
+		if tagEntity, err = service.Tag().GetTagByName(ctx, tag); err != nil {
+			// create it
+			if tagEntity == nil || tagEntity.Id == 0 {
+				err = service.Tag().CreateNewTag(ctx, tag)
+				if err != nil {
+					return
+				}
+			}
+		}
+		tagEntity, err = service.Tag().GetTagByName(ctx, tag)
+		if err != nil {
+			return
+		}
+		// get the tag id
+		tagIds = append(tagIds, strconv.Itoa(tagEntity.Id))
+
+		//tagIdStr := strconv.Itoa(tag)
+		//tagIds = append(tagIds, tagIdStr)
 	}
 	tags = strings.Join(tagIds, ",")
 
@@ -336,13 +354,29 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 		images = strings.Join(input.Images, ",")
 		facility.Images = images
 	}
-	if input.TagIds != nil {
+	if input.Tags != nil {
 		var tags string
 		var tagIds []string
-		for _, tag := range input.TagIds {
+		for _, tag := range input.Tags {
 			// to string
-			tagIdStr := strconv.Itoa(tag)
-			tagIds = append(tagIds, tagIdStr)
+			// check if the tag is exist
+			var tagEntity *entity.Tag
+			if tagEntity, err = service.Tag().GetTagByName(ctx, tag); err != nil {
+				// create it
+				if tagEntity == nil || tagEntity.Id == 0 {
+					err = service.Tag().CreateNewTag(ctx, tag)
+					if err != nil {
+						return
+					}
+				}
+			}
+			tagEntity, err = service.Tag().GetTagByName(ctx, tag)
+			if err != nil {
+				return
+			}
+			// get the tag id
+			tagIds = append(tagIds, strconv.Itoa(tagEntity.Id))
+
 		}
 		tags = strings.Join(tagIds, ",")
 		facility.Tags = tags
