@@ -10,7 +10,7 @@ type CreateSubscriptionReq struct {
 	g.Meta      `path:"/subscription/add" tags:"Subscription" method:"post" summary:"Add Subscription"`
 	Type        int `json:"type" v:"required#Please input type"`
 	PaymentType int `json:"payment_type" v:"required#Please input payment_type"`
-	CardId      int `json:"card_id" v:"required#Please input card_id"`
+	CardId      int `json:"card_id"`
 }
 
 type CreateSubscriptionRes struct{}
