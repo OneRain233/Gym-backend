@@ -253,3 +253,16 @@ func (s *sPayment) UpdatePaymentStatus(ctx context.Context, paymentId int, statu
 	}
 	return
 }
+
+func (s *sPayment) UpdatePaymentStatusByOrderId(ctx context.Context, orderId int, status int) error {
+	payment, err := s.GetPaymentByOrderId(ctx, orderId)
+	if err != nil {
+		return err
+	}
+	payment.Status = status
+	_, err = dao.Payment.Ctx(ctx).Where("order_id", orderId).Update(payment)
+	if err != nil {
+		return err
+	}
+	return nil
+}

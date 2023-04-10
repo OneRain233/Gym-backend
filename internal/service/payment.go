@@ -23,6 +23,7 @@ type (
 		GetAllPayment(ctx context.Context) (payments []*entity.Payment, err error)
 		GetPaymentByOrderCode(ctx context.Context, orderCode string) (payment *entity.Payment, err error)
 		UpdatePaymentStatus(ctx context.Context, paymentId int, status int) (err error)
+		UpdatePaymentStatusByOrderId(ctx context.Context, orderId int, status int) error
 	}
 )
 

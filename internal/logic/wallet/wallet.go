@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"fmt"
 
 	"github.com/gogf/gf/v2/database/gdb"
 
@@ -189,13 +190,14 @@ func (s *sWallet) Refund(ctx context.Context, order *entity.Order) error {
 		if err != nil {
 			return err
 		}
-		err = service.Payment().UpdatePaymentStatus(ctx, order.Id, consts.PaymentRefund)
+		err = service.Payment().UpdatePaymentStatusByOrderId(ctx, order.Id, consts.PaymentRefund)
 		if err != nil {
 			return err
 		}
 
 		payment, err = service.Payment().GetPaymentByOrderId(ctx, order.Id)
 		if err != nil {
+			fmt.Println("get payment by order id error")
 			return err
 		}
 
