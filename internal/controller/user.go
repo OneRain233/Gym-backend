@@ -181,3 +181,28 @@ func (c *cUser) UpdateAvatar(ctx context.Context, req *v1.UpdateAvatarReq) (res 
 	}
 	return
 }
+
+func (c *cUser) ForgetPasswordRequest(ctx context.Context, req *v1.ForgetPasswordReq) (res *v1.ForgetPasswordRes, err error) {
+	res = &v1.ForgetPasswordRes{}
+	token, err := service.User().ForgetPasswordCreateToken(ctx, req.Email)
+	if err != nil {
+		return
+	}
+	res.Token = token
+	return
+}
+
+func (c *cUser) ForgetPasswordReset(ctx context.Context, req *v1.ResetPasswordReq) (res *v1.ResetPasswordRes, err error) {
+	res = &v1.ResetPasswordRes{}
+
+	// reset password
+	if req.Password != req.ConfirmPassword {
+		err = gerror.New("The two passwords do not match")
+		return
+	}
+	err = service.User().ForgetPasswordResetPassword(ctx, req.Token, req.Password)
+	if err != nil {
+		return
+	}
+	return
+}

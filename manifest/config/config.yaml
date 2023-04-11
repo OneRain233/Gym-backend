@@ -17,6 +17,16 @@ database:
     link:   "mysql:root:2332@tcp(172.250.0.233:3306)/gym?charset=utf8mb4&parseTime=True&loc=Local"
     debug:  true
 
+redis:
+  default:
+    address: "172.17.0.2:6379"
+
+mail:
+  host:     "smtp.163.com"
+  port:     465
+  username: "15169904338@163.com"
+  password: "ZXXGRQPZPGNBXNVT"
+
 upload:
   defaultAvatar: "default.png"
   path: "uploads/"

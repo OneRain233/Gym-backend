@@ -131,3 +131,30 @@ type UpdateAvatarReq struct {
 type UpdateAvatarRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 }
+
+type ForgetPasswordReq struct {
+	g.Meta `path:"/user/forget-password" tags:"Account" method:"post" summary:"Forget password"`
+	Email  string `json:"email" v:"required#Please input email"`
+}
+
+type ForgetPasswordRes struct {
+	// TODO: send email instead of return token
+	Token string `json:"token"`
+}
+
+type ResetPasswordReq struct {
+	g.Meta          `path:"/user/reset-password" tags:"Account" method:"post" summary:"Reset password"`
+	Password        string `json:"password" v:"required#Please input password"`
+	ConfirmPassword string `json:"confirm_password" v:"required#Please input confirm password"`
+	Token           string `json:"token" v:"required#Please input token"`
+}
+
+type ResetPasswordRes struct{}
+
+type ValidateTokenReq struct {
+	g.Meta `path:"/user/validate-token" tags:"Account" method:"post" summary:"Validate token"`
+	Token  string `json:"token" v:"required#Please input token"`
+}
+
+type ValidateTokenRes struct {
+}

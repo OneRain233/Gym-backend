@@ -32,6 +32,10 @@ type (
 		GetUserBySearch(ctx context.Context, search string) (users []*entity.User, err error)
 		GetUserById(ctx context.Context, id uint) (user *entity.User, err error)
 		UpdateUser(ctx context.Context, form *model.UserUpdateForm) error
+		GetUserByEmail(ctx context.Context, email string) (user *entity.User, err error)
+		ForgetPasswordCreateToken(ctx context.Context, email string) (token string, err error)
+		ForgetPasswordValidateToken(ctx context.Context, token string) error
+		ForgetPasswordResetPassword(ctx context.Context, token string, password string) error
 	}
 )
 

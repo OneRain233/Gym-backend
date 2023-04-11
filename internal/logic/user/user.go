@@ -6,7 +6,9 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/mail"
 	"context"
+	"fmt"
 
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/text/gregex"
@@ -340,6 +342,89 @@ func (u *sUser) UpdateUser(ctx context.Context, form *model.UserUpdateForm) erro
 	}
 
 	// update user
+	_, err = dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *sUser) GetUserByEmail(ctx context.Context, email string) (user *entity.User, err error) {
+	err = dao.User.Ctx(ctx).Where(dao.User.Columns().Email, email).Scan(&user)
+	return
+}
+
+func (u *sUser) ForgetPasswordCreateToken(ctx context.Context, email string) (token string, err error) {
+	user, err := u.GetUserByEmail(ctx, email)
+	if err != nil {
+		return "", err
+	}
+	if user == nil {
+		return "", gerror.New("user not found")
+	}
+	// generate a random token
+	token = gmd5.MustEncrypt(gtime.TimestampNanoStr() + email)
+	// save token to redis
+	// redis options TTL: 24 hours
+
+	_, err = g.Redis().Set(ctx, token, user.Id)
+	if err != nil {
+		return "", err
+	}
+	// TODO: send email
+	err = mail.SendEmail(
+		user.Email,
+		"Reset your password "+token,
+	)
+	if err != nil {
+		return "", err
+	}
+	return "", nil
+}
+
+func (u *sUser) ForgetPasswordValidateToken(ctx context.Context, token string) error {
+	// get user id from redis
+	userId, err := g.Redis().Get(ctx, token)
+	if err != nil {
+		return err
+	}
+	if userId == nil {
+		return gerror.New("token not found")
+	}
+	fmt.Println(userId)
+	// check if the user exists
+	user, err := u.GetUserById(ctx, gconv.Uint(userId))
+	if err != nil {
+		return err
+	}
+	if user == nil {
+		return gerror.New("user not found")
+	}
+	return nil
+}
+
+func (u *sUser) ForgetPasswordResetPassword(ctx context.Context, token string, password string) error {
+	// get user id from redis
+	userId, err := g.Redis().Get(ctx, token)
+	if err != nil {
+		return err
+	}
+	if userId == nil {
+		return gerror.New("token not found")
+	}
+	fmt.Println(userId)
+	// check if the user exists
+	user, err := u.GetUserById(ctx, gconv.Uint(userId))
+	if err != nil {
+		return err
+	}
+
+	if user == nil {
+		return gerror.New("user not found")
+	}
+
+	// update password
+	user.Password = EncryptPassword(password)
 	_, err = dao.User.Ctx(ctx).Data(user).WherePri(user.Id).Update()
 	if err != nil {
 		return err
