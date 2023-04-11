@@ -18,7 +18,7 @@ database:
 
 redis:
   default:
-    address: "172.17.0.2:6379"
+    address: "172.17.0.11:6379"
 
 mail:
   host:     "smtp.163.com"
