@@ -112,9 +112,10 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 			return gerror.New("Payment type not found")
 		}
 		_, err = dao.Subscription.Ctx(ctx).Data(&entity.Subscription{
-			UserId:    userId,
-			StartTime: gtime.Now(),
-			EndTime:   gtime.Now().AddDate(0, 0, days),
+			UserId:           userId,
+			StartTime:        gtime.Now(),
+			EndTime:          gtime.Now().AddDate(0, 0, days),
+			SubscriptionType: form.Type,
 		}).Insert()
 		return err
 	}

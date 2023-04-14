@@ -27,7 +27,7 @@ func (s *sFacility) ProcessImage(images string) []string {
 }
 
 func (s *sFacility) FetchTags(ctx context.Context, facility *entity.Facility) (tags []string, err error) {
-	if facility.Tags == "" {
+	if facility.Tags == "" || facility == nil {
 		return
 	}
 	tagIdsStr := strings.Split(facility.Tags, ",")
