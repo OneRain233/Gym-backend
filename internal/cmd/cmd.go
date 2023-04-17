@@ -117,6 +117,7 @@ var (
 					controller.Announcement,
 					controller.SubscriptionUnauthorized,
 					controller.Tag,
+					controller.EvaluationUnauth,
 				)
 
 				// Normal user

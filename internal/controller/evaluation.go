@@ -10,11 +10,13 @@ import (
 
 var Evaluation = cEvaluation{}
 var EvaluationAdmin = cEvaluationAdmin{}
+var EvaluationUnauth = cEvaluationUnauth{}
 
 type cEvaluation struct{}
 type cEvaluationAdmin struct{}
+type cEvaluationUnauth struct{}
 
-func (c *cEvaluation) GetEvaluations(ctx context.Context, req *v1.GetEvaluationsReq) (res *v1.GetEvaluationsRes, err error) {
+func (c *cEvaluationUnauth) GetEvaluations(ctx context.Context, req *v1.GetEvaluationsReq) (res *v1.GetEvaluationsRes, err error) {
 	res = &v1.GetEvaluationsRes{}
 	user := service.Session().GetUser(ctx)
 	userId := user.Id
