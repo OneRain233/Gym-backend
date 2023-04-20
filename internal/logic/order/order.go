@@ -300,6 +300,10 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 		return "", err
 	}
 
+	if order.Status != consts.OrderStatusDone {
+		return "", gerror.New("order not done")
+	}
+
 	// TODO: Comment this part for testing
 	// ================================
 	//check if there is a receipt in db
@@ -364,7 +368,6 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 		return
 	}
 	return
-
 }
 
 func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) {

@@ -374,7 +374,7 @@ func (u *sUser) ForgetPasswordCreateToken(ctx context.Context, email string) (to
 	// TODO: send email
 	err = mail.SendEmail(
 		user.Email,
-		"Reset your password "+token,
+		"Reset your password http://101.42.160.53/page-reset/?token="+token,
 	)
 	if err != nil {
 		return "", err
