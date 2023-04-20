@@ -507,6 +507,7 @@ func (o *sOrder) EndOrder(ctx context.Context, orderCode string) (err error) {
 	if err != nil {
 		return
 	}
+
 	return
 }
 
@@ -557,11 +558,21 @@ func (o *sOrder) CheckExpiredOrder(ctx context.Context) (err error) {
 	if err != nil {
 		return
 	}
+	fmt.Println("using order", usingOrder)
+	// bug: didn't send email
 	for _, order := range usingOrder {
 		if order.EndTime.Before(gtime.Now()) {
+			fmt.Println("end order")
 			err = o.EndOrder(ctx, order.OrderCode)
 			if err != nil {
-				return
+				g.Log().Error(ctx, err.Error())
+				continue
+			}
+			fmt.Println("send receipt")
+			err = service.Receipt().SendReceiptToUser(ctx, order.OrderCode)
+			if err != nil {
+				g.Log().Error(ctx, err.Error())
+				continue
 			}
 		}
 	}

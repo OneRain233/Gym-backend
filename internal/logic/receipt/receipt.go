@@ -5,7 +5,12 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
+	"Gym-backend/utility/mail"
 	"context"
+
+	"github.com/gogf/gf/v2/frame/g"
+
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type sReceipt struct {
@@ -42,5 +47,39 @@ func (r *sReceipt) AddReceipt(ctx context.Context, input model.CreateReceiptForm
 	receiptEntity.ReceiptPath = input.ReceiptPath
 	receiptEntity.OrderId = input.OrderId
 	_, err = dao.Receipt.Ctx(ctx).Save(receiptEntity)
+	return
+}
+
+func (r *sReceipt) SendReceiptToUser(ctx context.Context, orderCode string) (err error) {
+	order, err := service.Order().GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return
+	}
+	if order == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	receipt, err := r.GetReceiptByOrderCode(ctx, order.Id)
+	if err != nil {
+		return
+	}
+	if receipt == nil {
+		// generate receipt
+		_, err := service.Order().GenerateOrderReceipt(ctx, order.OrderCode)
+		if err != nil {
+			return err
+		}
+	}
+	user, err := service.User().GetUserById(ctx, uint(order.UserId))
+	if err != nil {
+		return
+	}
+	if user == nil {
+		return gerror.New("user not found")
+	}
+
+	// send emil
+	g.Log().Info(ctx, "sending email to user")
+	err = mail.SendEmailWithAttachment(user.Email, "Receipt Your receipt is attached", receipt.ReceiptPath)
 	return
 }
