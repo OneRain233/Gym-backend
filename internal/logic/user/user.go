@@ -437,5 +437,10 @@ func (u *sUser) ForgetPasswordResetPassword(ctx context.Context, token string, p
 	if err != nil {
 		return err
 	}
+	// remove token from redis
+	_, err = g.Redis().Del(ctx, token)
+	if err != nil {
+		return err
+	}
 	return nil
 }

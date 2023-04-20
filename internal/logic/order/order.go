@@ -12,6 +12,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gogf/gf/v2/database/gdb"
+
+	"github.com/gogf/gf/v2/frame/g"
+
 	"github.com/gogf/gf/v2/crypto/gmd5"
 	"github.com/gogf/gf/v2/encoding/gjson"
 
@@ -396,16 +400,19 @@ func (o *sOrder) RefundOrder(ctx context.Context, orderCode string) (err error) 
 		err = gerror.New("payment not found, please contact the manager")
 		return
 	}
-	err = service.Wallet().Refund(ctx, order)
-	if err != nil {
-		return
-	}
-	order.Status = consts.OrderStatusRefunded
-	_, err = dao.Order.Ctx(ctx).Where("id", order.Id).Data(order).Update()
-	if err != nil {
-		return
-	}
-	return
+	return g.DB().Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		err = service.Wallet().Refund(ctx, order)
+		if err != nil {
+			return err
+		}
+		order.Status = consts.OrderStatusRefunded
+		_, err = dao.Order.Ctx(ctx).Where("id", order.Id).Data(order).Update()
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
 }
 
 func (o *sOrder) UpdateOrderStatus(ctx context.Context, orderCode string, status int) (err error) {
