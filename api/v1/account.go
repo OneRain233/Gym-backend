@@ -157,4 +157,5 @@ type ValidateTokenReq struct {
 }
 
 type ValidateTokenRes struct {
+	Validate bool `json:"validate"`
 }

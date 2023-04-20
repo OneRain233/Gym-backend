@@ -206,3 +206,15 @@ func (c *cUser) ForgetPasswordReset(ctx context.Context, req *v1.ResetPasswordRe
 	}
 	return
 }
+
+func (c *cUser) ValidateToken(ctx context.Context, req *v1.ValidateTokenReq) (res *v1.ValidateTokenRes, err error) {
+	res = &v1.ValidateTokenRes{}
+	token := req.Token
+	err = service.User().ForgetPasswordValidateToken(ctx, token)
+	if err != nil {
+		res.Validate = false
+		return
+	}
+	res.Validate = true
+	return
+}

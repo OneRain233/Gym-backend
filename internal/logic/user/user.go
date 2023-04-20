@@ -10,6 +10,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gogf/gf/v2/database/gredis"
 	"github.com/gogf/gf/v2/os/gtime"
 	"github.com/gogf/gf/v2/text/gregex"
 
@@ -366,8 +367,15 @@ func (u *sUser) ForgetPasswordCreateToken(ctx context.Context, email string) (to
 	token = gmd5.MustEncrypt(gtime.TimestampNanoStr() + email)
 	// save token to redis
 	// redis options TTL: 24 hours
-
-	_, err = g.Redis().Set(ctx, token, user.Id)
+	expireSeconds := 24 * 60 * 60
+	// convert to *int64
+	expireSecondsPtr := int64(expireSeconds)
+	options := gredis.SetOption{
+		TTLOption: gredis.TTLOption{
+			EX: &expireSecondsPtr,
+		},
+	}
+	_, err = g.Redis().Set(ctx, token, user.Id, options)
 	if err != nil {
 		return "", err
 	}
