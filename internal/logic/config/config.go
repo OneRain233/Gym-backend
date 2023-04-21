@@ -6,6 +6,12 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+
+	"github.com/gogf/gf/v2/util/gconv"
+
+	"github.com/gogf/gf/v2/frame/g"
+
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type sConfig struct {
@@ -19,11 +25,56 @@ func New() *sConfig {
 	return &sConfig{}
 }
 
+func (c *sConfig) InitConfigToCache(ctx context.Context) error {
+	err := service.Cache().Delete(ctx, "config")
+	if err != nil {
+		return gerror.New("Config make cache failed")
+	}
+	var configs []*entity.Config
+	err = dao.Config.Ctx(ctx).Scan(&configs)
+	if err != nil {
+		return gerror.New("Config make cache failed")
+	}
+	for _, config := range configs {
+		err = service.Cache().Push(ctx, "config", config)
+		if err != nil {
+			return gerror.New("Config make cache failed")
+		}
+	}
+	return nil
+}
+
 func (c *sConfig) GetConfig(ctx context.Context) (res []*entity.Config, err error) {
+	// check cache
+	// if cache exists, return cache
+	// else, get from db and set cache
+	// if cache not exists, get from db and set cache
+	var cacheRes interface{}
+	cacheRes, err = service.Cache().GetList(ctx, "config")
+	if cacheRes != nil {
+		g.Log().Info(ctx, "cache exists", cacheRes)
+		// convert interface to []*entity.Config
+
+		for _, v := range cacheRes.([]interface{}) {
+			g.Log().Info(ctx, "cache exists", v)
+			// parse json to entity
+			var config *entity.Config
+			err = gconv.Struct(v, &config)
+			if err != nil {
+				return
+			}
+			res = append(res, config)
+		}
+		return
+	}
+	g.Log().Info(ctx, "cache not exists")
+	// no cache
 	err = dao.Config.Ctx(ctx).Scan(&res)
 	if err != nil {
 		return
 	}
+	// set cache
+	_ = c.InitConfigToCache(ctx)
 	return
 }
 

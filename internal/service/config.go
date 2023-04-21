@@ -13,6 +13,7 @@ import (
 
 type (
 	IConfig interface {
+		InitConfigToCache(ctx context.Context) error
 		GetConfig(ctx context.Context) (res []*entity.Config, err error)
 		GetConfigByKey(ctx context.Context, key string) (res *entity.Config, err error)
 		UpdateConfig(ctx context.Context, config *model.Config) (err error)
