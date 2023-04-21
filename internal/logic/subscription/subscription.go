@@ -9,6 +9,10 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/gogf/gf/v2/util/gconv"
+
+	"github.com/gogf/gf/v2/frame/g"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 
 	"github.com/gogf/gf/v2/os/gtime"
@@ -25,9 +29,53 @@ func New() *sSubscription {
 	return &sSubscription{}
 }
 
+func (c *sSubscription) InitSubscriptionSTypesToCache(ctx context.Context) error {
+	err := service.Cache().Delete(ctx, "subscription_type")
+	if err != nil {
+		return err
+	}
+
+	var subscriptionTypes []*entity.SubscriptionType
+	err = dao.SubscriptionType.Ctx(ctx).Scan(&subscriptionTypes)
+	if err != nil {
+		return err
+	}
+	g.Log().Info(ctx, "Get Subsciptions", subscriptionTypes)
+
+	for _, subscriptionType := range subscriptionTypes {
+		g.Log().Info(ctx, "Get Subsciption", subscriptionType)
+		err = service.Cache().Push(ctx, "subscription_type", subscriptionType)
+		if err != nil {
+			continue
+		}
+		err = service.Cache().Set(ctx, "subscription_type_"+strconv.Itoa(subscriptionType.Id), subscriptionType, 0)
+		if err != nil {
+			continue
+		}
+	}
+	return nil
+}
+
 func (s *sSubscription) GetTypesOfSubscription(ctx context.Context) (res []*entity.SubscriptionType, err error) {
+	//res = make([]*entity.SubscriptionType, 0)
+	var cacheRes interface{}
+	cacheRes, err = service.Cache().GetList(ctx, "subscription_type")
+	g.Log().Info(ctx, cacheRes)
+	if cacheRes != nil && len(cacheRes.([]interface{})) > 0 {
+		g.Log().Debugf(ctx, "cache exists", len(cacheRes.([]interface{})))
+		for _, v := range cacheRes.([]interface{}) {
+			var subscriptionType *entity.SubscriptionType
+			err = gconv.Struct(v, &subscriptionType)
+			if err != nil {
+				return
+			}
+			res = append(res, subscriptionType)
+		}
+		return
+	}
 	res = make([]*entity.SubscriptionType, 0)
 	err = dao.SubscriptionType.Ctx(ctx).Scan(&res)
+	_ = s.InitSubscriptionSTypesToCache(ctx)
 	return
 }
 
@@ -39,6 +87,14 @@ func (s *sSubscription) GetSubscriptionPermissionById(ctx context.Context, permi
 
 func (s *sSubscription) GetSubscriptionTypeById(ctx context.Context, id int) (res *entity.SubscriptionType, err error) {
 	res = &entity.SubscriptionType{}
+	// check cache
+	var cacheRes interface{}
+	cacheRes, err = service.Cache().Get(ctx, "subscription_type_"+strconv.Itoa(id))
+	if cacheRes != nil {
+		res = cacheRes.(*entity.SubscriptionType)
+		return
+	}
+
 	err = dao.SubscriptionType.Ctx(ctx).Where("id", id).Scan(res)
 	return
 }

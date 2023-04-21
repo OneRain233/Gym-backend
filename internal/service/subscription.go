@@ -15,6 +15,7 @@ import (
 
 type (
 	ISubscription interface {
+		InitSubscriptionSTypesToCache(ctx context.Context) error
 		GetTypesOfSubscription(ctx context.Context) (res []*entity.SubscriptionType, err error)
 		GetSubscriptionPermissionById(ctx context.Context, permissionId int) (res *entity.SubscriptionPermission, err error)
 		GetSubscriptionTypeById(ctx context.Context, id int) (res *entity.SubscriptionType, err error)

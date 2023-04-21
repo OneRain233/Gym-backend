@@ -9,8 +9,6 @@ import (
 
 	"github.com/gogf/gf/v2/util/gconv"
 
-	"github.com/gogf/gf/v2/frame/g"
-
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
@@ -40,6 +38,10 @@ func (c *sConfig) InitConfigToCache(ctx context.Context) error {
 		if err != nil {
 			return gerror.New("Config make cache failed")
 		}
+		err = service.Cache().Set(ctx, config.Key, config, 0)
+		if err != nil {
+			return gerror.New("Config make cache failed")
+		}
 	}
 	return nil
 }
@@ -52,11 +54,11 @@ func (c *sConfig) GetConfig(ctx context.Context) (res []*entity.Config, err erro
 	var cacheRes interface{}
 	cacheRes, err = service.Cache().GetList(ctx, "config")
 	if cacheRes != nil {
-		g.Log().Info(ctx, "cache exists", cacheRes)
+		//g.Log().Info(ctx, "cache exists", cacheRes)
 		// convert interface to []*entity.Config
 
 		for _, v := range cacheRes.([]interface{}) {
-			g.Log().Info(ctx, "cache exists", v)
+			//g.Log().Info(ctx, "cache exists", v)
 			// parse json to entity
 			var config *entity.Config
 			err = gconv.Struct(v, &config)
@@ -67,7 +69,7 @@ func (c *sConfig) GetConfig(ctx context.Context) (res []*entity.Config, err erro
 		}
 		return
 	}
-	g.Log().Info(ctx, "cache not exists")
+	//g.Log().Info(ctx, "cache not exists")
 	// no cache
 	err = dao.Config.Ctx(ctx).Scan(&res)
 	if err != nil {
@@ -79,6 +81,21 @@ func (c *sConfig) GetConfig(ctx context.Context) (res []*entity.Config, err erro
 }
 
 func (c *sConfig) GetConfigByKey(ctx context.Context, key string) (res *entity.Config, err error) {
+	// check cache
+	// if cache exists, return cache
+	// else, get from db and set cache
+	var cacheRes interface{}
+	cacheRes, err = service.Cache().Get(ctx, key)
+	if cacheRes != nil {
+		//g.Log().Info(ctx, "cache exists", cacheRes)
+		// convert interface to *entity.Config
+		err = gconv.Struct(cacheRes, &res)
+		if err != nil {
+			return
+		}
+		return
+	}
+
 	err = dao.Config.Ctx(ctx).Where("key", key).Scan(&res)
 	if err != nil {
 		return
@@ -109,6 +126,8 @@ func (c *sConfig) UpdateConfig(ctx context.Context, config *model.Config) (err e
 			return
 		}
 	}
+	// update cache
+	_ = c.InitConfigToCache(ctx)
 	return
 }
 
@@ -126,6 +145,7 @@ func (c *sConfig) CreateConfig(ctx context.Context, config *model.Config) (err e
 	if err != nil {
 		return
 	}
-
+	// update cache
+	_ = c.InitConfigToCache(ctx)
 	return
 }
