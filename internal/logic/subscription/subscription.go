@@ -91,7 +91,10 @@ func (s *sSubscription) GetSubscriptionTypeById(ctx context.Context, id int) (re
 	var cacheRes interface{}
 	cacheRes, err = service.Cache().Get(ctx, "subscription_type_"+strconv.Itoa(id))
 	if cacheRes != nil {
-		res = cacheRes.(*entity.SubscriptionType)
+		err = gconv.Struct(cacheRes, &res)
+		if err != nil {
+			return
+		}
 		return
 	}
 
