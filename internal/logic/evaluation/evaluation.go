@@ -171,22 +171,30 @@ func (c *sEvaluation) UpdateEvaluation(ctx context.Context, form *model.UpdateEv
 	if err := c.ValidateUpdateEvaluation(ctx, form); err != nil {
 		return err
 	}
-	userId := service.Session().GetUser(ctx).Id
-	facilityId := form.FacilityId
-	evaluation := &entity.Evaluation{
-		UserId:      userId,
-		FacilityId:  facilityId,
-		Score:       form.Score,
-		Description: form.Description,
-		Anonymous:   form.IsAnonymous,
-		Images:      form.Images,
-		Videos:      form.Videos,
-	}
-	_, err := dao.Evaluation.Ctx(ctx).Data(evaluation).Where("user_id", userId).Where("facility_id", facilityId).Update()
+	evaluationId := form.Id
+	var evaluation *entity.Evaluation
+	evaluation, err := c.GetEvaluationById(ctx, evaluationId)
 	if err != nil {
 		return err
 	}
+	if evaluation == nil {
+		return gerror.New("Evaluation does not exist")
+	}
+
+	// difference update
+	evaluation.Score = form.Score
+	evaluation.Anonymous = form.IsAnonymous
+	evaluation.Description = form.Description
+	evaluation.Images = form.Images
+	evaluation.Videos = form.Videos
+
+	_, err = dao.Evaluation.Ctx(ctx).Data(evaluation).Where("id", evaluationId).Update()
+	if err != nil {
+		return err
+	}
+
 	return nil
+
 }
 
 func (c *sEvaluation) GetFacilityScore(ctx context.Context, facilityId int) (score int, err error) {
