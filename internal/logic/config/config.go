@@ -36,11 +36,13 @@ func (c *sConfig) InitConfigToCache(ctx context.Context) error {
 	for _, config := range configs {
 		err = service.Cache().Push(ctx, "config", config)
 		if err != nil {
-			return gerror.New("Config make cache failed")
+			continue
+			//return gerror.New("Config make cache failed")
 		}
 		err = service.Cache().Set(ctx, config.Key, config, 0)
 		if err != nil {
-			return gerror.New("Config make cache failed")
+			continue
+			//return gerror.New("Config make cache failed")
 		}
 	}
 	return nil
