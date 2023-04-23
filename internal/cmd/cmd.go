@@ -157,6 +157,7 @@ var (
 						controller.Visualize,
 						controller.EvaluationAdmin,
 						controller.TagAdmin,
+						controller.System,
 					)
 				})
 			})
