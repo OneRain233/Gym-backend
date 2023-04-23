@@ -11,6 +11,8 @@ type AddFacilityForm struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Location    string   `json:"location"`
+	Lat         float64  `json:"lat"`
+	Long        float64  `json:"long"`
 	Images      []string `json:"images"`
 	Tags        []string `json:"tags"`
 }
@@ -22,6 +24,8 @@ type ModifyFacilityForm struct {
 	Location    string   `json:"location"`
 	Images      []string `json:"images"`
 	Tags        []string `json:"tags"`
+	Lat         float64  `json:"lat"`
+	Long        float64  `json:"long"`
 }
 
 type AddFacilityPlaceForm struct {

@@ -82,6 +82,8 @@ func (c *cFacilityAdmin) AddFacility(ctx context.Context, req *v1.AddFacilityReq
 		Location:    req.Location,
 		Images:      req.Image,
 		Tags:        req.Tags,
+		Lat:         req.Lat,
+		Long:        req.Long,
 	}
 
 	err = service.Facility().AddFacility(ctx, &form)
@@ -100,6 +102,8 @@ func (c *cFacilityAdmin) ModifyFacility(ctx context.Context, req *v1.ModifyFacil
 		Location:    req.Location,
 		Images:      req.Image,
 		Tags:        req.Tags,
+		Lat:         req.Lat,
+		Long:        req.Long,
 	}
 	err = service.Facility().ModifyFacility(ctx, &form)
 	if err != nil {

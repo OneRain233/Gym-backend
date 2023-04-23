@@ -300,6 +300,8 @@ func (s *sFacility) AddFacility(ctx context.Context, input *model.AddFacilityFor
 		Location:    input.Location,
 		Images:      images,
 		Tags:        tags,
+		Lat:         input.Lat,
+		Long:        input.Long,
 	}
 
 	_, err = dao.Facility.Ctx(ctx).Insert(facility)
@@ -353,6 +355,12 @@ func (s *sFacility) ModifyFacility(ctx context.Context, input *model.ModifyFacil
 		var images string
 		images = strings.Join(input.Images, ",")
 		facility.Images = images
+	}
+	if input.Lat != 0 {
+		facility.Lat = input.Lat
+	}
+	if input.Long != 0 {
+		facility.Long = input.Long
 	}
 	if input.Tags != nil {
 		var tags string

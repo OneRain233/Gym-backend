@@ -17,4 +17,6 @@ type Facility struct {
 	Location    interface{} // Facility Location
 	Images      interface{} // Image urls
 	Tags        interface{} //
+	Lat         interface{} //
+	Long        interface{} //
 }

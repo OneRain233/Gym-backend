@@ -36,6 +36,8 @@ type AddFacilityReq struct {
 	// TODO: images
 	Image []string `json:"image" v:"required#Please input image"`
 	Tags  []string `json:"tags" v:"required#Please input tag_ids"`
+	Lat   float64  `json:"lat" v:"required#Please input lat"`
+	Long  float64  `json:"long" v:"required#Please input long"`
 }
 
 type AddFacilityRes struct {
@@ -75,6 +77,8 @@ type ModifyFacilityReq struct {
 	Location    string   `json:"location" v:"required#Please input location"`
 	Image       []string `json:"image" v:"required#Please input image"`
 	Tags        []string `json:"tags" v:"required#Please input tag_ids"`
+	Lat         float64  `json:"lat" v:"required#Please input lat"`
+	Long        float64  `json:"long" v:"required#Please input long"`
 }
 
 type ModifyFacilityRes struct {

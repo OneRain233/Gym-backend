@@ -16,6 +16,7 @@ import (
 	_ "Gym-backend/internal/logic/facility"
 	_ "Gym-backend/internal/logic/file"
 	_ "Gym-backend/internal/logic/middleware"
+	_ "Gym-backend/internal/logic/notice"
 	_ "Gym-backend/internal/logic/order"
 	_ "Gym-backend/internal/logic/payment"
 	_ "Gym-backend/internal/logic/place"
