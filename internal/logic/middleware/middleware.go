@@ -5,6 +5,8 @@ import (
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
 
+	"github.com/gogf/gf/v2/os/gctx"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 
 	"github.com/gogf/gf/v2/errors/gcode"
@@ -50,6 +52,8 @@ func (s *sMiddleware) Ctx(r *ghttp.Request) {
 
 // ResponseHandler used to handle all response
 func (s *sMiddleware) ResponseHandler(r *ghttp.Request) {
+	ctx := gctx.New()
+	g.Log().Info(ctx, r.URL.Path, r.Response.Status)
 	r.Middleware.Next()
 
 	// if response has been written, skip it
