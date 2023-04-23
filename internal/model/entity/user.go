@@ -20,4 +20,5 @@ type User struct {
 	UpdateTime *gtime.Time `json:"updateTime" ` // CREATE AT
 	Role       int         `json:"role"       ` // ROLE
 	LoginTime  *gtime.Time `json:"loginTime"  ` // LAST LOGIN TIME
+	IsCoach    int         `json:"isCoach"    ` //
 }

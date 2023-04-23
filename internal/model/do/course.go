@@ -6,21 +6,14 @@ package do
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // Course is the golang structure of table course for DAO operations like Where/Data.
 type Course struct {
-	g.Meta       `orm:"table:course, do:true"`
-	Id           interface{} // ID
-	Status       interface{} // status
-	StartTime    *gtime.Time // start_time
-	EndTime      *gtime.Time // end_time
-	Title        interface{} // title
-	Description  interface{} // course discription
-	Teacher      interface{} // teacher
-	Type         interface{} // type
-	Place        interface{} // place
-	MaxMemberNum interface{} // max member num
-	CurrentNum   interface{} // now member num
+	g.Meta      `orm:"table:course, do:true"`
+	Id          interface{} //
+	Title       interface{} //
+	Description interface{} //
+	Video       interface{} //
+	Image       interface{} //
 }

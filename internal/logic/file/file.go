@@ -30,6 +30,10 @@ func (s *sFile) UploadFile(ctx context.Context, input model.FileUploadForm) (out
 		uploadPath += "avatar/"
 	case "facility":
 		uploadPath += "facility/"
+	case "course_image":
+		uploadPath += "course/image/"
+	case "course_video":
+		uploadPath += "course/video/"
 	case "common":
 		uploadPath += "common/"
 	default:

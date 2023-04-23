@@ -22,6 +22,7 @@ type UserUpdateForm struct {
 	Email    string
 	Phone    string
 	Gender   uint
+	IsCoach  bool
 }
 
 type UserProfileWithCredit struct {

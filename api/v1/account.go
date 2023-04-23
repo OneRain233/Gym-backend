@@ -20,6 +20,7 @@ type LoginRes struct {
 		Avatar   string `json:"avatar"`
 		Role     int    `json:"role"`
 		Token    string `json:"token"`
+		IsCoach  bool   `json:"is_coach"`
 	} `json:"data"`
 }
 
@@ -48,6 +49,7 @@ type ProfileRes struct {
 		Email    string `json:"email"`
 		Phone    string `json:"phone"`
 		Avatar   string `json:"avatar"`
+		IsCoach  bool   `json:"is_coach"`
 	} `json:"data"`
 }
 
@@ -107,6 +109,7 @@ type UpdateUserReq struct {
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
 	Gender   uint   `json:"gender"`
+	IsCoach  bool   `json:"is_coach"`
 }
 
 type UserUpdateUserReq struct {

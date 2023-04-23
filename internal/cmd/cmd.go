@@ -136,6 +136,7 @@ var (
 						controller.File,
 						controller.Subscription,
 						controller.Evaluation,
+						controller.Course,
 					)
 				})
 
@@ -158,6 +159,7 @@ var (
 						controller.EvaluationAdmin,
 						controller.TagAdmin,
 						controller.System,
+						controller.CourseAdmin,
 					)
 				})
 			})

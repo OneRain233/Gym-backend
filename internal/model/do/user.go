@@ -22,4 +22,5 @@ type User struct {
 	UpdateTime *gtime.Time // CREATE AT
 	Role       interface{} // ROLE
 	LoginTime  *gtime.Time // LAST LOGIN TIME
+	IsCoach    interface{} //
 }

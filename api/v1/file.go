@@ -41,3 +41,25 @@ type FacilityImageUploadRes struct {
 	Url    string `json:"url"`
 	Name   string `json:"name"`
 }
+
+type CourseImageUploadReq struct {
+	g.Meta `path:"/upload/course/image" method:"post" mime:"multipart/form-data" tags:"File" summary:"Upload course image"`
+	File   *ghttp.UploadFile `json:"file" v:"required#Please select file to upload"`
+}
+
+type CourseImageUploadRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Url    string `json:"url"`
+	Name   string `json:"name"`
+}
+
+type CourseVideoUploadReq struct {
+	g.Meta `path:"/upload/course/video" method:"post" mime:"multipart/form-data" tags:"File" summary:"Upload course video"`
+	File   *ghttp.UploadFile `json:"file" v:"required#Please select file to upload"`
+}
+
+type CourseVideoUploadRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+	Url    string `json:"url"`
+	Name   string `json:"name"`
+}

@@ -45,6 +45,7 @@ func (c *cUser) Login(ctx context.Context, req *v1.LoginReq) (res *v1.LoginRes, 
 	res.Data.Username = userEntity.Username
 	res.Data.Avatar = userEntity.Avatar
 	res.Data.Role = userEntity.Role
+	res.Data.IsCoach = userEntity.IsCoach == 1
 	token, _ := service.BizCtx().GetSession(ctx).Id()
 	fmt.Println(token)
 	res.Data.Token = token
@@ -128,6 +129,7 @@ func (c *cUserAdmin) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserRe
 		Email:    req.Email,
 		Phone:    req.Phone,
 		Gender:   req.Gender,
+		IsCoach:  req.IsCoach,
 	}
 	err = service.User().UpdateUser(ctx, &form)
 	if err != nil {

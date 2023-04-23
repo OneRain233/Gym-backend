@@ -4,21 +4,11 @@
 
 package entity
 
-import (
-	"github.com/gogf/gf/v2/os/gtime"
-)
-
 // Course is the golang structure for table course.
 type Course struct {
-	Id           int         `json:"id"           ` // ID
-	Status       int         `json:"status"       ` // status
-	StartTime    *gtime.Time `json:"startTime"    ` // start_time
-	EndTime      *gtime.Time `json:"endTime"      ` // end_time
-	Title        string      `json:"title"        ` // title
-	Description  string      `json:"description"  ` // course discription
-	Teacher      string      `json:"teacher"      ` // teacher
-	Type         int         `json:"type"         ` // type
-	Place        string      `json:"place"        ` // place
-	MaxMemberNum int         `json:"maxMemberNum" ` // max member num
-	CurrentNum   int         `json:"currentNum"   ` // now member num
+	Id          int    `json:"id"          ` //
+	Title       string `json:"title"       ` //
+	Description string `json:"description" ` //
+	Video       string `json:"video"       ` //
+	Image       string `json:"image"       ` //
 }

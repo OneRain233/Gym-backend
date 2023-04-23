@@ -19,6 +19,11 @@ func (c *cProfile) GetProfile(ctx context.Context, req *v1.ProfileReq) (res *v1.
 	res.Data.Email = user.Email
 	res.Data.Phone = user.Phone
 	res.Data.Gender = uint(user.Gender)
+	if user.IsCoach == 1 {
+		res.Data.IsCoach = true
+	} else {
+		res.Data.IsCoach = false
+	}
 	return
 
 }
