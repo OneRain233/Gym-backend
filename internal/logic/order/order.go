@@ -52,12 +52,15 @@ func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderFor
 	duration := endTimeTime.Sub(startTimeTime)
 	userId := service.Session().GetUser(ctx).Id
 	subscription, err := service.Subscription().GetSubscriptionByUserId(ctx, userId)
-	if err != nil {
-		return
-	}
-	subscriptionType, err := service.Subscription().GetSubscriptionTypeById(ctx, subscription.SubscriptionType)
-	if err != nil {
-		return
+
+	var subscriptionType *entity.SubscriptionType
+	if subscription != nil {
+		subscriptionType, err = service.Subscription().GetSubscriptionTypeById(ctx, subscription.SubscriptionType)
+		if err != nil {
+			return
+		}
+	} else {
+		subscriptionType = &entity.SubscriptionType{}
 	}
 
 	//place := &entity.FacilityPlace{}
@@ -189,10 +192,8 @@ func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) 
 	// TODO: optimize the query for time
 	queryStartTime := gtime.NewFromStr(input.StartTime).Add(time.Duration(-24) * time.Hour) // 24 hour before
 	queryEndTime := gtime.NewFromStr(input.EndTime).Add(time.Duration(24) * time.Hour)      // 24 hour after
-
 	err = dao.Order.Ctx(ctx).Where("place_id = ? AND start_time >= ? AND end_time <= ? AND status = ?", input.PlaceId, queryStartTime, queryEndTime, consts.OrderStatusPending).Scan(&orders)
 	//err = dao.Order.Ctx(ctx).Where("place_id", input.PlaceId).Where("status", consts.OrderStatusPending).Scan(&orders)
-
 	if err != nil {
 		return false, err
 	}
