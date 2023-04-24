@@ -5,6 +5,7 @@ import "Gym-backend/internal/model/entity"
 type FacilityEntity struct {
 	Facility *entity.Facility        `json:"facility"`
 	Places   []*entity.FacilityPlace `json:"places"`
+	Rate     float64                 `json:"rate"`
 }
 
 type AddFacilityForm struct {

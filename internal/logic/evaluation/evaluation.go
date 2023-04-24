@@ -203,7 +203,7 @@ func (c *sEvaluation) GetFacilityScore(ctx context.Context, facilityId int) (sco
 		return
 	}
 	if len(evaluations) == 0 {
-		return
+		return 5, nil
 	}
 	var total int
 	for _, evaluation := range evaluations {

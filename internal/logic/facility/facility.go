@@ -77,9 +77,11 @@ func (s *sFacility) GetFacilityList(ctx context.Context, pagination *model.Pagin
 		if place == nil {
 			place = []*entity.FacilityPlace{}
 		}
+		rate, _ := service.Evaluation().GetFacilityScore(ctx, facility.Id)
 		res = append(res, &model.FacilityEntity{
 			Facility: facility,
 			Places:   place,
+			Rate:     float64(rate),
 		})
 	}
 	return
@@ -106,6 +108,11 @@ func (s *sFacility) GetFacilityById(ctx context.Context, id int) (res *model.Fac
 		place = []*entity.FacilityPlace{}
 	}
 	res.Places = place
+	rate, err := service.Evaluation().GetFacilityScore(ctx, id)
+	if err != nil {
+		return
+	}
+	res.Rate = float64(rate)
 	return
 }
 
@@ -130,6 +137,11 @@ func (s *sFacility) GetFacilityByName(ctx context.Context, name string) (res *mo
 		place = []*entity.FacilityPlace{}
 	}
 	res.Places = place
+	rate, err := service.Evaluation().GetFacilityScore(ctx, res.Facility.Id)
+	if err != nil {
+		return
+	}
+	res.Rate = float64(rate)
 	return
 }
 
@@ -159,9 +171,11 @@ func (s *sFacility) GetFacilityBySearch(ctx context.Context, search string) (res
 		if place == nil {
 			place = []*entity.FacilityPlace{}
 		}
+		rate, _ := service.Evaluation().GetFacilityScore(ctx, facility.Id)
 		res = append(res, &model.FacilityEntity{
 			Facility: facility,
 			Places:   place,
+			Rate:     float64(rate),
 		})
 	}
 	return
@@ -195,9 +209,11 @@ func (s *sFacility) GetFacilityByTagId(ctx context.Context, tagId int) (res []*m
 				if place == nil {
 					place = []*entity.FacilityPlace{}
 				}
+				rate, _ := service.Evaluation().GetFacilityScore(ctx, facility.Id)
 				res = append(res, &model.FacilityEntity{
 					Facility: facility,
 					Places:   place,
+					Rate:     float64(rate),
 				})
 			}
 		}
@@ -243,9 +259,11 @@ func (s *sFacility) GetFacilityByTagName(ctx context.Context, tagName string) (r
 				if place == nil {
 					place = []*entity.FacilityPlace{}
 				}
+				rate, _ := service.Evaluation().GetFacilityScore(ctx, facility.Id)
 				res = append(res, &model.FacilityEntity{
 					Facility: facility,
 					Places:   place,
+					Rate:     float64(rate),
 				})
 			}
 		}
