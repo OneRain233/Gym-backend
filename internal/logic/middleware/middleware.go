@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/response"
@@ -100,7 +101,16 @@ func (s *sMiddleware) AuthHandler(r *ghttp.Request) {
 // AdminAuthHandler used to handle admin user auth
 func (s *sMiddleware) AdminAuthHandler(r *ghttp.Request) {
 	user := service.Session().GetUser(r.Context())
-	if user.Role != 1 {
+	if user.Role != consts.RoleAdmin {
+		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
+	}
+	r.Middleware.Next()
+}
+
+// ManagerAuthHandler used to handle manager user auth
+func (s *sMiddleware) ManagerAuthHandler(r *ghttp.Request) {
+	user := service.Session().GetUser(r.Context())
+	if user.Role != consts.RoleManager && user.Role != consts.RoleAdmin {
 		response.Jsonify(r, gcode.CodeNotAuthorized.Code(), "Unauthorized")
 	}
 	r.Middleware.Next()

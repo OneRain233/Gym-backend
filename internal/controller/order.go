@@ -16,9 +16,11 @@ import (
 
 var Order = cOrder{}
 var OrderAdmin = cOrderAdmin{}
+var OrderManager = cOrderManager{}
 
 type cOrder struct{}
 type cOrderAdmin struct{}
+type cOrderManager struct{}
 
 func (c *cOrder) CreateOrder(ctx context.Context, req *v1.CreateOrderReq) (res *v1.CreateOrderRes, err error) {
 	res = &v1.CreateOrderRes{}
@@ -43,7 +45,7 @@ func (c *cOrder) CreateOrder(ctx context.Context, req *v1.CreateOrderReq) (res *
 	return
 }
 
-func (c *cOrderAdmin) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (res *v1.GetAllOrderRes, err error) {
+func (c *cOrderManager) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (res *v1.GetAllOrderRes, err error) {
 	res = &v1.GetAllOrderRes{}
 	var orders []*entity.Order
 
@@ -73,7 +75,7 @@ func (c *cOrderAdmin) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (
 	return
 }
 
-func (c *cOrderAdmin) GetOrderById(ctx context.Context, req *v1.GetOrderByUserIdReq) (res *v1.GetOrderByUserIdRes, err error) {
+func (c *cOrderManager) GetOrderById(ctx context.Context, req *v1.GetOrderByUserIdReq) (res *v1.GetOrderByUserIdRes, err error) {
 	res = &v1.GetOrderByUserIdRes{}
 	var order []*entity.Order
 	order, err = service.Order().GetOrdersByUserId(ctx, req.UserId)
@@ -99,7 +101,7 @@ func (c *cOrderAdmin) GetOrderById(ctx context.Context, req *v1.GetOrderByUserId
 	return
 }
 
-func (c *cOrderAdmin) GetOrderByPlaceId(ctx context.Context, req *v1.GetOrderByPlaceIdReq) (res *v1.GetOrderByPlaceIdRes, err error) {
+func (c *cOrderManager) GetOrderByPlaceId(ctx context.Context, req *v1.GetOrderByPlaceIdReq) (res *v1.GetOrderByPlaceIdRes, err error) {
 	res = &v1.GetOrderByPlaceIdRes{}
 	var order []*entity.Order
 	order, err = service.Order().GetOrdersByPlaceId(ctx, req.PlaceId)
@@ -151,7 +153,7 @@ func (c *cOrder) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderByOrde
 	return
 }
 
-func (c *cOrderAdmin) GetOrderByTime(ctx context.Context, req *v1.GetOrderByTimeReq) (res *v1.GetOrderByTimeRes, err error) {
+func (c *cOrderManager) GetOrderByTime(ctx context.Context, req *v1.GetOrderByTimeReq) (res *v1.GetOrderByTimeRes, err error) {
 	res = &v1.GetOrderByTimeRes{}
 	startTime := gtime.NewFromStr(req.StartTime)
 	endTime := gtime.NewFromStr(req.EndTime)
@@ -224,7 +226,7 @@ func (c *cOrder) GetOwnOrder(ctx context.Context, req *v1.GetOwnOrderReq) (res *
 	return
 }
 
-func (c *cOrderAdmin) StartOrder(ctx context.Context, req *v1.StartOrderReq) (res *v1.StartOrderRes, err error) {
+func (c *cOrderManager) StartOrder(ctx context.Context, req *v1.StartOrderReq) (res *v1.StartOrderRes, err error) {
 	res = &v1.StartOrderRes{}
 	err = service.Order().StartOrder(ctx, req.OrderCode)
 	if err != nil {

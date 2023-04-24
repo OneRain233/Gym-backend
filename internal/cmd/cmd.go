@@ -140,6 +140,18 @@ var (
 					)
 				})
 
+				// Manager user
+				group.Group("/", func(group *ghttp.RouterGroup) {
+					group.Middleware(
+						service.Middleware().ResponseHandler,
+						service.Middleware().AuthHandler,
+						service.Middleware().ManagerAuthHandler,
+					)
+					group.Bind(
+						controller.OrderManager,
+					)
+				})
+
 				// Admin user
 				group.Group("/", func(group *ghttp.RouterGroup) {
 					group.Middleware(

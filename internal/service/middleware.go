@@ -15,6 +15,7 @@ type (
 		ResponseHandler(r *ghttp.Request)
 		AuthHandler(r *ghttp.Request)
 		AdminAuthHandler(r *ghttp.Request)
+		ManagerAuthHandler(r *ghttp.Request)
 		CorsHandler(r *ghttp.Request)
 	}
 )
