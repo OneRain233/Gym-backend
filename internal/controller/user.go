@@ -12,9 +12,11 @@ import (
 
 var User = cUser{}
 var UserAdmin = cUserAdmin{}
+var UserManger = cUserManger{}
 
 type cUser struct{}
 type cUserAdmin struct{}
+type cUserManger struct{}
 
 func (c *cUser) Register(ctx context.Context, req *v1.RegisterReq) (res *v1.RegisterRes, err error) {
 	res = &v1.RegisterRes{}
@@ -84,7 +86,7 @@ func (c *cUser) ChangePassword(ctx context.Context, req *v1.ChangePasswdReq) (re
 	return
 }
 
-func (c *cUserAdmin) GetAllUser(ctx context.Context, req *v1.GetUserListReq) (res *v1.GetUserListRes, err error) {
+func (c *cUserManger) GetAllUser(ctx context.Context, req *v1.GetUserListReq) (res *v1.GetUserListRes, err error) {
 	res = &v1.GetUserListRes{}
 	limit := req.Limit
 	page := req.Page
@@ -99,7 +101,7 @@ func (c *cUserAdmin) GetAllUser(ctx context.Context, req *v1.GetUserListReq) (re
 	return
 }
 
-func (c *cUserAdmin) SearchUser(ctx context.Context, req *v1.GetUserSearchReq) (res *v1.GetUserSearchRes, err error) {
+func (c *cUserManger) SearchUser(ctx context.Context, req *v1.GetUserSearchReq) (res *v1.GetUserSearchRes, err error) {
 	res = &v1.GetUserSearchRes{}
 	res.User, err = service.User().GetUserBySearch(ctx, req.Username)
 	if err != nil {
@@ -108,7 +110,7 @@ func (c *cUserAdmin) SearchUser(ctx context.Context, req *v1.GetUserSearchReq) (
 	return
 }
 
-func (c *cUserAdmin) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (res *v1.GetUserByIdRes, err error) {
+func (c *cUserManger) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (res *v1.GetUserByIdRes, err error) {
 	res = &v1.GetUserByIdRes{}
 	res.User, err = service.User().GetUserById(ctx, req.Id)
 	if err != nil {
@@ -117,7 +119,7 @@ func (c *cUserAdmin) GetUserById(ctx context.Context, req *v1.GetUserByIdReq) (r
 	return
 }
 
-func (c *cUserAdmin) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserReq) (res *v1.UpdateUserRes, err error) {
+func (c *cUserManger) UpdateUserProfile(ctx context.Context, req *v1.UpdateUserReq) (res *v1.UpdateUserRes, err error) {
 	res = &v1.UpdateUserRes{}
 	if req.Id == 0 {
 		req.Id = uint(service.Session().GetUser(ctx).Id)

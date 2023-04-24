@@ -149,6 +149,8 @@ var (
 					)
 					group.Bind(
 						controller.OrderManager,
+						controller.UserManger,
+						controller.Visualize,
 					)
 				})
 
@@ -167,7 +169,6 @@ var (
 						controller.Config,
 						controller.UserAdmin,
 						controller.CreditAdmin,
-						controller.Visualize,
 						controller.EvaluationAdmin,
 						controller.TagAdmin,
 						controller.System,
