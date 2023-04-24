@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -57,4 +58,13 @@ type AdminGetEvaluationReq struct {
 
 type AdminGetEvaluationRes struct {
 	Evaluations []*entity.Evaluation `json:"evaluations"`
+}
+
+type UserGetEvaluationsReq struct {
+	g.Meta     `path:"/evaluation/user/get" tags:"Evaluation" method:"post" summary:"User Get Evaluations"`
+	FacilityId int `json:"facility_id"`
+}
+
+type UserGetEvaluationRes struct {
+	Evaluations []*model.SafeEvaluation `json:"evaluations"`
 }

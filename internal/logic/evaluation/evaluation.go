@@ -212,3 +212,12 @@ func (c *sEvaluation) GetFacilityScore(ctx context.Context, facilityId int) (sco
 	score = total / len(evaluations)
 	return
 }
+
+func (c *sEvaluation) FetchUsername(ctx context.Context, evaluation *entity.Evaluation) (username string, err error) {
+	user, err := service.User().GetUserById(ctx, uint(evaluation.UserId))
+	if err != nil {
+		return "", err
+	}
+
+	return user.Username, nil
+}

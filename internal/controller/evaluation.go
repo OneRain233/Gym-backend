@@ -107,3 +107,24 @@ func (c *cEvaluation) UpdateEvaluation(ctx context.Context, req *v1.UpdateEvalua
 	}
 	return
 }
+
+func (c *cEvaluation) UserGetEvaluations(ctx context.Context, req *v1.UserGetEvaluationsReq) (res *v1.UserGetEvaluationRes, err error) {
+	res = &v1.UserGetEvaluationRes{}
+	evaluations, err := service.Evaluation().GetEvaluationByFacilityId(ctx, req.FacilityId)
+	if err != nil {
+		return
+	}
+	for _, evaluation := range evaluations {
+		username, err1 := service.Evaluation().FetchUsername(ctx, evaluation)
+		res.Evaluations = append(res.Evaluations, &model.SafeEvaluation{
+			Evaluation: evaluation,
+			UserName:   username,
+		})
+		err = err1
+	}
+	if evaluations == nil {
+		res.Evaluations = make([]*model.SafeEvaluation, 0)
+	}
+	return
+
+}
