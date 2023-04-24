@@ -24,7 +24,7 @@ func New() *sReceipt {
 	return &sReceipt{}
 }
 
-func (r *sReceipt) GetReceiptByOrderCode(ctx context.Context, orderId int) (receipt *entity.Receipt, err error) {
+func (r *sReceipt) GetReceiptByOrderId(ctx context.Context, orderId int) (receipt *entity.Receipt, err error) {
 	receipt = &entity.Receipt{}
 	// check count
 	cnt, err := dao.Receipt.Ctx(ctx).Where("order_id", orderId).Count()
@@ -59,7 +59,7 @@ func (r *sReceipt) SendReceiptToUser(ctx context.Context, orderCode string) (err
 		err = gerror.New("order not found")
 		return
 	}
-	receipt, err := r.GetReceiptByOrderCode(ctx, order.Id)
+	receipt, err := r.GetReceiptByOrderId(ctx, order.Id)
 	if err != nil {
 		return
 	}
@@ -82,4 +82,9 @@ func (r *sReceipt) SendReceiptToUser(ctx context.Context, orderCode string) (err
 	g.Log().Info(ctx, "sending email to user")
 	err = mail.SendEmailWithAttachment(user.Email, "Receipt Your receipt is attached", receipt.ReceiptPath)
 	return
+}
+
+func (r *sReceipt) DeleteReceipt(ctx context.Context, id int) error {
+	_, err := dao.Receipt.Ctx(ctx).Where("id", id).Delete()
+	return err
 }

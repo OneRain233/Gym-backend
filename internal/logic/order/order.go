@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gogf/gf/v2/os/gfile"
+
 	"github.com/gogf/gf/v2/database/gdb"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -287,6 +289,28 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 	// 5. If the order is paid and there is a receipt	pass
 
 	// TODO: regenerate?
+	order, err := o.GetOrderByOrderCode(ctx, orderCode)
+	if err != nil {
+		return "", err
+	}
+	if order == nil {
+		return "", gerror.New("order not found")
+	}
+	receiptEntity, err := service.Receipt().GetReceiptByOrderId(ctx, order.Id)
+	if err != nil {
+		return "", err
+	}
+	if receiptEntity != nil {
+		// check file exists?
+		if gfile.Exists(receiptEntity.ReceiptPath) {
+			return receiptEntity.ReceiptPath, nil
+		}
+		// delete the receipt in db
+		err = service.Receipt().DeleteReceipt(ctx, receiptEntity.Id)
+		if err != nil {
+			return "", err
+		}
+	}
 	// check if the order is paid
 	payment, err := service.Payment().GetPaymentByOrderCode(ctx, orderCode)
 	if err != nil {
@@ -299,26 +323,9 @@ func (o *sOrder) GenerateOrderReceipt(ctx context.Context, orderCode string) (pa
 		return "", gerror.New("payment not successful")
 	}
 
-	order, err := o.GetOrderByOrderCode(ctx, orderCode)
-	if err != nil {
-		return "", err
-	}
-
 	if order.Status != consts.OrderStatusDone {
 		return "", gerror.New("order not done")
 	}
-
-	// TODO: Comment this part for testing
-	// ================================
-	//check if there is a receipt in db
-	receiptEntity, err := service.Receipt().GetReceiptByOrderCode(ctx, order.Id)
-	if err != nil {
-		return "", err
-	}
-	if receiptEntity != nil {
-		return receiptEntity.ReceiptPath, nil
-	}
-	// ================================
 
 	// generate order code qr code
 	userId := service.Session().GetUser(ctx).Id

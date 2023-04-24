@@ -13,9 +13,10 @@ import (
 
 type (
 	IReceipt interface {
-		GetReceiptByOrderCode(ctx context.Context, orderId int) (receipt *entity.Receipt, err error)
+		GetReceiptByOrderId(ctx context.Context, orderId int) (receipt *entity.Receipt, err error)
 		AddReceipt(ctx context.Context, input model.CreateReceiptForm) (err error)
 		SendReceiptToUser(ctx context.Context, orderCode string) (err error)
+		DeleteReceipt(ctx context.Context, id int) error
 	}
 )
 
