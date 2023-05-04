@@ -25,4 +25,5 @@ type UpdateEvaluationForm struct {
 type SafeEvaluation struct {
 	Evaluation *entity.Evaluation `json:"evaluation"`
 	UserName   string             `json:"username"`
+	Avatar     string             `json:"avatar"`
 }

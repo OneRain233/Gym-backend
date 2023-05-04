@@ -25,7 +25,7 @@ type (
 		GetEvaluationById(ctx context.Context, id int) (evaluation *entity.Evaluation, err error)
 		UpdateEvaluation(ctx context.Context, form *model.UpdateEvaluationForm) error
 		GetFacilityScore(ctx context.Context, facilityId int) (score int, err error)
-		FetchUsername(ctx context.Context, evaluation *entity.Evaluation) (username string, err error)
+		FetchUsername(ctx context.Context, evaluation *entity.Evaluation) (user *entity.User, err error)
 	}
 )
 

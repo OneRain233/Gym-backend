@@ -119,10 +119,11 @@ func (c *cEvaluation) UserGetEvaluations(ctx context.Context, req *v1.UserGetEva
 		return
 	}
 	for _, evaluation := range evaluations {
-		username, err1 := service.Evaluation().FetchUsername(ctx, evaluation)
+		user, err1 := service.Evaluation().FetchUsername(ctx, evaluation)
 		res.Evaluations = append(res.Evaluations, &model.SafeEvaluation{
 			Evaluation: evaluation,
-			UserName:   username,
+			UserName:   user.Username,
+			Avatar:     user.Avatar,
 		})
 		err = err1
 	}

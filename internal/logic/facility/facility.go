@@ -27,6 +27,9 @@ func (s *sFacility) ProcessImage(images string) []string {
 }
 
 func (s *sFacility) FetchTags(ctx context.Context, facility *entity.Facility) (tags []string, err error) {
+	if facility == nil {
+		return nil, gerror.New("facility is nil")
+	}
 	if facility.Tags == "" || facility == nil {
 		return make([]string, 0), nil
 	}

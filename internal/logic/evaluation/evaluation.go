@@ -214,11 +214,13 @@ func (c *sEvaluation) GetFacilityScore(ctx context.Context, facilityId int) (sco
 	return
 }
 
-func (c *sEvaluation) FetchUsername(ctx context.Context, evaluation *entity.Evaluation) (username string, err error) {
-	user, err := service.User().GetUserById(ctx, uint(evaluation.UserId))
+func (c *sEvaluation) FetchUsername(ctx context.Context, evaluation *entity.Evaluation) (user *entity.User, err error) {
+	user, err = service.User().GetUserById(ctx, uint(evaluation.UserId))
 	if err != nil {
-		return "", err
+		return
 	}
-
-	return user.Username, nil
+	if user == nil {
+		return nil, gerror.New("User does not exist")
+	}
+	return user, nil
 }
