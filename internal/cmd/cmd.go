@@ -110,6 +110,7 @@ var (
 				)
 				// Unauthorized user
 				group.Bind(
+					controller.File,
 					controller.User,
 					controller.Facility,
 					controller.Bank,
@@ -133,7 +134,7 @@ var (
 						controller.Card,
 						controller.Wallet,
 						controller.Credit,
-						controller.File,
+
 						controller.Subscription,
 						controller.Evaluation,
 						controller.Course,
