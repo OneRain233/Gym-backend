@@ -55,10 +55,14 @@ func (s *cEvaluationAdmin) GetEvaluations(ctx context.Context, req *v1.AdminGetE
 func (c *cEvaluation) AddEvaluation(ctx context.Context, req *v1.AddEvaluationReq) (res *v1.AddEvaluationRes, err error) {
 	res = &v1.AddEvaluationRes{}
 	videos := ""
-	videos = strings.Join(req.Videos, ",")
+	if req.Videos != nil {
+		videos = strings.Join(req.Videos, ",")
+	}
 
 	images := ""
-	images = strings.Join(req.Images, ",")
+	if req.Images != nil {
+		images = strings.Join(req.Images, ",")
+	}
 
 	form := &model.AddEvaluationForm{
 		UserId:      service.Session().GetUser(ctx).Id,
