@@ -27,6 +27,7 @@ func (c *sEvaluation) AddEvaluation(ctx context.Context, form *model.AddEvaluati
 	}
 	userId := form.UserId
 	facilityId := form.FacilityId
+
 	evaluation := &entity.Evaluation{
 		UserId:      userId,
 		FacilityId:  facilityId,
