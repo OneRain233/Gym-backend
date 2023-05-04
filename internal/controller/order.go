@@ -45,6 +45,26 @@ func (c *cOrder) CreateOrder(ctx context.Context, req *v1.CreateOrderReq) (res *
 	return
 }
 
+func (c *cOrder) CreateRegularOrder(ctx context.Context, req *v1.CreateRegularOrderReq) (res *v1.CreateRegularOrderRes, err error) {
+	res = &v1.CreateRegularOrderRes{}
+	form := model.CreateRegularOrderFormWeekly{
+		UserId:           service.Session().GetUser(ctx).Id,
+		PlaceId:          req.PlaceId,
+		SessionStartTime: req.SessionStart,
+		SessionEndTime:   req.SessionEnd,
+		StartDay:         req.StartDay,
+		WeekCount:        req.WeekCount,
+	}
+
+	resp, err := service.Order().CreateRegularWeeklyOrder(ctx, form)
+	if err != nil {
+		return
+	}
+	res.OrderCode = resp.OrderCode
+	res.Orders = resp
+	return
+}
+
 func (c *cOrderManager) GetAllOrder(ctx context.Context, req *v1.GetAllOrderReq) (res *v1.GetAllOrderRes, err error) {
 	res = &v1.GetAllOrderRes{}
 	var orders []*entity.Order

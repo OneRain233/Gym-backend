@@ -94,6 +94,86 @@ func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderFor
 	}
 }
 
+func (o *sOrder) CreateRegularWeeklyOrder(ctx context.Context, input model.CreateRegularOrderFormWeekly) (response *model.RegularOrderResponseForm, err error) {
+	response = &model.RegularOrderResponseForm{}
+	response.Orders = make([]*model.ResponseOrderForm, 0)
+	startDay := gtime.NewFromStr(input.StartDay)
+	weekCount := input.WeekCount
+	parentOrderCode := o.GenerateParentOrderCode()
+	// calculate every session date
+	var sessionDate []*gtime.Time
+	for i := 0; i < weekCount; i++ {
+		sessionDate = append(sessionDate, startDay.AddDate(0, 0, 7*i))
+	}
+	// check if the time is taken
+	startTime := gtime.NewFromStr(input.SessionStartTime)
+	endTime := gtime.NewFromStr(input.SessionEndTime)
+	for _, date := range sessionDate {
+		newInput := model.CreateOrderForm{
+			UserId:    input.UserId,
+			PlaceId:   input.PlaceId,
+			StartTime: date.Format("Y-m-d") + " " + startTime.Format("H:i:s"),
+			EndTime:   date.Format("Y-m-d") + " " + endTime.Format("H:i:s"),
+		}
+		validated, err := o.ValidateTime(ctx, newInput)
+		if err != nil {
+			return response, err
+		}
+		if !validated {
+			err = gerror.New("time is taken or invalid")
+			return response, err
+		}
+	}
+
+	// calculate amount
+	amountCnt, discount, err := o.CalculateAmount(ctx, model.CreateOrderForm{
+		UserId:    input.UserId,
+		PlaceId:   input.PlaceId,
+		StartTime: sessionDate[0].Format("Y-m-d") + " " + startTime.Format("H:i:s"),
+		EndTime:   sessionDate[0].Format("Y-m-d") + " " + endTime.Format("H:i:s"),
+	})
+	if err != nil {
+		return
+	}
+	amount := amountCnt * float64(weekCount)
+	// create order for every session
+	for _, date := range sessionDate {
+		newInput := model.CreateOrderForm{
+			UserId:    input.UserId,
+			PlaceId:   input.PlaceId,
+			StartTime: date.Format("Y-m-d") + " " + startTime.Format("H:i:s"),
+			EndTime:   date.Format("Y-m-d") + " " + endTime.Format("H:i:s"),
+		}
+		orderEntity := &entity.Order{
+			Time:            gtime.Now(),
+			OrderCode:       o.GenerateOrderCode(),
+			UserId:          newInput.UserId,
+			PlaceId:         newInput.PlaceId,
+			StartTime:       gtime.NewFromStr(newInput.StartTime),
+			EndTime:         gtime.NewFromStr(newInput.EndTime),
+			Amount:          amountCnt,
+			Status:          consts.OrderStatusWaitingPayment,
+			Discount:        discount,
+			ParentOrderCode: parentOrderCode,
+		}
+		_, err = dao.Order.Ctx(ctx).Insert(orderEntity)
+		if err != nil {
+			return response, err
+		}
+		response.Orders = append(response.Orders, &model.ResponseOrderForm{
+			Amount:    amountCnt,
+			OrderCode: orderEntity.OrderCode,
+			StartTime: newInput.StartTime,
+			EndTime:   newInput.EndTime,
+			PlaceId:   newInput.PlaceId,
+		})
+	}
+	response.Amount = amount
+	response.OrderCode = parentOrderCode
+	return
+
+}
+
 func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error) {
 	response = &model.ResponseOrderForm{}
 	// check if the time is taken
@@ -110,16 +190,26 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 	if err != nil {
 		return
 	}
-	orderEntity := &entity.Order{}
-	orderEntity.UserId = input.UserId
-	orderEntity.PlaceId = input.PlaceId
-	orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
-	orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
-	orderEntity.Amount = amountCnt
-	orderEntity.Status = consts.OrderStatusWaitingPayment
-	orderEntity.OrderCode = o.GenerateOrderCode()
-	orderEntity.Time = gtime.Now()
-	orderEntity.Discount = discount
+	orderEntity := &entity.Order{
+		UserId:    input.UserId,
+		PlaceId:   input.PlaceId,
+		StartTime: gtime.NewFromStr(input.StartTime),
+		EndTime:   gtime.NewFromStr(input.EndTime),
+		Amount:    amountCnt,
+		Status:    consts.OrderStatusWaitingPayment,
+		OrderCode: o.GenerateOrderCode(),
+		Time:      gtime.Now(),
+		Discount:  discount,
+	}
+	//orderEntity.UserId = input.UserId
+	//orderEntity.PlaceId = input.PlaceId
+	//orderEntity.StartTime = gtime.NewFromStr(input.StartTime)
+	//orderEntity.EndTime = gtime.NewFromStr(input.EndTime)
+	//orderEntity.Amount = amountCnt
+	//orderEntity.Status = consts.OrderStatusWaitingPayment
+	//orderEntity.OrderCode = o.GenerateOrderCode()
+	//orderEntity.Time = gtime.Now()
+	//orderEntity.Discount = discount
 
 	_, err = dao.Order.Ctx(ctx).Save(orderEntity)
 	response.OrderCode = orderEntity.OrderCode
@@ -137,6 +227,11 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 func (o *sOrder) GenerateOrderCode() string {
 	// YearMonthDay + 8 digits
 	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+}
+
+func (o *sOrder) GenerateParentOrderCode() string {
+	// "2" + YearMonthDay + 8 digits
+	return "2" + gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
 }
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
@@ -242,10 +337,25 @@ func (o *sOrder) GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*en
 	return
 }
 
+func (o *sOrder) GetRegularOrdersByOrderCode(ctx context.Context, orderCode string) (res []*entity.Order, err error) {
+	res = []*entity.Order{}
+	var orders []*entity.Order
+	err = dao.Order.Ctx(ctx).Where("parent_order_code", orderCode).Scan(&orders)
+	if err != nil {
+		return
+	}
+	if len(orders) == 0 {
+		return nil, gerror.New("order not found")
+	}
+	res = append(res, orders...)
+	return
+}
+
 func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error) {
+	res = &entity.Order{}
 	err = dao.Order.Ctx(ctx).Where("order_code", orderCode).Scan(&res)
 	if res == nil {
-		return nil, nil
+		return nil, gerror.New("order not found")
 	}
 	if err != nil {
 		return

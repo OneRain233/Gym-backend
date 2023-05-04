@@ -19,6 +19,7 @@ var normalUserClient *gclient.Client
 var adminUserClient *gclient.Client
 
 var tmpOrderCode string
+var tmpPlaceId int
 
 const (
 	adminUsername = "test_admin"
@@ -530,6 +531,53 @@ func TestCreatePayment(t *testing.T) {
 		t.AssertNE(resp, nil)
 		respJson := gjson.New(resp.ReadAllString())
 		fmt.Println(respJson)
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+// post /api/v1/order/own
+func TestGetOwnOrderList(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/order/own", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		respJson := gjson.New(resp.ReadAllString())
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+// post /api/v1/order/all
+func TestGetAllOrderList(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := adminUserClient.Post(ctx, "/api/v1/order/all", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		respJson := gjson.New(resp.ReadAllString())
+		t.Assert(respJson.Get("code"), 0)
+		t.Assert(respJson.Get("message"), "success")
+	})
+}
+
+// post /api/v1/order/code
+func TestGetOrderDetailByCode(t *testing.T) {
+	ctx := gctx.New()
+	req := map[string]interface{}{
+		"orderCode": tmpOrderCode,
+	}
+
+	gtest.C(t, func(t *gtest.T) {
+		resp, err := normalUserClient.Post(ctx, "/api/v1/order/code", req)
+		t.Assert(err, nil)
+		t.AssertNE(resp, nil)
+		respJson := gjson.New(resp.ReadAllString())
 		t.Assert(respJson.Get("code"), 0)
 		t.Assert(respJson.Get("message"), "success")
 	})

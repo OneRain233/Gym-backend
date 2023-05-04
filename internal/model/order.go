@@ -17,6 +17,12 @@ type ResponseOrderForm struct {
 	OrderCode string
 }
 
+type RegularOrderResponseForm struct {
+	Amount    float64
+	OrderCode string
+	Orders    []*ResponseOrderForm
+}
+
 type CreateReceiptForm struct {
 	OrderCode   string
 	OrderId     int
@@ -26,4 +32,21 @@ type CreateReceiptForm struct {
 type AdminResponseOrderForm struct {
 	Order *entity.Order         `json:"order"`
 	Place *entity.FacilityPlace `json:"place"`
+}
+
+type CreateRegularOrderFormWeekly struct {
+	UserId           int
+	PlaceId          int
+	SessionStartTime string
+	SessionEndTime   string
+	StartDay         string
+	WeekCount        int
+}
+
+type CreateRegularOrderFormDaily struct {
+	UserId           int
+	PlaceId          int
+	SessionStartTime string
+	SessionEndTime   string
+	Weekday          int
 }

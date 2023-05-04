@@ -25,6 +25,58 @@ func New() *sPayment {
 	return &sPayment{}
 }
 
+func (s *sPayment) CreatePaymentForRegularOrder(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error) {
+	response = &model.ResponsePaymentForm{}
+	orders, err := service.Order().GetRegularOrdersByOrderCode(ctx, form.OrderCode)
+	if err != nil {
+		return
+	}
+	if orders == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	amount := 0.0
+	for _, order := range orders {
+		amount += order.Amount
+	}
+	if form.PaymentType == consts.PaymentTypeWallet {
+		wallet, err := service.Wallet().GetWallet(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if wallet.Amount < amount {
+			return nil, gerror.New("not enough money")
+		}
+	} else if form.PaymentType == consts.PaymentTypeCard {
+		card, err := service.Card().GetCardById(ctx, form.CardId)
+		if err != nil {
+			return nil, err
+		}
+		if card == nil {
+			return nil, gerror.New("card not found")
+		}
+		if card.Amount < amount {
+			return nil, gerror.New("not enough money")
+		}
+	} else {
+		return nil, gerror.New("payment type not valid")
+	}
+
+	for _, order := range orders {
+		newForm := &model.CreatePaymentForm{
+			OrderCode:   order.OrderCode,
+			PaymentType: form.PaymentType,
+			CardId:      form.CardId,
+		}
+		_, err1 := s.CreatePayment(ctx, newForm)
+		if err1 != nil {
+			return nil, err1
+		}
+		//response = resp
+	}
+	return
+}
+
 func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error) {
 	response = &model.ResponsePaymentForm{}
 	order, err := service.Order().GetOrderByOrderCode(ctx, form.OrderCode)
@@ -134,7 +186,6 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 	response.Status = consts.PaymentSuccess
 
 	return
-
 }
 
 func (s *sPayment) CreatePaymentForRefund(ctx context.Context, form *model.RefundPaymentForm) error {

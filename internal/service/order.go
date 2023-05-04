@@ -16,11 +16,14 @@ import (
 type (
 	IOrder interface {
 		CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, discount float64, err error)
+		CreateRegularWeeklyOrder(ctx context.Context, input model.CreateRegularOrderFormWeekly) (response *model.RegularOrderResponseForm, err error)
 		CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error)
 		GenerateOrderCode() string
+		GenerateParentOrderCode() string
 		ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error)
 		GetOrdersByUserId(ctx context.Context, userId int) (res []*entity.Order, err error)
 		GetOrdersByPlaceId(ctx context.Context, placeId int) (res []*entity.Order, err error)
+		GetRegularOrdersByOrderCode(ctx context.Context, orderCode string) (res []*entity.Order, err error)
 		GetOrderByOrderCode(ctx context.Context, orderCode string) (res *entity.Order, err error)
 		GetAllOrders(ctx context.Context, pagination *model.Pagination) (res []*entity.Order, err error)
 		GetRefundedOrder(ctx context.Context) (res []*entity.Order, err error)

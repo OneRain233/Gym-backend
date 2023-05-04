@@ -13,6 +13,7 @@ import (
 
 type (
 	IPayment interface {
+		CreatePaymentForRegularOrder(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
 		CreatePayment(ctx context.Context, form *model.CreatePaymentForm) (response *model.ResponsePaymentForm, err error)
 		CreatePaymentForRefund(ctx context.Context, form *model.RefundPaymentForm) error
 		GeneratePaymentCode() string

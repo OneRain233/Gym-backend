@@ -18,6 +18,7 @@ type (
 		ValidatePhone(ctx context.Context, input *model.BindCardForm) error
 		BindCard(ctx context.Context, input *model.BindCardForm) error
 		GetCardsByUserId(ctx context.Context, userId int) (cards []*entity.WalletCard, err error)
+		GetCardById(ctx context.Context, cardId int) (card *entity.WalletCard, err error)
 		GetCardsCountByUserId(ctx context.Context, userId int) (count int, err error)
 		Pay(ctx context.Context, input *model.CardPayForm) error
 		PayForSubscription(ctx context.Context, input *model.CardPayForm) error

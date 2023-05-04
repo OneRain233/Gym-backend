@@ -106,6 +106,14 @@ func (s *sCard) GetCardsByUserId(ctx context.Context, userId int) (cards []*enti
 	return
 }
 
+func (s *sCard) GetCardById(ctx context.Context, cardId int) (card *entity.WalletCard, err error) {
+	err = dao.WalletCard.Ctx(ctx).Where("id", cardId).Scan(&card)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (s *sCard) GetCardsCountByUserId(ctx context.Context, userId int) (count int, err error) {
 	count, err = dao.WalletCard.Ctx(ctx).Where("user_id", userId).Count()
 	if err != nil {

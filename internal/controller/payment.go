@@ -7,6 +7,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gogf/gf/v2/frame/g"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
@@ -18,22 +20,46 @@ type cPaymentAdmin struct{}
 
 func (c *cPayment) CreatePayment(ctx context.Context, req *v1.CreatePaymentReq) (res *v1.CreatePaymentRes, err error) {
 	res = &v1.CreatePaymentRes{}
-	form := model.CreatePaymentForm{
-		OrderCode:      req.OrderCode,
-		PaymentType:    req.PaymentType,
-		CardId:         req.CardId,
-		IsSubscription: false,
-	}
-	resp, err := service.Payment().CreatePayment(ctx, &form)
-	if err != nil {
+	length := len(req.OrderCode)
+	fmt.Println(length)
+	if len(req.OrderCode) == 17 {
+		g.Log().Info(ctx, "order code is 17")
+		form := model.CreatePaymentForm{
+			OrderCode:   req.OrderCode,
+			PaymentType: req.PaymentType,
+			CardId:      req.CardId,
+		}
+		resp, err1 := service.Payment().CreatePayment(ctx, &form)
+		if err1 != nil {
+			return
+		}
+		res.PaymentCode = resp.PaymentCode
+		res.OrderCode = resp.OrderCode
+		res.PaymentType = resp.PaymentType
+		res.Amount = resp.Amount
+		res.Status = resp.Status
+		return
+	} else if len(req.OrderCode) == 18 {
+		g.Log().Info(ctx, "order code is 18")
+		form := model.CreatePaymentForm{
+			OrderCode:   req.OrderCode,
+			PaymentType: req.PaymentType,
+			CardId:      req.CardId,
+		}
+		resp, err1 := service.Payment().CreatePaymentForRegularOrder(ctx, &form)
+		if err1 != nil {
+			return
+		}
+		res.PaymentCode = resp.PaymentCode
+		res.OrderCode = resp.OrderCode
+		res.PaymentType = resp.PaymentType
+		res.Amount = resp.Amount
+		res.Status = resp.Status
+		return
+	} else {
+		err = gerror.New("order code not valid")
 		return
 	}
-	res.PaymentCode = resp.PaymentCode
-	res.OrderCode = resp.OrderCode
-	res.PaymentType = resp.PaymentType
-	res.Amount = resp.Amount
-	res.Status = resp.Status
-	return
 }
 
 func (c *cPaymentAdmin) GetPaymentByUserId(ctx context.Context, req *v1.GetPaymentByUserIdReq) (res *v1.GetPaymentByUserIdRes, err error) {
