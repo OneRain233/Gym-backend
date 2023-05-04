@@ -4,14 +4,19 @@
 
 package entity
 
+import (
+	"github.com/gogf/gf/v2/os/gtime"
+)
+
 // Evaluation is the golang structure for table evaluation.
 type Evaluation struct {
-	Id          int    `json:"id"          ` // ID
-	UserId      int    `json:"userId"      ` // User id
-	FacilityId  int    `json:"facilityId"  ` // Facility Id
-	Score       int    `json:"score"       ` // Score
-	Description string `json:"description" ` // Description
-	Anonymous   int    `json:"anonymous"   ` // IS Anonymous
-	Images      string `json:"images"      ` // Image urls
-	Videos      string `json:"videos"      ` // Videos urls
+	Id          int         `json:"id"          ` // ID
+	UserId      int         `json:"userId"      ` // User id
+	FacilityId  int         `json:"facilityId"  ` // Facility Id
+	Score       int         `json:"score"       ` // Score
+	Description string      `json:"description" ` // Description
+	Anonymous   int         `json:"anonymous"   ` // IS Anonymous
+	Images      string      `json:"images"      ` // Image urls
+	Videos      string      `json:"videos"      ` // Videos urls
+	Time        *gtime.Time `json:"time"        ` //
 }

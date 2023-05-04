@@ -8,6 +8,8 @@ import (
 	"Gym-backend/internal/service"
 	"context"
 
+	"github.com/gogf/gf/v2/os/gtime"
+
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
@@ -36,6 +38,7 @@ func (c *sEvaluation) AddEvaluation(ctx context.Context, form *model.AddEvaluati
 		Anonymous:   form.IsAnonymous,
 		Images:      form.Images,
 		Videos:      form.Videos,
+		Time:        gtime.Now(),
 	}
 	_, err := dao.Evaluation.Ctx(ctx).Data(evaluation).Insert()
 	if err != nil {
@@ -188,6 +191,7 @@ func (c *sEvaluation) UpdateEvaluation(ctx context.Context, form *model.UpdateEv
 	evaluation.Description = form.Description
 	evaluation.Images = form.Images
 	evaluation.Videos = form.Videos
+	evaluation.Time = gtime.Now()
 
 	_, err = dao.Evaluation.Ctx(ctx).Data(evaluation).Where("id", evaluationId).Update()
 	if err != nil {

@@ -6,6 +6,7 @@ package do
 
 import (
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // Evaluation is the golang structure of table evaluation for DAO operations like Where/Data.
@@ -19,4 +20,5 @@ type Evaluation struct {
 	Anonymous   interface{} // IS Anonymous
 	Images      interface{} // Image urls
 	Videos      interface{} // Videos urls
+	Time        *gtime.Time //
 }

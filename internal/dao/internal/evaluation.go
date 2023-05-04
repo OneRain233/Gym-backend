@@ -28,6 +28,7 @@ type EvaluationColumns struct {
 	Anonymous   string // IS Anonymous
 	Images      string // Image urls
 	Videos      string // Videos urls
+	Time        string //
 }
 
 // evaluationColumns holds the columns for table evaluation.
@@ -40,6 +41,7 @@ var evaluationColumns = EvaluationColumns{
 	Anonymous:   "anonymous",
 	Images:      "images",
 	Videos:      "videos",
+	Time:        "time",
 }
 
 // NewEvaluationDao creates and returns a new DAO object for table data access.
