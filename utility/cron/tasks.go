@@ -25,3 +25,19 @@ func OrderExpired() error {
 	}
 	return nil
 }
+
+func SubscriptionExpired() error {
+	ctx := gctx.New()
+	// 00:00 every day
+	_, err := gcron.Add(ctx, "0 0 0 * * *", func(ctx context.Context) {
+		err := service.Subscription().CheckExpiredSubscription(ctx)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}

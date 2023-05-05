@@ -98,6 +98,10 @@ var (
 			if err != nil {
 				g.Log().Fatal(gctx.New(), err)
 			}
+			err = cron.SubscriptionExpired()
+			if err != nil {
+				g.Log().Fatal(gctx.New(), err)
+			}
 
 			s.AddStaticPath("/uploads", uploadPath)
 

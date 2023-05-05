@@ -26,6 +26,7 @@ type (
 		UpdateSubscriptionStatus(ctx context.Context, subscriptionId int, status int) error
 		GenerateOrderCode() string
 		CancelSubscription(ctx context.Context) error
+		CheckExpiredSubscription(ctx context.Context) error
 	}
 )
 

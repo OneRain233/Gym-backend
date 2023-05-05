@@ -229,3 +229,18 @@ func (s *sSubscription) CancelSubscription(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (s *sSubscription) CheckExpiredSubscription(ctx context.Context) error {
+	var subscriptions []*entity.Subscription
+	err := dao.Subscription.Ctx(ctx).Where("end_time < ?", gtime.Now().Format("Y-m-d H:i:s")).Scan(&subscriptions)
+	if err != nil {
+		return err
+	}
+	for _, subscription := range subscriptions {
+		err = s.UpdateSubscriptionStatus(ctx, subscription.Id, consts.SubscriptionStatusExpire)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
