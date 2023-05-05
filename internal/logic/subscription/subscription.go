@@ -40,10 +40,10 @@ func (c *sSubscription) InitSubscriptionSTypesToCache(ctx context.Context) error
 	if err != nil {
 		return err
 	}
-	g.Log().Info(ctx, "Get Subsciptions", subscriptionTypes)
+	g.Log().Info(ctx, "Get Subscriptions", subscriptionTypes)
 
 	for _, subscriptionType := range subscriptionTypes {
-		g.Log().Info(ctx, "Get Subsciption", subscriptionType)
+		g.Log().Info(ctx, "Get Subscription", subscriptionType)
 		err = service.Cache().Push(ctx, "subscription_type", subscriptionType)
 		if err != nil {
 			continue
@@ -118,6 +118,12 @@ func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userI
 	return
 }
 
+func (s *sSubscription) GetUnFinishedSubscription(ctx context.Context, userId int) (res *entity.Subscription, err error) {
+	res = &entity.Subscription{}
+	now := gtime.Now().Format("Y-m-d H:i:s")
+	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Where("end_time > ?", now).Scan(res)
+	return
+}
 func (s *sSubscription) GetSubscriptionListByUserId(ctx context.Context, userId int) (res []*entity.Subscription, err error) {
 	res = make([]*entity.Subscription, 0)
 	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Scan(&res)
@@ -147,13 +153,13 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 	}
 	days := subscriptionType.Days
 	amount := subscriptionType.Amount
-
+	subscription, err := s.GetUnFinishedSubscription(ctx, userId)
 	endDay, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
 	if err != nil {
 		return err
 	}
 	// not expired
-	if endDay.Timestamp() > gtime.Now().Timestamp() {
+	if endDay.Timestamp() > gtime.Now().Timestamp() && subscription.Status == consts.SubscriptionStatusNormal {
 		return gerror.New("You have not expired subscription")
 	} else {
 		// create order
