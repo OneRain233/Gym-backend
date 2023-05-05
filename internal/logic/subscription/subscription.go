@@ -126,7 +126,15 @@ func (s *sSubscription) GetSubscriptionListByUserId(ctx context.Context, userId 
 
 func (s *sSubscription) GetSubscriptionByUserId(ctx context.Context, userId int) (res *entity.Subscription, err error) {
 	res = &entity.Subscription{}
-	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Scan(res)
+	today := gtime.Now().Format("Y-m-d H:i:s")
+	// find subscription that end time is greater than today
+	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Where("end_time > ?", today).Scan(res)
+	if res == nil {
+		return nil, gerror.New("You have not subscription")
+	}
+	if err != nil {
+		return nil, gerror.New("You have not subscription")
+	}
 	return
 }
 
@@ -181,7 +189,43 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 
 }
 
+func (s *sSubscription) UpdateSubscriptionStatus(ctx context.Context, subscriptionId int, status int) error {
+	var subscription *entity.Subscription
+	err := dao.Subscription.Ctx(ctx).Where("id", subscriptionId).Scan(&subscription)
+	if err != nil {
+		return err
+	}
+	if subscription == nil {
+		return gerror.New("Subscription not found")
+	}
+	_, err = dao.Subscription.Ctx(ctx).Data(g.Map{
+		"status": status,
+	}).Where("id", subscriptionId).Update()
+
+	return err
+}
+
 func (s *sSubscription) GenerateOrderCode() string {
 	// YearMonthDay + 8 digits
 	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+}
+
+func (s *sSubscription) CancelSubscription(ctx context.Context) error {
+	userId := service.Session().GetUser(ctx).Id
+	subscription, err := s.GetSubscriptionByUserId(ctx, userId)
+	if err != nil {
+		return err
+	}
+	if subscription == nil {
+		return gerror.New("You have not subscription")
+	}
+	if subscription.Status != consts.SubscriptionStatusNormal {
+		return gerror.New("You have not subscription")
+	}
+	// update subscription status
+	err = s.UpdateSubscriptionStatus(ctx, subscription.Id, consts.SubscriptionStatusCancel)
+	if err != nil {
+		return err
+	}
+	return nil
 }

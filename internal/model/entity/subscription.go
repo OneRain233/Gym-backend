@@ -15,4 +15,5 @@ type Subscription struct {
 	StartTime        *gtime.Time `json:"startTime"        ` //
 	EndTime          *gtime.Time `json:"endTime"          ` //
 	SubscriptionType int         `json:"subscriptionType" ` //
+	Status           int         `json:"status"           ` //
 }

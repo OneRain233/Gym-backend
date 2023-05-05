@@ -23,7 +23,9 @@ type (
 		GetSubscriptionListByUserId(ctx context.Context, userId int) (res []*entity.Subscription, err error)
 		GetSubscriptionByUserId(ctx context.Context, userId int) (res *entity.Subscription, err error)
 		CreateSubscription(ctx context.Context, form *model.CreateSubscriptionForm) error
+		UpdateSubscriptionStatus(ctx context.Context, subscriptionId int, status int) error
 		GenerateOrderCode() string
+		CancelSubscription(ctx context.Context) error
 	}
 )
 

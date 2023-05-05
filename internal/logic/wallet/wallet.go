@@ -229,7 +229,19 @@ func (s *sWallet) TopUp(ctx context.Context, input *model.WalletTopUpForm) error
 		if card.WalletId != wallet.Id {
 			return gerror.New("card not belongs to wallet")
 		}
-		// TODO: use card to pay for top up
+		if err != nil {
+			return err
+		}
+		if card.Amount < input.Amount {
+			return gerror.New("card amount not enough")
+		}
+		wallet.Amount += input.Amount
+		_, err = dao.Wallet.Ctx(ctx).Where("id", wallet.Id).Update(wallet)
+		if err != nil {
+			return err
+		}
+		card.Amount -= input.Amount
+		_, err = dao.WalletCard.Ctx(ctx).Where("id", card.Id).Update(card)
 		if err != nil {
 			return err
 		}
@@ -237,7 +249,38 @@ func (s *sWallet) TopUp(ctx context.Context, input *model.WalletTopUpForm) error
 	})
 }
 
-func (s *sWallet) Withdraw(ctx context.Context, input *model.WalletWithdrawForm) error {
-	// TODO: withdraw logic
-	return nil
+func (s *sWallet) WithDraw(ctx context.Context, input *model.WalletWithdrawForm) error {
+	return dao.Wallet.Transaction(ctx, func(ctx context.Context, tx gdb.TX) error {
+		userId := service.Session().GetUser(ctx).Id
+		var wallet *entity.Wallet
+		err := dao.Wallet.Ctx(ctx).Where("user_id", userId).Scan(&wallet)
+		if err != nil {
+			return err
+		}
+		if wallet.Status != consts.WalletStatusNormal {
+			return gerror.New("wallet is frozen")
+		}
+		var card *entity.WalletCard
+		err = dao.WalletCard.Ctx(ctx).Where("id", input.CardId).Scan(&card)
+		if card.WalletId != wallet.Id {
+			return gerror.New("card not belongs to wallet")
+		}
+		if err != nil {
+			return err
+		}
+		if wallet.Amount < input.Amount {
+			return gerror.New("wallet amount not enough")
+		}
+		wallet.Amount -= input.Amount
+		_, err = dao.Wallet.Ctx(ctx).Where("id", wallet.Id).Update(wallet)
+		if err != nil {
+			return err
+		}
+		card.Amount += input.Amount
+		_, err = dao.WalletCard.Ctx(ctx).Where("id", card.Id).Update(card)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
 }

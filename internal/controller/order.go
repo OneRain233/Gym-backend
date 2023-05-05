@@ -255,6 +255,15 @@ func (c *cOrderManager) StartOrder(ctx context.Context, req *v1.StartOrderReq) (
 	return
 }
 
+func (c *cOrderManager) PayByCash(ctx context.Context, req *v1.PayOrderByCashReq) (res *v1.PayOrderByCashRes, err error) {
+	res = &v1.PayOrderByCashRes{}
+	err = service.Order().PayByCash(ctx, req.OrderCode)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (c *cOrder) GetOrderStatus(ctx context.Context, req *v1.GetOrdersByStatusReq) (res *v1.GetOrdersByStatusRes, err error) {
 	res = &v1.GetOrdersByStatusRes{}
 	orders, err := service.Order().GetOrderByStatus(ctx, req.Status)

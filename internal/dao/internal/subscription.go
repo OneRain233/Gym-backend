@@ -25,6 +25,7 @@ type SubscriptionColumns struct {
 	StartTime        string //
 	EndTime          string //
 	SubscriptionType string //
+	Status           string //
 }
 
 // subscriptionColumns holds the columns for table subscription.
@@ -34,6 +35,7 @@ var subscriptionColumns = SubscriptionColumns{
 	StartTime:        "start_time",
 	EndTime:          "end_time",
 	SubscriptionType: "subscription_type",
+	Status:           "status",
 }
 
 // NewSubscriptionDao creates and returns a new DAO object for table data access.

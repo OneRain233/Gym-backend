@@ -23,7 +23,7 @@ type (
 		GetCardsInWallet(ctx context.Context) (cards []*entity.WalletCard, err error)
 		Refund(ctx context.Context, order *entity.Order) error
 		TopUp(ctx context.Context, input *model.WalletTopUpForm) error
-		Withdraw(ctx context.Context, input *model.WalletWithdrawForm) error
+		WithDraw(ctx context.Context, input *model.WalletWithdrawForm) error
 	}
 )
 

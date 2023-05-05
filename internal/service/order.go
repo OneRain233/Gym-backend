@@ -15,6 +15,7 @@ import (
 
 type (
 	IOrder interface {
+		PayByCash(ctx context.Context, orderCode string) error
 		CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, discount float64, err error)
 		CreateRegularWeeklyOrder(ctx context.Context, input model.CreateRegularOrderFormWeekly) (response *model.RegularOrderResponseForm, err error)
 		CreateOrder(ctx context.Context, input model.CreateOrderForm) (response *model.ResponseOrderForm, err error)

@@ -37,6 +37,23 @@ func New() *sOrder {
 	return &sOrder{}
 }
 
+func (o *sOrder) PayByCash(ctx context.Context, orderCode string) error {
+	var order *entity.Order
+	err := dao.Order.Ctx(ctx).Where("order_code", orderCode).Scan(&order)
+	if err != nil {
+		return err
+	}
+	paymentForm := &model.CreatePaymentForm{
+		OrderCode:   orderCode,
+		PaymentType: consts.PaymentTypeCash,
+	}
+	_, err = service.Payment().CreatePayment(ctx, paymentForm)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (o *sOrder) CalculateAmount(ctx context.Context, input model.CreateOrderForm) (amount float64, discount float64, err error) {
 	unit := 0
 	startTime := input.StartTime

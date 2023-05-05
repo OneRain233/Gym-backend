@@ -17,4 +17,5 @@ type Subscription struct {
 	StartTime        *gtime.Time //
 	EndTime          *gtime.Time //
 	SubscriptionType interface{} //
+	Status           interface{} //
 }

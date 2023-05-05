@@ -166,6 +166,11 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 			_, _ = dao.Payment.Ctx(ctx).Where("id", paymentRecord.Id).Update(paymentRecord)
 			return
 		}
+	} else if paymentRecord.PaymentType == consts.PaymentTypeCash {
+		// do nothing
+	} else {
+		err = gerror.New("payment type not valid")
+		return
 	}
 
 	// update payment status

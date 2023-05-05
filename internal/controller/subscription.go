@@ -51,3 +51,12 @@ func (c *cSubscriptionUnauthorized) GetSubscriptionType(ctx context.Context, req
 	}
 	return
 }
+
+func (c *cSubscription) CancelSubscription(ctx context.Context, req *v1.CancelSubscriptionReq) (res *v1.CancelSubscriptionRes, err error) {
+	res = &v1.CancelSubscriptionRes{}
+	err = service.Subscription().CancelSubscription(ctx)
+	if err != nil {
+		return
+	}
+	return
+}

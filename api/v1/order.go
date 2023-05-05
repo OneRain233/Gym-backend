@@ -135,3 +135,12 @@ type GetOrdersByStatusRes struct {
 	g.Meta `mime:"application/json" example:"string"`
 	Order  []*model.AdminResponseOrderForm `json:"order"`
 }
+
+type PayOrderByCashReq struct {
+	g.Meta    `path:"/order/pay-cash" method:"post" tags:"Order" summary:"Pay order by cash"`
+	OrderCode string `json:"orderCode" v:"required#Please input order code"`
+}
+
+type PayOrderByCashRes struct {
+	g.Meta `mime:"application/json" example:"string"`
+}

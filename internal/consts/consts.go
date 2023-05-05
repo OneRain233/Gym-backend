@@ -6,6 +6,7 @@ const (
 	PaymentTypeCard   = 1
 	PaymentTypeWallet = 2
 	PaymentTypeRefund = 3
+	PaymentTypeCash   = 4
 
 	RoleAdmin      = 1
 	RoleNormalUser = 0
@@ -32,6 +33,10 @@ const (
 
 	OpenTime  = "OpenTime"
 	CloseTime = "CloseTime"
+
+	SubscriptionStatusNormal = 0
+	SubscriptionStatusExpire = 1
+	SubscriptionStatusCancel = 2
 )
 
 const (

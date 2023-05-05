@@ -30,3 +30,9 @@ type GetSubscriptionTypeReq struct {
 type GetSubscriptionTypeRes struct {
 	SubscriptionType []*entity.SubscriptionType `json:"subscription_type"`
 }
+
+type CancelSubscriptionReq struct {
+	g.Meta `path:"/subscription/cancel" tags:"Subscription" method:"post" summary:"Cancel Subscription"`
+}
+
+type CancelSubscriptionRes struct{}
