@@ -4,7 +4,6 @@ import (
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"Gym-backend/utility/cron"
-	"Gym-backend/utility/response"
 	"context"
 	"encoding/base64"
 	"fmt"
@@ -30,10 +29,10 @@ var (
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
-			oai := s.GetOpenApi()
-			oai.Info.Title = `API Reference`
-			oai.Config.CommonResponse = response.JsonRes{}
-			oai.Config.CommonResponseDataField = `Data`
+			//oai := s.GetOpenApi()
+			//oai.Info.Title = `API Reference`
+			//oai.Config.CommonResponse = response.JsonRes{}
+			//oai.Config.CommonResponseDataField = `Data`
 
 			// set time zone
 			err = gtime.SetTimeZone(g.Cfg().MustGet(gctx.New(), "timeZone").String())
