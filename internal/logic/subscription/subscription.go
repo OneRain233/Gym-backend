@@ -7,6 +7,7 @@ import (
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/gogf/gf/v2/util/gconv"
@@ -102,7 +103,7 @@ func (s *sSubscription) GetSubscriptionTypeById(ctx context.Context, id int) (re
 	return
 }
 
-func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (res *gtime.Time, err error) {
+func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (sub *entity.Subscription, res *gtime.Time, err error) {
 	res = gtime.NewFromStr("1970-01-01 00:00:00")
 	var allSubscription []*entity.Subscription
 	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Scan(&allSubscription)
@@ -113,10 +114,11 @@ func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userI
 		endTime := subscription.EndTime
 		if endTime.Timestamp() > res.Timestamp() && subscription.Status == consts.SubscriptionStatusNormal {
 			res = endTime
+			sub = subscription
 		}
 	}
 	if res.Timestamp() == gtime.NewFromStr("1970-01-01 00:00:00").Timestamp() {
-		return nil, nil
+		return nil, gtime.NewFromStr("1970-01-01 00:00:00"), nil
 	}
 	return
 }
@@ -156,13 +158,15 @@ func (s *sSubscription) CreateSubscription(ctx context.Context, form *model.Crea
 	}
 	days := subscriptionType.Days
 	amount := subscriptionType.Amount
-	subscription, err := s.GetUnFinishedSubscription(ctx, userId)
-	endDay, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
+	//subscription, err := s.GetUnFinishedSubscription(ctx, userId)
+	sub, endDay, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
 	if err != nil {
 		return err
 	}
 	// not expired
-	if endDay.Timestamp() > gtime.Now().Timestamp() && subscription.Status == consts.SubscriptionStatusNormal {
+	fmt.Println(endDay)
+	fmt.Println((endDay.Timestamp() > gtime.Now().Timestamp()))
+	if endDay.Timestamp() > gtime.Now().Timestamp() && sub.Status == consts.SubscriptionStatusNormal {
 		return gerror.New("You have not expired subscription")
 	} else {
 		// create order

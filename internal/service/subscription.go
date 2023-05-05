@@ -19,7 +19,7 @@ type (
 		GetTypesOfSubscription(ctx context.Context) (res []*entity.SubscriptionType, err error)
 		GetSubscriptionPermissionById(ctx context.Context, permissionId int) (res *entity.SubscriptionPermission, err error)
 		GetSubscriptionTypeById(ctx context.Context, id int) (res *entity.SubscriptionType, err error)
-		GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (res *gtime.Time, err error)
+		GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (sub *entity.Subscription, res *gtime.Time, err error)
 		GetUnFinishedSubscription(ctx context.Context, userId int) (res *entity.Subscription, err error)
 		GetSubscriptionListByUserId(ctx context.Context, userId int) (res []*entity.Subscription, err error)
 		GetSubscriptionByUserId(ctx context.Context, userId int) (res *entity.Subscription, err error)
