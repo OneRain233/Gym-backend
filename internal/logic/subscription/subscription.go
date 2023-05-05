@@ -103,7 +103,7 @@ func (s *sSubscription) GetSubscriptionTypeById(ctx context.Context, id int) (re
 }
 
 func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userId int) (res *gtime.Time, err error) {
-	res = gtime.Now()
+	res = gtime.NewFromStr("1970-01-01 00:00:00")
 	var allSubscription []*entity.Subscription
 	err = dao.Subscription.Ctx(ctx).Where("user_id", userId).Scan(&allSubscription)
 	if err != nil {
@@ -111,9 +111,12 @@ func (s *sSubscription) GetSubscriptionEndDayByUserId(ctx context.Context, userI
 	}
 	for _, subscription := range allSubscription {
 		endTime := subscription.EndTime
-		if endTime.Timestamp() > res.Timestamp() {
+		if endTime.Timestamp() > res.Timestamp() && subscription.Status == consts.SubscriptionStatusNormal {
 			res = endTime
 		}
+	}
+	if res.Timestamp() == gtime.NewFromStr("1970-01-01 00:00:00").Timestamp() {
+		return nil, nil
 	}
 	return
 }
