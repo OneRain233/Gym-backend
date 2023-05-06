@@ -51,8 +51,8 @@ func (c *cOrder) CreateRegularOrder(ctx context.Context, req *v1.CreateRegularOr
 	form := model.CreateRegularOrderFormWeekly{
 		UserId:           service.Session().GetUser(ctx).Id,
 		PlaceId:          req.PlaceId,
-		SessionStartTime: req.SessionStart,
-		SessionEndTime:   req.SessionEnd,
+		SessionStartTime: req.SessionStartTime,
+		SessionEndTime:   req.SessionEndTime,
 		StartDay:         req.StartDay,
 		WeekCount:        req.WeekCount,
 	}

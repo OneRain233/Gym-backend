@@ -23,12 +23,12 @@ type CreateOrderRes struct {
 }
 
 type CreateRegularOrderReq struct {
-	g.Meta       `path:"/order/create-regular" method:"post" tags:"Order" summary:"Create regular order"`
-	PlaceId      int    `json:"placeId" v:"required#Please input place id"`
-	SessionStart string `json:"session_start_time" v:"required#Please input session start time"`
-	SessionEnd   string `json:"session_end_time" v:"required#Please input session end time"`
-	StartDay     string `json:"start_day" v:"required#Please input start day"`
-	WeekCount    int    `json:"week_count" v:"required#Please input week count"`
+	g.Meta           `path:"/order/create-regular" method:"post" tags:"Order" summary:"Create regular order"`
+	PlaceId          int    `json:"placeId" v:"required#Please input place id"`
+	SessionStartTime string `json:"session_start_time" v:"required#Please input session start time"`
+	SessionEndTime   string `json:"session_end_time" v:"required#Please input session end time"`
+	StartDay         string `json:"start_day" v:"required#Please input start day"`
+	WeekCount        int    `json:"week_count" v:"required#Please input week count"`
 }
 
 type CreateRegularOrderRes struct {
