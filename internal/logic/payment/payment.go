@@ -38,6 +38,9 @@ func (s *sPayment) CreatePaymentForRegularOrder(ctx context.Context, form *model
 	amount := 0.0
 	for _, order := range orders {
 		amount += order.Amount
+		if order.Status != consts.OrderStatusWaitingPayment {
+			return nil, gerror.New("order status not valid")
+		}
 	}
 	if form.PaymentType == consts.PaymentTypeWallet {
 		wallet, err := service.Wallet().GetWallet(ctx)
@@ -94,6 +97,11 @@ func (s *sPayment) CreatePayment(ctx context.Context, form *model.CreatePaymentF
 	}
 	if wallet == nil {
 		err = gerror.New("wallet not found")
+		return
+	}
+
+	if order.Status != consts.OrderStatusWaitingPayment {
+		err = gerror.New("order status not valid")
 		return
 	}
 
