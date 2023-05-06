@@ -37,6 +37,18 @@ type CreateRegularOrderRes struct {
 	Orders    *model.RegularOrderResponseForm `json:"orders"`
 }
 
+type GetRegularOrderInfoReq struct {
+	g.Meta    `path:"/order/regular-info" method:"post" tags:"Order" summary:"Get regular order info"`
+	OrderCode string `json:"orderCode" v:"required#Please input order code"`
+}
+
+type GetRegularOrderInfoRes struct {
+	g.Meta    `mime:"application/json" example:"string"`
+	OrderCode string                          `json:"orderCode"`
+	Amount    float64                         `json:"amount"`
+	Orders    []*model.AdminResponseOrderForm `json:"orders"`
+}
+
 type GetAllOrderReq struct {
 	g.Meta `path:"/order/all" method:"post" tags:"Order" summary:"Get all order"`
 	Limit  int `json:"limit"`

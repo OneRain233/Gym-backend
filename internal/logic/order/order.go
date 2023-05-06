@@ -380,6 +380,23 @@ func (o *sOrder) GetOrderByOrderCode(ctx context.Context, orderCode string) (res
 	return
 }
 
+func (o *sOrder) GetRegularOrderByParentOrderCode(ctx context.Context, parentOrderCode string) (res *model.RegularOrderInfoResponseForm, err error) {
+	res = &model.RegularOrderInfoResponseForm{}
+	var orders []*entity.Order
+	err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().ParentOrderCode, parentOrderCode).Scan(&orders)
+	if err != nil {
+		return
+	}
+
+	res.OrderCode = parentOrderCode
+	res.Amount = 0
+	for _, order := range orders {
+		res.Amount += order.Amount
+	}
+	res.Orders = orders
+	return
+}
+
 func (o *sOrder) GetAllOrders(ctx context.Context, pagination *model.Pagination) (res []*entity.Order, err error) {
 	if pagination.Page == 0 || pagination.Limit == 0 {
 		err = dao.Order.Ctx(ctx).Scan(&res)

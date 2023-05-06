@@ -173,6 +173,32 @@ func (c *cOrder) GetOrderByOrderCode(ctx context.Context, req *v1.GetOrderByOrde
 	return
 }
 
+func (c *cOrder) GetRegularOrderByParentOrderCode(ctx context.Context, req *v1.GetRegularOrderInfoReq) (res *v1.GetRegularOrderInfoRes, err error) {
+	res = &v1.GetRegularOrderInfoRes{}
+	var orders []*entity.Order
+	orders, err = service.Order().GetRegularOrdersByOrderCode(ctx, req.OrderCode)
+	if err != nil {
+		return
+	}
+	if orders == nil {
+		err = gerror.New("order not found")
+		return
+	}
+	for _, order := range orders {
+		place, err1 := service.Place().GetPlaceById(ctx, order.PlaceId)
+		if err1 != nil {
+			err = err1
+		}
+		res.Orders = append(res.Orders, &model.AdminResponseOrderForm{
+			Order: order,
+			Place: place,
+		})
+		res.Amount += order.Amount
+	}
+	res.OrderCode = req.OrderCode
+	return
+}
+
 func (c *cOrderManager) GetOrderByTime(ctx context.Context, req *v1.GetOrderByTimeReq) (res *v1.GetOrderByTimeRes, err error) {
 	res = &v1.GetOrderByTimeRes{}
 	startTime := gtime.NewFromStr(req.StartTime)

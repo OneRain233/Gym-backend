@@ -23,6 +23,12 @@ type RegularOrderResponseForm struct {
 	Orders    []*ResponseOrderForm
 }
 
+type RegularOrderInfoResponseForm struct {
+	Amount    float64
+	OrderCode string
+	Orders    []*entity.Order
+}
+
 type CreateReceiptForm struct {
 	OrderCode   string
 	OrderId     int
