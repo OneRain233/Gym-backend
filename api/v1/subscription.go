@@ -36,3 +36,25 @@ type CancelSubscriptionReq struct {
 }
 
 type CancelSubscriptionRes struct{}
+
+type AdminCancelSubscriptionReq struct {
+	g.Meta `path:"/subscription/admin/cancel" tags:"Subscription" method:"post" summary:"Admin Cancel Subscription"`
+	UserId int `json:"user_id" v:"required#Please input user_id"`
+}
+
+type AdminCancelSubscriptionRes struct{}
+
+type AdminGetSubscriptionReq struct {
+	g.Meta `path:"/subscription/admin/get" tags:"Subscription" method:"post" summary:"Admin Get Subscription"`
+}
+
+type AdminGetSubscriptionRes struct {
+	Subscription []*entity.Subscription `json:"subscription"`
+}
+
+type AdminCancelSubscriptionByIdReq struct {
+	g.Meta `path:"/subscription/admin/cancel-by-id" tags:"Subscription" method:"post" summary:"Admin Cancel Subscription By Id"`
+	Id     int `json:"id" v:"required#Please input id"`
+}
+
+type AdminCancelSubscriptionByIdRes struct{}

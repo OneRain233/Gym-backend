@@ -117,7 +117,6 @@ var (
 					controller.User,
 					controller.Facility,
 					controller.Bank,
-					controller.BankAdmin, //TODO: Move this to do auth
 					controller.Announcement,
 					controller.SubscriptionUnauthorized,
 					controller.Tag,
@@ -155,6 +154,7 @@ var (
 						controller.OrderManager,
 						controller.UserManger,
 						controller.Visualize,
+						controller.SubscriptionAdmin,
 					)
 				})
 
@@ -166,6 +166,7 @@ var (
 						service.Middleware().AdminAuthHandler,
 					)
 					group.Bind(
+						controller.BankAdmin, //TODO: Move this to do auth
 						controller.FacilityAdmin,
 						controller.PaymentAdmin,
 						controller.OrderAdmin,

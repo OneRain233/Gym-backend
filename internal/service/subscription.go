@@ -28,6 +28,8 @@ type (
 		GenerateOrderCode() string
 		CancelSubscription(ctx context.Context) error
 		CheckExpiredSubscription(ctx context.Context) error
+		CancelSubscriptionByUserId(ctx context.Context, userId int) error
+		GetAllSubscriptions(ctx context.Context) ([]*entity.Subscription, error)
 	}
 )
 

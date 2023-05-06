@@ -2,6 +2,7 @@ package controller
 
 import (
 	v1 "Gym-backend/api/v1"
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/service"
 	"context"
@@ -55,6 +56,33 @@ func (c *cSubscriptionUnauthorized) GetSubscriptionType(ctx context.Context, req
 func (c *cSubscription) CancelSubscription(ctx context.Context, req *v1.CancelSubscriptionReq) (res *v1.CancelSubscriptionRes, err error) {
 	res = &v1.CancelSubscriptionRes{}
 	err = service.Subscription().CancelSubscription(ctx)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cSubscriptionAdmin) AdminCancelSubscription(ctx context.Context, req *v1.AdminCancelSubscriptionReq) (res *v1.AdminCancelSubscriptionRes, err error) {
+	res = &v1.AdminCancelSubscriptionRes{}
+	err = service.Subscription().CancelSubscriptionByUserId(ctx, req.UserId)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cSubscriptionAdmin) AdminGetSubscription(ctx context.Context, req *v1.AdminGetSubscriptionReq) (res *v1.AdminGetSubscriptionRes, err error) {
+	res = &v1.AdminGetSubscriptionRes{}
+	res.Subscription, err = service.Subscription().GetAllSubscriptions(ctx)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (c *cSubscription) AdminCancelSubscriptionById(ctx context.Context, req *v1.AdminCancelSubscriptionByIdReq) (res *v1.AdminCancelSubscriptionByIdRes, err error) {
+	res = &v1.AdminCancelSubscriptionByIdRes{}
+	err = service.Subscription().UpdateSubscriptionStatus(ctx, req.Id, consts.SubscriptionStatusCancel)
 	if err != nil {
 		return
 	}

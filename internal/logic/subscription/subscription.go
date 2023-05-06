@@ -257,3 +257,26 @@ func (s *sSubscription) CheckExpiredSubscription(ctx context.Context) error {
 	}
 	return nil
 }
+
+func (s *sSubscription) CancelSubscriptionByUserId(ctx context.Context, userId int) error {
+	subscription, endDay, err := s.GetSubscriptionEndDayByUserId(ctx, service.Session().GetUser(ctx).Id)
+	if err != nil {
+		return err
+	}
+	if endDay.Timestamp() > gtime.Now().Timestamp() && subscription.Status == consts.SubscriptionStatusNormal {
+		err = s.UpdateSubscriptionStatus(ctx, subscription.Id, consts.SubscriptionStatusCancel)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *sSubscription) GetAllSubscriptions(ctx context.Context) ([]*entity.Subscription, error) {
+	var subscriptions []*entity.Subscription
+	err := dao.Subscription.Ctx(ctx).Scan(&subscriptions)
+	if err != nil {
+		return nil, err
+	}
+	return subscriptions, nil
+}
