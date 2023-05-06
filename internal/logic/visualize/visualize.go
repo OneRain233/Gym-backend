@@ -46,3 +46,21 @@ func (v *sVisualize) GetDailyIncome(ctx context.Context, timeRange *model.TimeRa
 	}
 	return
 }
+
+func (v *sVisualize) GetWeeklyIncome(ctx context.Context, timeRange *model.TimeRange) (res []*model.WeeklyIncome, err error) {
+	// used to draw line chart
+	startDate := timeRange.StartDate.StartOfWeek()
+	endDate := timeRange.EndDate.EndOfWeek()
+	for startDate.Before(endDate) {
+		income, err := service.Order().GetWeeklyOrderIncome(ctx, startDate)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, &model.WeeklyIncome{
+			Week:   startDate.WeeksOfYear(),
+			Income: income,
+		})
+		startDate = startDate.AddDate(0, 0, 7)
+	}
+	return
+}

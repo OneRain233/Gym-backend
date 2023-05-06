@@ -27,3 +27,18 @@ func (c *cVisualize) GetDailyIncome(ctx context.Context, req *v1.GetDailyIncomeR
 	}
 	return
 }
+
+func (c *cVisualize) GetWeeklyIncome(ctx context.Context, req *v1.GetWeeklyIncomeReq) (res *v1.GetWeeklyIncomeRes, err error) {
+	res = &v1.GetWeeklyIncomeRes{}
+	startDate := gtime.NewFromStr(req.StartDate)
+	endDate := gtime.NewFromStr(req.EndDate)
+	timeRange := &model.TimeRange{
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+	res.Incomes, err = service.Visualize().GetWeeklyIncome(ctx, timeRange)
+	if err != nil {
+		return
+	}
+	return
+}

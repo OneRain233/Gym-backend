@@ -16,6 +16,7 @@ type (
 		GetFacilityMonthlyUsage(ctx context.Context) (res []*model.FacilityMonthlyUsage, err error)
 		GetWeeklyIncomeForAYear(ctx context.Context) (res []*model.WeeklyIncome, err error)
 		GetDailyIncome(ctx context.Context, timeRange *model.TimeRange) (res []*model.DailyIncome, err error)
+		GetWeeklyIncome(ctx context.Context, timeRange *model.TimeRange) (res []*model.WeeklyIncome, err error)
 	}
 )
 
