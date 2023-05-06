@@ -225,7 +225,7 @@ func (s *sSubscription) GenerateOrderCode() string {
 
 func (s *sSubscription) CancelSubscription(ctx context.Context) error {
 	userId := service.Session().GetUser(ctx).Id
-	subscription, err := s.GetSubscriptionByUserId(ctx, userId)
+	subscription, _, err := s.GetSubscriptionEndDayByUserId(ctx, userId)
 	if err != nil {
 		return err
 	}
