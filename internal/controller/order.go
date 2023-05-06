@@ -2,6 +2,7 @@ package controller
 
 import (
 	v1 "Gym-backend/api/v1"
+	"Gym-backend/internal/consts"
 	"Gym-backend/internal/model"
 	"Gym-backend/internal/model/entity"
 	"Gym-backend/internal/service"
@@ -193,6 +194,9 @@ func (c *cOrder) GetRegularOrderByParentOrderCode(ctx context.Context, req *v1.G
 			Order: order,
 			Place: place,
 		})
+		if order.Status == consts.OrderStatusRefunded || order.Status == consts.OrderStatusCancelled {
+			continue
+		}
 		res.Amount += order.Amount
 	}
 	res.OrderCode = req.OrderCode
