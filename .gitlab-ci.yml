@@ -61,10 +61,10 @@ deploy:
     #     echo "Deleting existing gym_kneethaimay/gym-demo image"
     #     docker rmi gym_kneethaimay/gym-demo
     #   fi
-    - docker rmi gym_kneethaimay/gym-demo
-    - docker stop gym-demo
-    - docker rm gym-demo
-    - docker rmi gym_kneethaimay/gym-demo
+    # - docker rmi gym_kneethaimay/gym-demo
+    # - docker stop gym-demo
+    # - docker rm gym-demo
+    # - docker rmi gym_kneethaimay/gym-demo
     - echo "Deployment Todo"
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
