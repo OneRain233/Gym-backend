@@ -112,7 +112,7 @@ func (c *cEvaluation) UpdateEvaluation(ctx context.Context, req *v1.UpdateEvalua
 	return
 }
 
-func (c *cEvaluation) UserGetEvaluations(ctx context.Context, req *v1.UserGetEvaluationsReq) (res *v1.UserGetEvaluationRes, err error) {
+func (c *cEvaluationUnauth) UserGetEvaluations(ctx context.Context, req *v1.UserGetEvaluationsReq) (res *v1.UserGetEvaluationRes, err error) {
 	res = &v1.UserGetEvaluationRes{}
 	evaluations, err := service.Evaluation().GetEvaluationByFacilityId(ctx, req.FacilityId)
 	if err != nil {
