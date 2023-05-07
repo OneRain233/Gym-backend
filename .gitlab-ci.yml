@@ -52,9 +52,19 @@ deploy:
     - if: $CI_COMMIT_BRANCH == "main"
   script:
     - echo "Delete previous container"
-    - docker stop gym-demo
-    - docker rm gym-demo
-    - docker rmi gym_kneethaimay/gym-demo
+    - if docker ps -a | grep -q gym-demo ; then
+        echo "Stopping and removing existing gym-demo container"
+        docker stop gym-demo
+        docker rm gym-demo
+      fi
+    - if docker images | grep -q gym_kneethaimay/gym-demo ; then
+        echo "Deleting existing gym_kneethaimay/gym-demo image"
+        docker rmi gym_kneethaimay/gym-demo
+      fi
+    # - docker rmi gym_kneethaimay/gym-demo
+    # - docker stop gym-demo
+    # - docker rm gym-demo
+    # - docker rmi gym_kneethaimay/gym-demo
     - echo "Deployment Todo"
     - go env -w GO111MODULE=on
     - go env -w GOPROXY=https://goproxy.cn,direct
