@@ -243,12 +243,21 @@ func (o *sOrder) CreateOrder(ctx context.Context, input model.CreateOrderForm) (
 
 func (o *sOrder) GenerateOrderCode() string {
 	// YearMonthDay + 8 digits
-	return gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+	orderCode := gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+	if len(orderCode) != 17 {
+		return o.GenerateOrderCode()
+	}
+	return orderCode
 }
 
 func (o *sOrder) GenerateParentOrderCode() string {
 	// "2" + YearMonthDay + 8 digits
-	return "2" + gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+	orderCode := "2" + gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
+	if len(orderCode) != 18 {
+		return o.GenerateParentOrderCode()
+	}
+	return orderCode
+	//return "2" + gtime.Now().Format("Ymd") + strconv.Itoa(gtime.Now().Nanosecond())
 }
 
 func (o *sOrder) ValidateTime(ctx context.Context, input model.CreateOrderForm) (res bool, err error) {
