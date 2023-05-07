@@ -18,9 +18,9 @@ type cEvaluationUnauth struct{}
 
 func (c *cEvaluationUnauth) GetEvaluations(ctx context.Context, req *v1.GetEvaluationsReq) (res *v1.GetEvaluationsRes, err error) {
 	res = &v1.GetEvaluationsRes{}
-	user := service.Session().GetUser(ctx)
-	userId := user.Id
-	res.Evaluations, err = service.Evaluation().GetEvaluationsByUserId(ctx, userId)
+	//user := service.Session().GetUser(ctx)
+	//userId := user.Id
+	res.Evaluations, err = service.Evaluation().GetAllEvaluations(ctx)
 	if err != nil {
 		return
 	}
