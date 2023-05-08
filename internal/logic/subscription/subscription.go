@@ -292,5 +292,10 @@ func (s *sSubscription) UpdateSubscriptionType(ctx context.Context, form *model.
 	}
 	subscription.Amount = form.Amount
 	subscription.Days = form.Days
+
+	_, err = dao.SubscriptionType.Ctx(ctx).Data(subscription).Where("id", form.Id).Update()
+
+	// update cache
+	err = s.InitSubscriptionSTypesToCache(ctx)
 	return err
 }
