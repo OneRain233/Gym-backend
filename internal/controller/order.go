@@ -259,7 +259,7 @@ func (c *cOrder) GetOwnOrder(ctx context.Context, req *v1.GetOwnOrderReq) (res *
 		return
 	}
 	if orders == nil {
-		err = gerror.New("order not found")
+		res.Order = make([]*model.AdminResponseOrderForm, 0)
 		return
 	}
 	for _, order := range orders {
