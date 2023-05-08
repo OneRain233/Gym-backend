@@ -282,9 +282,15 @@ func (s *sSubscription) GetAllSubscriptions(ctx context.Context) ([]*entity.Subs
 }
 
 func (s *sSubscription) UpdateSubscriptionType(ctx context.Context, form *model.UpdateSubscriptionTypeForm) error {
-	_, err := dao.SubscriptionType.Ctx(ctx).Data(g.Map{
-		"days":   form.Days,
-		"amount": form.Amount,
-	}).Where("id", form.Id).Update()
+	var subscription *entity.SubscriptionType
+	err := dao.SubscriptionType.Ctx(ctx).Where("id", form.Id).Scan(&subscription)
+	if err != nil {
+		return err
+	}
+	if subscription == nil {
+		return gerror.New("Subscription not found")
+	}
+	subscription.Amount = form.Amount
+	subscription.Days = form.Days
 	return err
 }
