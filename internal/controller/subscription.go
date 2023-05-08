@@ -88,3 +88,17 @@ func (c *cSubscription) AdminCancelSubscriptionById(ctx context.Context, req *v1
 	}
 	return
 }
+
+func (c *cSubscriptionAdmin) AdminUpdateSubscriptionType(ctx context.Context, req *v1.AdminUpdateSubscriptionTypeReq) (res *v1.AdminUpdateSubscriptionTypeRes, err error) {
+	res = &v1.AdminUpdateSubscriptionTypeRes{}
+	form := &model.UpdateSubscriptionTypeForm{
+		Id:     req.Id,
+		Amount: req.Amount,
+		Days:   req.Days,
+	}
+	err = service.Subscription().UpdateSubscriptionType(ctx, form)
+	if err != nil {
+		return
+	}
+	return
+}

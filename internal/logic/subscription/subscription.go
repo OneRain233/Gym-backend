@@ -280,3 +280,11 @@ func (s *sSubscription) GetAllSubscriptions(ctx context.Context) ([]*entity.Subs
 	}
 	return subscriptions, nil
 }
+
+func (s *sSubscription) UpdateSubscriptionType(ctx context.Context, form *model.UpdateSubscriptionTypeForm) error {
+	_, err := dao.SubscriptionType.Ctx(ctx).Data(g.Map{
+		"days":   form.Days,
+		"amount": form.Amount,
+	}).Where("id", form.Id).Update()
+	return err
+}

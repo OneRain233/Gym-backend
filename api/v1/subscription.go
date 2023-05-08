@@ -58,3 +58,13 @@ type AdminCancelSubscriptionByIdReq struct {
 }
 
 type AdminCancelSubscriptionByIdRes struct{}
+
+type AdminUpdateSubscriptionTypeReq struct {
+	g.Meta `path:"/subscription/admin/update-type" tags:"Subscription" method:"post" summary:"Admin Update Subscription Type"`
+	Id     int     `json:"id" v:"required#Please input id"`
+	Name   string  `json:"name" v:"required#Please input name"`
+	Days   int     `json:"days" v:"required#Please input days"`
+	Amount float64 `json:"amount" v:"required#Please input amount"`
+}
+
+type AdminUpdateSubscriptionTypeRes struct{}

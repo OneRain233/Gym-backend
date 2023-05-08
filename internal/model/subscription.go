@@ -6,3 +6,9 @@ type CreateSubscriptionForm struct {
 	PaymentType int
 	CardId      int
 }
+
+type UpdateSubscriptionTypeForm struct {
+	Days   int
+	Amount float64
+	Id     int
+}
